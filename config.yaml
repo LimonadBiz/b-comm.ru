@@ -1,0 +1,9 @@
+url: http://b-comm.ru
+baseURL: http://b-comm.ru
+canonifyURLs: true
+
+name: Провайдерам
+description:
+contentDir: "content"
+theme: "hugo-bootstrap-premium"
+
