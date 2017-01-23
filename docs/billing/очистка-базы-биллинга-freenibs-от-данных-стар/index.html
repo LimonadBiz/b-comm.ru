@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Очистка базы биллинга freeNIBS от данных старше 3-х месяцев  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="clear, freeNIBS, очистка, ">
+
+
+<meta property="og:title" content="Очистка базы биллинга freeNIBS от данных старше 3-х месяцев  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/billing/%D0%BE%D1%87%D0%B8%D1%81%D1%82%D0%BA%D0%B0-%D0%B1%D0%B0%D0%B7%D1%8B-%D0%B1%D0%B8%D0%BB%D0%BB%D0%B8%D0%BD%D0%B3%D0%B0-freenibs-%D0%BE%D1%82-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%81%D1%82%D0%B0%D1%80" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2009-07-25T10:53:20Z" />
+<meta property="og:article:modified_time" content="2009-07-25T10:53:20Z" />
+
+  
+    
+<meta property="og:article:tag" content="clear">
+    
+<meta property="og:article:tag" content="freeNIBS">
+    
+<meta property="og:article:tag" content="очистка">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Очистка базы биллинга freeNIBS от данных старше 3-х месяцев" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/billing/%D0%BE%D1%87%D0%B8%D1%81%D1%82%D0%BA%D0%B0-%D0%B1%D0%B0%D0%B7%D1%8B-%D0%B1%D0%B8%D0%BB%D0%BB%D0%B8%D0%BD%D0%B3%D0%B0-freenibs-%D0%BE%D1%82-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%81%D1%82%D0%B0%D1%80" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Очистка базы биллинга freeNIBS от данных старше 3-х месяцев",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2009-07-25",
+    "description": "",
+    "wordCount":  637 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/billing/%D0%BE%D1%87%D0%B8%D1%81%D1%82%D0%BA%D0%B0-%D0%B1%D0%B0%D0%B7%D1%8B-%D0%B1%D0%B8%D0%BB%D0%BB%D0%B8%D0%BD%D0%B3%D0%B0-freenibs-%D0%BE%D1%82-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D1%81%D1%82%D0%B0%D1%80" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Очистка базы биллинга freeNIBS от данных старше 3-х месяцев
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2009-07-25">25 Jul, 2009</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 3 min
+  &middot; (637 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/clear" class="label label-primary">clear</a>
+  
+  <a href="http://b-comm.ru/tags/freenibs" class="label label-primary">freeNIBS</a>
+  
+  <a href="http://b-comm.ru/tags/%D0%BE%D1%87%D0%B8%D1%81%D1%82%D0%BA%D0%B0" class="label label-primary">очистка</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <p>Очистка базы биллинга freeNIBS от данных старше 3-х месяцев, хотя можно и больше оставить, можно и меньше.</p>
+
+<p>Дело в том, что база actions разрастается &#8212; выборка медленее, мускулу тяжелее)))</p>
+
+<p>15592000 &#8212; это число в секундах, почти 59 дней)))</p>
+
+<p></p>
+
+<pre lang="cpp" line="1">#include &lt;QtCore>
+#include &lt;QCoreApplication>
+#include &lt;QtSql>
+#include &lt;iostream>
+#include &lt;cstdlib>
+#include &lt;iomanip>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+#include &lt;time.h>
+using namespace std;
+
+
+#define SQLDRIVER "QMYSQL"
+#define HOST "10.1.1.1"
+#define DBNAME "freenibs"
+#define USER "freenibs"
+#define PASSWORD "freenibs"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+
+    QTextCodec *codec = QTextCodec::codecForName("CP1251");
+    QTextCodec::setCodecForTr(codec);
+    QTextCodec::setCodecForCStrings(codec);
+
+    QSqlDatabase db = QSqlDatabase::addDatabase(SQLDRIVER);
+
+    if( !db.isDriverAvailable(SQLDRIVER))
+    {
+
+    }
+
+
+    db.setHostName(HOST);
+    db.setDatabaseName(DBNAME);
+    db.setUserName(USER);
+    db.setPassword(PASSWORD);
+    //db.setPort(3306);
+    bool ok=db.open();
+    if(ok!=true){
+        std::cout&lt;&lt;"unable connec't";
+        exit(1);
+    }
+    // QString exec_this;
+
+    QVector&lt;QString> tables(0);
+    tables.append("`actions`");
+
+
+
+
+
+
+
+//очищаем таблица actions
+            QSqlQuery query(" DELETE FROM `actions` WHERE `start_time`&lt;FROM_UNIXTIME(UNIX_TIMESTAMP(NOW() )-15592000); ");
+            query.clear();
+
+            QSqlQuery query1(" OPTIMIZE TABLE `actions`; ");
+            query1.clear();
+//очищаем таблица updown
+            QSqlQuery query4(" DELETE FROM `updown` WHERE `time`&lt;FROM_UNIXTIME(UNIX_TIMESTAMP(NOW() )-15592000); ");
+            query4.clear();
+
+            QSqlQuery query5(" OPTIMIZE TABLE `updown`; ");
+            query5.clear();
+
+            //qDebug()&lt;&lt;query.lastError()&lt;&lt;endl;
+
+
+     db.close();
+//    return a.exec();
+}
+
+</pre>
+
+<p>Makefile:</p>
+
+<pre lang="makefile" line="1">#############################################################################
+# Makefile for building: freenibs_clear
+# Generated by qmake (2.01a) (Qt 4.4.3) on: Sun Mar 15 02:29:55 2009
+# Project:  pro.pro
+# Template: app
+# Command: /usr/local/bin/qmake-qt4 -unix -o Makefile pro.pro
+#############################################################################
+
+####### Compiler, tools and options
+
+CC            = cc
+CXX           = c++
+DEFINES       = -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
+CFLAGS        = -pipe -O2 -fno-strict-aliasing -pipe -Wall -W $(DEFINES)
+CXXFLAGS      = -pipe -O2 -fno-strict-aliasing -pipe -Wall -W $(DEFINES)
+INCPATH       = -I/usr/local/share/qt4/mkspecs/freebsd-g++ -I. -I/usr/local/include/qt4/QtCore -I/usr/local/include/qt4/QtCore -I/usr/local/include/qt4/QtGui -I/usr/local/include/qt4/QtGui -I/usr/local/include/qt4/QtSql -I/usr/local/include/qt4/QtSql -I/usr/local/include/qt4 -I. -I. -I/usr/local/include
+LINK          = c++
+LFLAGS        = -pthread -Wl,-rpath,/usr/local/lib/qt4
+LIBS          = $(SUBLIBS)  -L/usr/local/lib -L/usr/local/lib/qt4 -lQtSql -L/usr/local/lib/qt4 -L/usr/local/lib -pthread -pthread -lQtGui -pthread -lpng -lSM -lICE -pthread -pthread -lXi -lXrender -lXrandr -lfreetype -lfontconfig -lXext -lX11 -lQtCore -lz -lm -pthread -lgthread-2.0 -lglib-2.0 -liconv
+AR            = ar cqs
+RANLIB        =
+QMAKE         = /usr/local/bin/qmake-qt4
+TAR           = tar -cf
+COMPRESS      = gzip -9f
+COPY          = cp -f
+SED           = sed
+COPY_FILE     = $(COPY)
+COPY_DIR      = $(COPY) -R
+INSTALL_FILE  = $(COPY_FILE)
+INSTALL_DIR   = $(COPY_DIR)
+INSTALL_PROGRAM = $(COPY_FILE)
+DEL_FILE      = rm -f
+SYMLINK       = ln -sf
+DEL_DIR       = rmdir
+MOVE          = mv -f
+CHK_DIR_EXISTS= test -d
+MKDIR         = mkdir -p
+
+####### Output directory
+
+OBJECTS_DIR   = ./
+
+####### Files
+
+SOURCES       = main.cpp
+OBJECTS       = main.o
+DIST          = /usr/local/share/qt4/mkspecs/common/unix.conf \
+                /usr/local/share/qt4/mkspecs/qconfig.pri \
+                /usr/local/share/qt4/mkspecs/features/qt_functions.prf \
+                /usr/local/share/qt4/mkspecs/features/qt_config.prf \
+                /usr/local/share/qt4/mkspecs/features/exclusive_builds.prf \
+                /usr/local/share/qt4/mkspecs/features/default_pre.prf \
+                /usr/local/share/qt4/mkspecs/features/release.prf \
+                /usr/local/share/qt4/mkspecs/features/default_post.prf \
+                /usr/local/share/qt4/mkspecs/features/unix/thread.prf \
+                /usr/local/share/qt4/mkspecs/features/warn_on.prf \
+                /usr/local/share/qt4/mkspecs/features/qt.prf \
+                /usr/local/share/qt4/mkspecs/features/moc.prf \
+                /usr/local/share/qt4/mkspecs/features/resources.prf \
+                /usr/local/share/qt4/mkspecs/features/uic.prf \
+                /usr/local/share/qt4/mkspecs/features/yacc.prf \
+                /usr/local/share/qt4/mkspecs/features/lex.prf \
+                pro.pro
+QMAKE_TARGET  = freenibs_clear
+DESTDIR       =
+TARGET        = freenibs_clear
+
+first: all
+####### Implicit rules
+
+.SUFFIXES: .o .c .cpp .cc .cxx .C
+
+.cpp.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$&lt;"
+
+.cc.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$&lt;"
+
+.cxx.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$&lt;"
+
+.C.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o "$@" "$&lt;"
+
+.c.o:
+        $(CC) -c $(CFLAGS) $(INCPATH) -o "$@" "$&lt;"
+
+####### Build rules
+
+all: Makefile $(TARGET)
+
+$(TARGET):  $(OBJECTS)
+        $(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+
+Makefile: pro.pro  /usr/local/share/qt4/mkspecs/freebsd-g++/qmake.conf /usr/local/share/qt4/mkspecs/common/unix.conf \
+                /usr/local/share/qt4/mkspecs/qconfig.pri \
+                /usr/local/share/qt4/mkspecs/features/qt_functions.prf \
+                /usr/local/share/qt4/mkspecs/features/qt_config.prf \
+                /usr/local/share/qt4/mkspecs/features/exclusive_builds.prf \
+                /usr/local/share/qt4/mkspecs/features/default_pre.prf \
+                /usr/local/share/qt4/mkspecs/features/release.prf \
+                /usr/local/share/qt4/mkspecs/features/default_post.prf \
+                /usr/local/share/qt4/mkspecs/features/unix/thread.prf \
+                /usr/local/share/qt4/mkspecs/features/warn_on.prf \
+                /usr/local/share/qt4/mkspecs/features/qt.prf \
+                /usr/local/share/qt4/mkspecs/features/moc.prf \
+                /usr/local/share/qt4/mkspecs/features/resources.prf \
+                /usr/local/share/qt4/mkspecs/features/uic.prf \
+                /usr/local/share/qt4/mkspecs/features/yacc.prf \
+                /usr/local/share/qt4/mkspecs/features/lex.prf \
+                /usr/local/lib/qt4/libQtSql.prl \
+                /usr/local/lib/qt4/libQtCore.prl \
+                /usr/local/lib/qt4/libQtGui.prl
+        $(QMAKE) -unix -o Makefile pro.pro
+/usr/local/share/qt4/mkspecs/common/unix.conf:
+/usr/local/share/qt4/mkspecs/qconfig.pri:
+/usr/local/share/qt4/mkspecs/features/qt_functions.prf:
+/usr/local/share/qt4/mkspecs/features/qt_config.prf:
+/usr/local/share/qt4/mkspecs/features/exclusive_builds.prf:
+/usr/local/share/qt4/mkspecs/features/default_pre.prf:
+/usr/local/share/qt4/mkspecs/features/release.prf:
+/usr/local/share/qt4/mkspecs/features/default_post.prf:
+/usr/local/share/qt4/mkspecs/features/unix/thread.prf:
+/usr/local/share/qt4/mkspecs/features/warn_on.prf:
+/usr/local/share/qt4/mkspecs/features/qt.prf:
+/usr/local/share/qt4/mkspecs/features/moc.prf:
+/usr/local/share/qt4/mkspecs/features/resources.prf:
+/usr/local/share/qt4/mkspecs/features/uic.prf:
+/usr/local/share/qt4/mkspecs/features/yacc.prf:
+/usr/local/share/qt4/mkspecs/features/lex.prf:
+/usr/local/lib/qt4/libQtSql.prl:
+/usr/local/lib/qt4/libQtCore.prl:
+/usr/local/lib/qt4/libQtGui.prl:
+qmake:  FORCE
+        @$(QMAKE) -unix -o Makefile pro.pro
+
+dist:
+        @$(CHK_DIR_EXISTS) .tmp/freenibs_clear1.0.0 || $(MKDIR) .tmp/freenibs_clear1.0.0
+        $(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/freenibs_clear1.0.0/ &#038;&#038; $(COPY_FILE) --parents main.cpp .tmp/freenibs_clear1.0.0/ &#038;&#038; (cd `dirname .tmp/freenibs_clear1.0.0` &#038;&#038; $(TAR) freenibs_clear1.0.0.tar freenibs_clear1.0.0 &#038;&#038; $(COMPRESS) freenibs_clear1.0.0.tar) &#038;&#038; $(MOVE) `dirname .tmp/freenibs_clear1.0.0`/freenibs_clear1.0.0.tar.gz . &#038;&#038; $(DEL_FILE) -r .tmp/freenibs_clear1.0.0
+
+
+clean:compiler_clean
+        -$(DEL_FILE) $(OBJECTS)
+        -$(DEL_FILE) *~ core *.core
+
+
+####### Sub-libraries
+
+distclean: clean
+        -$(DEL_FILE) $(TARGET)
+        -$(DEL_FILE) Makefile
+
+
+mocclean: compiler_moc_header_clean compiler_moc_source_clean
+
+mocables: compiler_moc_header_make_all compiler_moc_source_make_all
+
+compiler_moc_header_make_all:
+compiler_moc_header_clean:
+compiler_rcc_make_all:
+compiler_rcc_clean:
+compiler_image_collection_make_all: qmake_image_collection.cpp
+compiler_image_collection_clean:
+        -$(DEL_FILE) qmake_image_collection.cpp
+compiler_moc_source_make_all:
+compiler_moc_source_clean:
+compiler_uic_make_all:
+compiler_uic_clean:
+compiler_yacc_decl_make_all:
+compiler_yacc_decl_clean:
+compiler_yacc_impl_make_all:
+compiler_yacc_impl_clean:
+compiler_lex_make_all:
+compiler_lex_clean:
+compiler_clean:
+
+####### Compile
+
+main.o: main.cpp
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+####### Install
+
+install:   FORCE
+
+uninstall:   FORCE
+
+FORCE:
+
+
+</pre>
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="http://b-comm.ru/billing/freenibs-%D1%81%D0%BD%D1%8F%D1%82%D0%B8%D0%B5-%D0%B0%D0%B1%D0%BE%D0%BD%D0%BF%D0%BB%D0%B0%D1%82%D1%8B-%D0%B7%D0%B0-%D1%81%D1%83%D1%82%D0%BA%D0%B8" title="FreeNIBS Снятие абонплаты за сутки">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/billing/%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5-%D1%84%D0%BE%D1%80%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-ipfw-pipe-%D0%B4%D0%BB%D1%8F-%D0%BF%D1%80" title="Автоматическое формирование ipfw pipe для правильного link-up">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

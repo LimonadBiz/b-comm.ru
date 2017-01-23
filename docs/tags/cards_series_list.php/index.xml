@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cards_series_list.Php on </title>
+    <link>http://b-comm.ru/tags/cards_series_list.php/index.xml</link>
+    <description>Recent content in Cards_series_list.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/cards_series_list.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>cards_series_list.php</title>
+      <link>http://b-comm.ru/billing/cards_series_list-php</link>
+      <pubDate>Sat, 14 Jan 2012 23:30:21 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/cards_series_list-php</guid>
+      <description>&lt;p&gt;cards_series_list.php&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?
+if(!USE_CARDS) exit();
+include_once(&#34;utils.php&#34;);
+
+    $result = mysql_query (&#34;SELECT *, count(*) as count, unix_timestamp(added) as unix_added, unix_timestamp(expired) as unix_expired FROM &#34;.CARDS_TABLE.&#34; GROUP BY series ORDER BY added DESC&#34;,$LINK_CARDS) or die(&#34;card_series_list.php -&gt; err1 &#34;.mysql_error($LINK_CARDS));
+    if (!mysql_num_rows ($result)) exit();
+?&gt;
+  
+
+&lt;HR /&gt;
+&amp;lt;TABLE BORDER=0 CELLSPACING=2 CELLPADDING=4 BGCOLOR=black&gt;
+   &amp;lt;TR ALIGN=center BGCOLOR=&#34;#99dd99&#34;&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;Серия&lt;/B&gt;
+&lt;/TD&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;Время создания&lt;/B&gt;
+&lt;/TD&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;Номинал&lt;/B&gt;
+&lt;/TD&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;Количество&lt;/B&gt;
+&lt;/TD&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;Срок годности&lt;/B&gt;
+&lt;/TD&gt;
+   &amp;lt;/TR&gt;
+
+
+&lt;?
+
+    for ($i = 0; $i &lt; mysql_num_rows ($result); $i++) {
+      $row = mysql_fetch_object ($result);
+      if ($row-&gt;unix_expired &amp;lt;= time())
+        printf (&#34;   &amp;lt;TR ALIGN=center BGCOLOR=\&#34;#ffcccc\&#34;&gt;\n&#34;);
+      else
+        printf (&#34;   &amp;lt;TR ALIGN=center BGCOLOR=\&#34;#dddd99\&#34;&gt;\n&#34;);
+      printf (&#34;    
+
+&lt;TD&gt;
+  &amp;lt;A href=cards.php?series=%s&gt;%s&amp;lt;/A&gt;
+&lt;/TD&gt;\n&#34;, $row-&gt;series, $row-&gt;series);
+      printf (&#34;    
+
+&lt;TD&gt;
+  %s
+&lt;/TD&gt;\n&#34;, date(&#34;Y/m/d H:i:s&#34;,$row-&gt;unix_added));
+      printf (&#34;    
+
+&lt;TD&gt;
+  %8.2f
+&lt;/TD&gt;\n&#34;, $row-&gt;nominal);
+      printf (&#34;    
+
+&lt;TD&gt;
+  %d
+&lt;/TD&gt;\n&#34;, $row-&gt;count);
+      printf (&#34;    
+
+&lt;TD&gt;
+  %s
+&lt;/TD&gt;\n&#34;, date(&#34;Y-m-d&#34;,$row-&gt;unix_expired));
+      echo &#34;   &amp;lt;/TR&gt;\n&#34;;
+    }
+    mysql_free_result ($result);
+?&gt;
+&amp;lt;/TABLE&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Openvz сохранение виртуальных нод на хост машину вариант 1-rsync, tar, 7zip, bzip2 и большая нагрузка  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="7zip, bzip2, downtime, HN-нода, OpenVZ, rsync, tar, локально, нагрузка, нода, скрипт, ">
+
+
+<meta property="og:title" content="Openvz сохранение виртуальных нод на хост машину вариант 1-rsync, tar, 7zip, bzip2 и большая нагрузка  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/virtualization/openvz-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D0%BD%D0%BE%D0%B4-%D0%BD%D0%B0-%D1%85%D0%BE%D1%81%D1%82-%D0%BC" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2011-01-19T16:56:41Z" />
+<meta property="og:article:modified_time" content="2011-01-19T16:56:41Z" />
+
+  
+    
+<meta property="og:article:tag" content="7zip">
+    
+<meta property="og:article:tag" content="bzip2">
+    
+<meta property="og:article:tag" content="downtime">
+    
+<meta property="og:article:tag" content="HN-нода">
+    
+<meta property="og:article:tag" content="OpenVZ">
+    
+<meta property="og:article:tag" content="rsync">
+    
+<meta property="og:article:tag" content="tar">
+    
+<meta property="og:article:tag" content="локально">
+    
+<meta property="og:article:tag" content="нагрузка">
+    
+<meta property="og:article:tag" content="нода">
+    
+<meta property="og:article:tag" content="скрипт">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Openvz сохранение виртуальных нод на хост машину вариант 1-rsync, tar, 7zip, bzip2 и большая нагрузка" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/virtualization/openvz-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D0%BD%D0%BE%D0%B4-%D0%BD%D0%B0-%D1%85%D0%BE%D1%81%D1%82-%D0%BC" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Openvz сохранение виртуальных нод на хост машину вариант 1-rsync, tar, 7zip, bzip2 и большая нагрузка",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2011-01-19",
+    "description": "",
+    "wordCount":  1532 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/virtualization/openvz-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D0%BD%D0%BE%D0%B4-%D0%BD%D0%B0-%D1%85%D0%BE%D1%81%D1%82-%D0%BC" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Openvz сохранение виртуальных нод на хост машину вариант 1-rsync, tar, 7zip, bzip2 и большая нагрузка
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2011-01-19">19 Jan, 2011</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 8 min
+  &middot; (1532 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/7zip" class="label label-primary">7zip</a>
+  
+  <a href="http://b-comm.ru/tags/bzip2" class="label label-primary">bzip2</a>
+  
+  <a href="http://b-comm.ru/tags/downtime" class="label label-primary">downtime</a>
+  
+  <a href="http://b-comm.ru/tags/hn-%D0%BD%D0%BE%D0%B4%D0%B0" class="label label-primary">HN-нода</a>
+  
+  <a href="http://b-comm.ru/tags/openvz" class="label label-primary">OpenVZ</a>
+  
+  <a href="http://b-comm.ru/tags/rsync" class="label label-primary">rsync</a>
+  
+  <a href="http://b-comm.ru/tags/tar" class="label label-primary">tar</a>
+  
+  <a href="http://b-comm.ru/tags/%D0%BB%D0%BE%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE" class="label label-primary">локально</a>
+  
+  <a href="http://b-comm.ru/tags/%D0%BD%D0%B0%D0%B3%D1%80%D1%83%D0%B7%D0%BA%D0%B0" class="label label-primary">нагрузка</a>
+  
+  <a href="http://b-comm.ru/tags/%D0%BD%D0%BE%D0%B4%D0%B0" class="label label-primary">нода</a>
+  
+  <a href="http://b-comm.ru/tags/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82" class="label label-primary">скрипт</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <h2 id="ставим-цель">Ставим Цель</h2>
+
+<p>Нам нужно держать в некой папке на этом же сервере актуальные копии нод. При этом в добавок складировать архивы с этими нодами.</p>
+
+<p>Для проделывания этих действий Я написал скрипт. Так же не учитывается реальное состояние ноды &#8212; были ли реальные изменения или нет? Изменения /var/log &#8212; не очень актуально (разве, что bin-logs nfv от mysql храняться) и их бекапить можно &#171;наживо&#187; тем же rsync&#8217;ом)))</p>
+
+<p>У Меня есть несколько нод, и конечно хотелось бы определиться с тем, что лучше использовать для архивирования?</p>
+
+<h3 id="openvz-сохранение-виртуальных-нод-на-хост-машину-1-rsync-tar-7zip-bzip2-и-большая-нагрузка">OpenVZ сохранение виртуальных нод на хост машину #1: rsync, tar, 7zip, bzip2 и большая нагрузка</h3>
+
+<h3 id="логика-работы-скрипта">Логика работы скрипта</h3>
+
+<p>Логика скрипта состоит в том, что OpenVZ ноды Мы называем в виде цифр, а буквенное значение не присваиваем (давно было, что OpenVZ не умел в отличии от Virtuozz&#8217;ы этого делать, как сейчас дела обстоят &#8212; не знаю).</p>
+
+<p>Дальше у Нас есть место на диске, где хранятся наши ноды &#8212;</p>
+
+<p>В /etc/vz/vz.conf это будет /vz/private/:</p>
+
+<pre lang="php">VE_PRIVATE=/vz/private/$VEID</pre>
+
+<p>А у Меня в скрипте VZ_ROOT=&#187;/vz/private&#187;.</p>
+
+<p>VZ_DUMP_ROOT=&#187;/vz/private/dump&#187; &#8212; то куда Я сохраняю ноды.</p>
+
+<p><strong>Внимание!!! Логика скрипта состоит в том, что бы синхронизировать с помощью rsync ноду из $VZ_ROOT с $VZ_DUMP_ROOT, и не удалять это содержимое из бекапной папки</strong>!!!</p>
+
+<p>Так можно получить наименьший downtime, но и под каждую ноду будет в 2-а раза больше места забираться!!!</p>
+
+<p><strong>TODO:</strong> Я еще добавил такую функцию в скрипт, что бы для не запущенных нод он просто делал rsync, не создавая бекапы, хотя надо было бы по другому сделать: <strong>если rsync нашёл различающиеся файлы &#8212; делать бекап )))</strong></p>
+
+<p><strong>TODO:</strong> Так же чистку нод Я не делал, а надо было бы почистить: /var/log &#8212; может rsync не нужен</p>
+
+<p><strong>backup-openvz.sh</strong></p>
+
+<p></p>
+
+<pre lang="bash" line="1">#!/bin/sh
+# Размещено на http://b-comm.ru/?p=119
+# Автор wel: valeranew@ukr.net
+# script номер 1: сохранение нод, но не учитывается то что скрипт может 
+# подвесить всю родительскую HN-ноду
+# у Меня виртуальна нода из-за большого LA выключила некоторые сервисы
+# советую вторую реализацию найти или выкинуть bzip / 7zip 
+
+VZ_ROOT="/vz/private"
+VZ_DUMP_ROOT="/vz/private/dump"
+
+VZCTL="/usr/sbin/vzctl "
+
+
+
+VZ_NotStop=() #пишем подряд контейнеры, которые будут зависить друг от друга
+
+shopt -s extglob
+
+if [ ! -d "$VZ_ROOT" ]; then
+        mkdir -p $VZ_ROOT
+fi
+if [ ! -d "$VZ_DUMP_ROOT" ]; then
+        mkdir -p $VZ_DUMP_ROOT
+fi
+
+cd $VZ_ROOT
+echo "------------------------------------------------------------------------------------------------------"
+
+for DIR in *
+do
+        if [  -d "$DIR" ]; then
+                if [[ "$DIR" != +([0-9]) ]]; then
+                        echo "Не сохраняю $DIR так как директория содержит буквы"
+                else
+                        NOT_BACKUP=0
+                        for ((i=0; i&lt;${#VZ_NotStop[@]}; i++)); do
+                                if [ "${VZ_NotStop[$i]}" -eq "$DIR" ]; then
+                                         NOT_BACKUP=1
+                                fi
+                        done
+
+                        RUN_OUT=`vzlist |awk '{print $1}'|grep -v V|grep "\&lt;$DIR\>"`
+                        let " VZ_RUN = RUN_OUT + 0"
+                        #Содержит значение текущей OVZ или пустую строку
+                        if [ "$VZ_RUN"  -eq "$DIR" ]; then
+                                VZ_IS_RUNNING=1
+                        else
+                                VZ_IS_RUNNING=0
+                        fi
+
+                         if [ "$NOT_BACKUP" -eq "1" ]; then
+                                echo "$DIR не будет сохранено"
+                         else
+                                echo "Сохраняю $DIR"
+                                a=`date +%s`
+                                if  [ "$VZ_IS_RUNNING"  -eq "1" ]; then
+                                $VZCTL stop $DIR  >/dev/null 2>&1
+                                fi
+                                nice -n -19 ionice -c1 rsync -acr --numeric-ids --force --delete-excluded --delete-after  --max-delete=200  $VZ_ROOT/$DIR $VZ_DUMP_ROOT  #>/dev/null 2>&1
+                                if  [ "$VZ_IS_RUNNING"  -eq "1" ]; then
+                                        $VZCTL start $DIR >/dev/null 2>&1
+                                fi
+                                b=`date +%s`
+                                let "e = b -a"
+                                echo "Сохранение $DIR заняло $e sec"
+
+                             if  [ "$VZ_IS_RUNNING"  -eq "1" ]; then
+                                echo "Архивирование начато"
+                                a=`date +%s`
+                                NAME=`date +%Y-%m-%d--%H-%M-%S`
+                                TAR_NAME="$DIR.$NAME.tar"
+                                TAR_NAME_FOR_7z="$DIR.$NAME.7.tar"
+                                P7ZIP_DUMP="$VZ_DUMP_ROOT/$TAR_NAME_FOR_7z"
+                                nice -n 19 ionice -c3 tar --ignore-failed-read -cf $VZ_DUMP_ROOT/$TAR_NAME $DIR/  >/dev/null 2>&1
+                                c=`date +%s`
+                                let "d = c -a"
+                                echo "Время работы tar $d sec"
+                                echo "Начинаю архивировать $TAR_NAME_FOR_7z.7z"
+                                g=`date +%s`
+
+                                #нужно для 7zip#
+                                nice -n 19 ionice -c3 cp $VZ_DUMP_ROOT/$TAR_NAME $VZ_DUMP_ROOT/$TAR_NAME_FOR_7z
+
+                                nice -n 19 ionice -c3 7z a -t7z -mx9   $VZ_DUMP_ROOT/$TAR_NAME_FOR_7z.7z  $P7ZIP_DUMP  >/dev/null 2>&1
+                                c=`date +%s`
+                                let "PKZIP = g -c"
+                                echo "Время архивирования $TAR_NAME_FOR_7z.7z $PKZIP sec"
+                                echo "Архивирую $TAR_NAME.bz2"
+                                u=`date +%s`
+                                nice -n 19 ionice -c3 bzip2 $VZ_DUMP_ROOT/$TAR_NAME > /dev/null 2>&1
+                                i=`date +%s`
+                                let "BZIP = i -u"
+                                echo "Время архивирования $TAR_NAME $BZIP sec"
+                                b=`date +%s`
+                                rm $VZ_DUMP_ROOT/$TAR_NAME > /dev/null 2>&1
+                                rm $P7ZIP_DUMP > /dev/null 2>&1
+                                rm $VZ_DUMP_ROOT/$DIR.latest.tar.bz2  > /dev/null 2>&1
+                                cp $VZ_DUMP_ROOT/$TAR_NAME.bz2 $VZ_DUMP_ROOT/$DIR.latest.tar.bz2  > /dev/null 2>&1
+                                let "e = b -a"
+                                #echo "Архивирование занало  $e sec  из них ==  BZIP: $BZIP sec"
+                                echo "Архивирование занало  $e sec из них == PKZIP: $PKZIP sec BZIP: $BZIP sec"
+                             fi
+
+                         fi
+                fi
+        fi
+done
+#Внимательнее тут - Я перезапустил все виртуальные машины!!!
+/etc/init.d/vz restart
+
+</pre>
+
+<p><strong>log выполнения</strong></p>
+
+<pre lang="php" >-------------------------------------------------------------------------------------------------------
+Сохраняю 186
+Сохранение 186 заняло 3296 sec
+Архивирование начато
+Время работы tar 2883 sec
+Начинаю архивировать 186.2011-01-19--07-42-56.7.tar.7z
+Время архивирования 186.2011-01-19--07-42-56.7.tar.7z -3982 sec
+Архивирую 186.2011-01-19--07-42-56.tar.bz2
+Время архивирования 186.2011-01-19--07-42-56.tar 1325 sec
+Архивирование занало  8190 sec из них == PKZIP: -3982 sec BZIP: 1325 sec
+Сохраняю 201
+Сохранение 201 заняло 535 sec
+Архивирование начато
+Время работы tar 325 sec
+Начинаю архивировать 201.2011-01-19--10-09-00.7.tar.7z
+Время архивирования 201.2011-01-19--10-09-00.7.tar.7z -5251 sec
+Архивирую 201.2011-01-19--10-09-00.tar.bz2
+Время архивирования 201.2011-01-19--10-09-00.tar 1868 sec
+Архивирование занало  7444 sec из них == PKZIP: -5251 sec BZIP: 1868 sec
+Сохраняю 203
+Сохранение 203 заняло 90 sec
+Архивирование начато
+Время работы tar 8 sec
+Начинаю архивировать 203.2011-01-19--12-16-34.7.tar.7z
+Время архивирования 203.2011-01-19--12-16-34.7.tar.7z -387 sec
+Архивирую 203.2011-01-19--12-16-34.tar.bz2
+Время архивирования 203.2011-01-19--12-16-34.tar 92 sec
+Архивирование занало  487 sec из них == PKZIP: -387 sec BZIP: 92 sec
+Сохраняю 205
+Сохранение 205 заняло 83 sec
+Архивирование начато
+Время работы tar 6 sec
+Начинаю архивировать 205.2011-01-19--12-26-05.7.tar.7z
+Время архивирования 205.2011-01-19--12-26-05.7.tar.7z -488 sec
+Архивирую 205.2011-01-19--12-26-05.tar.bz2
+Время архивирования 205.2011-01-19--12-26-05.tar 115 sec
+Архивирование занало  609 sec из них == PKZIP: -488 sec BZIP: 115 sec
+Сохраняю 206
+Сохранение 206 заняло 64 sec
+Архивирование начато
+Время работы tar 8 sec
+Начинаю архивировать 206.2011-01-19--12-37-19.7.tar.7z
+Время архивирования 206.2011-01-19--12-37-19.7.tar.7z -452 sec
+Архивирую 206.2011-01-19--12-37-19.tar.bz2
+Время архивирования 206.2011-01-19--12-37-19.tar 112 sec
+Архивирование занало  572 sec из них == PKZIP: -452 sec BZIP: 112 sec
+Сохраняю 207
+Сохранение 207 заняло 106 sec
+Архивирование начато
+Время работы tar 27 sec
+Начинаю архивировать 207.2011-01-19--12-48-39.7.tar.7z
+Время архивирования 207.2011-01-19--12-48-39.7.tar.7z -880 sec
+Архивирую 207.2011-01-19--12-48-39.tar.bz2
+Время архивирования 207.2011-01-19--12-48-39.tar 252 sec
+Архивирование занало  1159 sec из них == PKZIP: -880 sec BZIP: 252 sec
+Сохраняю 209
+Сохранение 209 заняло 350 sec
+Архивирование начато
+Время работы tar 195 sec
+Начинаю архивировать 209.2011-01-19--13-13-51.7.tar.7z
+Время архивирования 209.2011-01-19--13-13-51.7.tar.7z -2040 sec
+Архивирую 209.2011-01-19--13-13-51.tar.bz2
+Время архивирования 209.2011-01-19--13-13-51.tar 747 sec
+Архивирование занало  2982 sec из них == PKZIP: -2040 sec BZIP: 747 sec
+Сохраняю 223
+Сохранение 223 заняло 192 sec
+Архивирование начато
+Время работы tar 38 sec
+Начинаю архивировать 223.2011-01-19--14-06-57.7.tar.7z
+Время архивирования 223.2011-01-19--14-06-57.7.tar.7z -1351 sec
+Архивирую 223.2011-01-19--14-06-57.tar.bz2
+Время архивирования 223.2011-01-19--14-06-57.tar 302 sec
+Архивирование занало  1691 sec из них == PKZIP: -1351 sec BZIP: 302 sec
+Не сохраняю backup так как директория содержит буквы
+Не сохраняю dump так как директория содержит буквы
+Shutting down VE 223
+Shutting down VE 209
+Shutting down VE 207
+Shutting down VE 206
+Shutting down VE 205
+Shutting down VE 203
+Shutting down VE 201
+Shutting down VE 186
+Bringing down interface venet0: ..done
+Stopping OpenVZ: ..done
+Starting OpenVZ: ..done
+Bringing up interface venet0: ..done
+Configuring interface venet0: ..done
+Starting VE 186: ..done
+Starting VE 201: ..done
+Starting VE 203: ..done
+Starting VE 205: ..done
+Starting VE 206: ..done
+Starting VE 207: ..done
+Starting VE 209: ..done
+Starting VE 223: ..done
+</pre>
+
+<pre lang="bash" line="1">vzlist  -a|awk '{print$1,$5}'
+VEID HOSTNAME
+186 mail-server
+201 web-server1
+203 ns1
+205 ns2
+206 xbt-tracker
+207 verlihub-server
+209 web-server2
+223 database-server
+</pre>
+
+<pre lang="bash" line="1">/vz/private# ls -la dump/|grep -v latest
+итого 14521388
+drwxr-xr-x 10 root root       4096 Янв 19 14:35 .
+drwx------ 12 root root       4096 Янв 19 15:33 ..
+drwxrwxrwx 21 root root       4096 Янв 19 06:43 186
+-rw-r--r--  1 root root  733662921 Янв 19 09:37 186.2011-01-19--07-42-56.7.tar.7z
+-rw-r--r--  1 root root 1173570629 Янв 19 08:30 186.2011-01-19--07-42-56.tar.bz2
+drwxr-xr-x 21 root root       4096 Янв 19 06:35 201
+-rw-r--r--  1 root root 2743271248 Янв 19 11:41 201.2011-01-19--10-09-00.7.tar.7z
+-rw-r--r--  1 root root 2863944236 Янв 19 10:14 201.2011-01-19--10-09-00.tar.bz2
+drwxr-xr-x 21 root root       4096 Янв 19 06:35 203
+-rw-r--r--  1 root root   55583004 Янв 19 12:23 203.2011-01-19--12-16-34.7.tar.7z
+-rw-r--r--  1 root root   86636067 Янв 19 12:16 203.2011-01-19--12-16-34.tar.bz2
+drwxr-xr-x 21 root root       4096 Янв 19 06:36 205
+-rw-r--r--  1 root root   61589401 Янв 19 12:34 205.2011-01-19--12-26-05.7.tar.7z
+-rw-r--r--  1 root root   96632242 Янв 19 12:26 205.2011-01-19--12-26-05.tar.bz2
+drwxr-xr-x 20 root root       4096 Янв 19 06:35 206
+-rw-r--r--  1 root root   53580264 Янв 19 12:44 206.2011-01-19--12-37-19.7.tar.7z
+-rw-r--r--  1 root root   90946031 Янв 19 12:37 206.2011-01-19--12-37-19.tar.bz2
+drwxr-xr-x 20 root root       4096 Янв 19 06:36 207
+-rw-r--r--  1 root root  112456884 Янв 19 13:03 207.2011-01-19--12-48-39.7.tar.7z
+-rw-r--r--  1 root root  205655557 Янв 19 12:49 207.2011-01-19--12-48-39.tar.bz2
+drwxr-xr-x 20 root root       4096 Янв 19 06:36 209
+-rw-r--r--  1 root root  443173145 Янв 19 13:51 209.2011-01-19--13-13-51.7.tar.7z
+-rw-r--r--  1 root root  604901452 Янв 19 13:17 209.2011-01-19--13-13-51.tar.bz2
+drwxr-xr-x 21 root root       4096 Янв 19 06:36 223
+-rw-r--r--  1 root root   91173753 Янв 19 14:30 223.2011-01-19--14-06-57.7.tar.7z
+-rw-r--r--  1 root root  158046225 Янв 19 14:07 223.2011-01-19--14-06-57.tar.bz2
+</pre>
+
+<p>На время выполнения скрипта:</p>
+
+<pre lang="bash">Tasks: 128 total,   3 running, 125 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.7%us,  0.3%sy, 98.7%ni,  0.0%id,  0.0%wa,  0.0%hi,  0.3%si,  0.0%st
+Mem:   3105112k total,  2936252k used,   168860k free,    36568k buffers
+Swap:  4096532k total,     1160k used,  4095372k free,  1913184k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+29584 root      39  19  678m 674m 1724 R 98.4 22.3  17:04.09 7z
+14365 Debian-e  20   0 27708 4816 1620 S  0.7  0.2   0:04.44 pdns_recursor
+31387 root      20   0  2388 1144  872 R  0.7  0.0   0:00.04 top
+    1 root      20   0  2100  696  592 S  0.0  0.0   0:03.84 init
+    2 root      15  -5     0    0    0 S  0.0  0.0   0:00.00 kthreadd
+</pre>
+
+<h3 id="вывод">Вывод:</h3>
+
+<p>Во первых надо определить &#8212; надо ли полностью архивировать ноду если изменений не было?</p>
+
+<p>Во вторых надо определиться с тем, что использовать для архивирования &#8212; bzip2 или 7zip или в tar?</p>
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="http://b-comm.ru/%D1%80%D0%B0%D1%81%D1%81%D1%83%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F/%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80-%D0%B1%D1%83%D0%B4%D1%83%D1%89%D0%B5%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D0%BC-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D0%B8" title="Браузер будущего: применяем виртуализацию">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/%D1%80%D0%B0%D1%81%D1%81%D1%83%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F/%D1%82%D0%BE%D1%80%D1%80%D0%B5%D0%BD%D1%82%D1%8B-%D0%B8-%D1%82%D0%BE%D1%80%D1%80%D0%B5%D0%BD%D1%82-%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C-c" title="Торренты и торрент-действительность: cкачал и за решётку &amp;#8212; реальность">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

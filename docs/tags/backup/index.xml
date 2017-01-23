@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Backup on </title>
+    <link>http://b-comm.ru/tags/backup/index.xml</link>
+    <description>Recent content in Backup on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/backup/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Бекап конфигурации Cisco</title>
+      <link>http://b-comm.ru/4isp/%D0%B1%D0%B5%D0%BA%D0%B0%D0%BF-%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D0%B8-cisco</link>
+      <pubDate>Tue, 22 Nov 2011 23:41:03 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/4isp/%D0%B1%D0%B5%D0%BA%D0%B0%D0%BF-%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D0%B8-cisco</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://b-comm.ru/wp-content/uploads/2011/11/cisco_catalyst_switch_3560_новый-размер.jpg&#34;&gt;&lt;img src=&#34;http://b-comm.ru/wp-content/uploads/2011/11/cisco_catalyst_switch_3560_новый-размер.jpg&#34; alt=&#34;&#34; title=&#34;cisco catalyst switch 3560&#34; width=&#34;300&#34; height=&#34;222&#34; class=&#34;alignleft size-full wp-image-188&#34; /&gt;&lt;/a&gt;Что бы осуществлять backup с помощью script&amp;#8217;а нужно настроить Циско Catalyst на выполнение удаленных команд с помощью rsh. В консоле нужно выполнить следующие команды:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;configure terminal
+no ip rcmd domain-lookup
+ip rcmd rsh-enable
+ip rcmd remote-host user 172.16.1.1 root enable&lt;/pre&gt;
+
+&lt;p&gt;ip rcmd domain-lookup — запрещаем проверку dns-имени для хоста с которого Мы будем подключатся.&lt;/p&gt;
+
+&lt;p&gt;ip rcmd rsh-enable – включаем сервис rsh.&lt;/p&gt;
+
+&lt;p&gt;ip rcmd remote-host user 172.16.1.1 root enable – пользователю с логином user, который должен существовать, устанавливает соединение с ип 172.16.1.1. Он будет из-под root и выполнять команды в режиме enable.&lt;/p&gt;
+
+&lt;p&gt;Проверка настроек с хоста 172.16.1.1 залогиневшись под rootом:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;rsh -l user 172.16.1.2 show running-config&lt;/pre&gt;
+
+&lt;p&gt;Если Вам удалось увидеть configuration, то Вы можете переходить к скрипту бекапа.&lt;/p&gt;
+
+&lt;p&gt;Для удобства разобьем операцию бекапа на два файла: один будет cisco_catalyst.txt — лист свитчей с именами, а второй скрипт на Perl&amp;#8217;е— backup.pl.&lt;/p&gt;
+
+&lt;p&gt;cisco_catalyst.txt:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;172.16.1.2 cisco_switch1
+172.16.1.3 cisco_switch2
+172.16.1.4 cisco_switch3
+172.16.1.5 cisco_switch4&lt;/pre&gt;
+
+&lt;p&gt;backup.pl:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;#!/usr/bin/perl -w
+
+$SW_LIST=&#39;cisco_catalyst.txt&#39;; #Список свитчей тут
+$USER=&#39;hilik&#39;; #Логин, который используется для бекапа
+
+$date=`/bin/date +%d%m%Y`;\
+#Сюда кладём бекап
+$BACKUP_DIR=&#39;/home/scripts/backup/&#39;;
+ 
+open(IN,&#34;&amp;lt;$SW_LIST&#34; ) or die &#34;Can&#39;t open list with switches: cisco_catalyst.txt&#34;;
+while(&amp;lt;IN&gt;)
+{
+ 
+    ($host, $name)=split(&#34; &#34;,$_);
+    if($host and $name)
+    {
+      chomp($name);
+      $file=&#34;$name.$date&#34;;
+      #print $file;
+      chomp($host);
+      `/usr/bin/rsh -l $USER $host &#39;sh running-config&#39; &gt;$BACKUP_DIR/$file`;
+      #print $k
+      #print &#34;Host $host, Name $name\n&#34;;
+    }
+}
+close(IN);
+&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Скрипты бекапа баз данных mysql</title>
+      <link>http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D1%8B-%D0%B1%D0%B5%D0%BA%D0%B0%D0%BF%D0%B0-%D0%B1%D0%B0%D0%B7-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-mysql</link>
+      <pubDate>Sat, 21 Nov 2009 09:35:40 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D1%8B-%D0%B1%D0%B5%D0%BA%D0%B0%D0%BF%D0%B0-%D0%B1%D0%B0%D0%B7-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-mysql</guid>
+      <description>&lt;p&gt;В нашей жизни возникает потребность бекапить данные и обычно в самый не подходящий момент эти данные, которые &amp;#171;так сильно нужны&amp;#187; &amp;#8212; отсутствуют.&lt;/p&gt;
+
+&lt;p&gt;Скрипт бекапит только заданые базы данных (то есть, если забыли добавить свои базы данных &amp;#8212; сами виноваты((( )&lt;/p&gt;
+
+&lt;pre lang=&#34;shell&#34; line=&#34;1&#34;&gt;45      20      */2     *       *       root    /bin/mysql_back.sh &gt;/dev/null
+&lt;/pre&gt;
+
+&lt;p&gt;/bin/mysql_back.sh&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;#!/bin/sh
+dump=/usr/local/bin/mysqldump
+password=&#34;root_password&#34;
+opt=&#34;--quote-names --add-drop-table --opt  -x  -F --add-drop-table  --all-databases -p$password&#34;
+#--compatible=mysql40
+
+
+path_to_save_db=/home/backup/mysql
+buckup_name=alldb
+
+//базы для сохранения
+db_backup=&#34;freenibs radius mysql&#34;
+name_of_same_db=`echo $db_backup|tr &#39; &#39; &#39;_&#39;`
+opt_not_all_db=&#34;--quote-names --add-drop-table --opt  -x  -F -B $db_backup -p$password &#34;
+# --compatible=mysql40
+FN=`/bin/date +%d.%m.%Y-%H-%M-%S`
+
+#rm $path_to_save_db/*
+$dump $opt  &gt;$path_to_save_db/$buckup_name.sql
+
+place=&#34;$FN&#34;
+mkdir -p $path_to_save_db/$place
+for b in $db_backup;do
+opt_not_all_db=&#34;--quote-names --add-drop-table --opt  -x  -F -B $b -p$password&#34;
+$dump $opt_not_all_db  &gt;$path_to_save_db/$place/$b.sql
+
+done
+cd $path_to_save_db
+
+nice -19 tar -cvf $path_to_save_db/all-$FN.tar $buckup_name.sql &gt;/dev/null
+
+nice -19 tar -cvf $path_to_save_db/$place.tar $place  &gt;/dev/null
+
+
+nice -19 bzip2 $place.tar
+nice -19 bzip2 all-$FN.tar
+
+rm $path_to_save_db/$buckup_name.sql
+rm -rf $path_to_save_db/$place
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

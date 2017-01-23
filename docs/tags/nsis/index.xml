@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nsis on </title>
+    <link>http://b-comm.ru/tags/nsis/index.xml</link>
+    <description>Recent content in Nsis on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/nsis/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>О том как провайдеру Интернета распространять программы  с помощью Nullsoft Scriptable Install System (NSIS)</title>
+      <link>http://b-comm.ru/4isp/%D0%BE-%D1%82%D0%BE%D0%BC-%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B2%D0%B0%D0%B9%D0%B4%D0%B5%D1%80%D1%83-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%BD%D0%B5%D1%82%D0%B0-%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%BE</link>
+      <pubDate>Sat, 01 Jan 2011 14:00:28 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/4isp/%D0%BE-%D1%82%D0%BE%D0%BC-%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B2%D0%B0%D0%B9%D0%B4%D0%B5%D1%80%D1%83-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%BD%D0%B5%D1%82%D0%B0-%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%BE</guid>
+      <description>&lt;p&gt;в данном посте пойдёт речь О том как провайдеру Интернета распространять программы. Даже не так &amp;#8212; набор программ с помощью Nullsoft Scriptable Install System (NSIS) — система создания инсталляторов для Microsoft Windows с открытыми исходными кодами)))&lt;/p&gt;
+
+&lt;p&gt;Дело в том, что обычно появляется необходимость установить IP-TV плейер, DC++ клиент, включить службы в Виндовсе и т.д. и что делать?&lt;/p&gt;
+
+&lt;p&gt;Настройщики мучаются-мучаются-мучаются, а еще они не квалифицированные или же у них времени нет или же нет чего-либо&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;А пользователь переустановил систему?&lt;/p&gt;
+
+&lt;p&gt;Мною было написаны скрипты для &lt;a href=&#34;http://nsis.sourceforge.net/Main_Page&#34; rel=&#34;nofollow&#34;&gt;Nullsoft Scriptable Install System (NSIS) — система создания инсталляторов для Microsoft Windows с открытыми исходными кодами, созданная компанией Nullsoft, основанной создателями Winamp. NSIS создан как альтернатива InstallShield, предназначенного для коммерческих продуктов.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Так же выкладываю &lt;a href=&#34;http://depositfiles.com/files/6zcndegap&#34; title=&#34;tools.rar&#34; rel=&#34;nofollow&#34;&gt;А это исходные программы нужные для моей сборки.&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Это последний вариант. Он устанавливал в 32-битную систему &amp;#8212; 32-битные программы, в 64-битную 64-битные (правда надо было доработать этот момент, но не хватило времени )))&lt;/p&gt;
+
+&lt;p&gt;Во вторых Я использовал скины &amp;#8212; это круто))) NSIS SkinCrafter Plugin, правда Я под Windows 7 очень долго устанавливал &amp;#8212; он не сразу заработал, вернее Он не работал))).&lt;/p&gt;
+
+&lt;p&gt;В общем у Меня есть отдельно: greylink0022-x64 директория С greylink&amp;#8217;ом для х86_64 и greylink0025 С greylink&amp;#8217;ом для х86 для 32-бит.&lt;/p&gt;
+
+&lt;p&gt;Я сделал что бы с помощью nsProcess::FindProcess &amp;#8212; искался активный процесс greylink.exe и если он есть предлагалось его грохнуть, иначе ж не запишешь новые данные)))&lt;/p&gt;
+
+&lt;p&gt;Убивание с помощью nsProcess::KillProcess)))&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://depositfiles.com/files/6zcndegap&#34; title=&#34;tools.rar&#34; rel=&#34;nofollow&#34;&gt;исходные программы нужные для сборки&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;new_x64_and_x86_4_kill_proc_vnc_winmtr_slugbi_16.nsi:&lt;/p&gt;
+
+&lt;pre lang=&#34;nsis&#34; line=&#34;1&#34;&gt;; Script generated with the Venis Install Wizard
+
+; Define your application name
+!define APPNAME &#34;Home&#34;
+!define PRODUCT_VERSION &#34;0.5&#34;
+!define APPNAMEANDVERSION &#34;Home pack ${PRODUCT_VERSION}&#34;
+
+  VIProductVersion         &#34;1.${PRODUCT_VERSION}&#34;
+  VIAddVersionKey          &#34;FileVersion&#34;        &#34;${PRODUCT_VERSION}&#34; 
+  VIAddVersionKey          &#34;ProductName&#34;           &#34;Home pack&#34;
+  VIAddVersionKey          &#34;CompanyName&#34;          &#34;Home&#34;
+  VIAddVersionKey          &#34;LegalTrademarks&#34;       &#34;www.home&#34;
+  VIAddVersionKey          &#34;LegalCopyright&#34;        &#34;CopyRights 2010© to valeranew@ukr.net&#34; 
+    VIAddVersionKey          &#34;FileDescription&#34;       &#34;dc++&#34;
+    
+; !define SF_SELECTED   1
+; !define SF_SUBSEC     2
+; !define SF_SUBSECEND  4
+; !define SF_BOLD       8
+; !define SF_RO         16
+; !define SF_EXPAND     32
+; !define SECTION_OFF   0xFFFFFFFE
+; ExecShell
+
+; Main Install settings
+Name &#34;${APPNAMEANDVERSION}&#34;
+InstallDir &#34;$PROGRAMFILES\Home&#34;
+InstallDirRegKey HKLM &#34;Software\${APPNAME}&#34; &#34;&#34;
+;OutFile &#34;home_pack_full.exe&#34;
+OutFile &#34;home_pack_full-${PRODUCT_VERSION}.exe&#34;
+; Modern interface settings
+!include &#34;MUI2.nsh&#34;
+;kill
+!include &#34;nsProcess.nsh&#34;
+!include &#34;Sections.nsh&#34;
+
+  !define MUI_HEADERIMAGE
+  !define MUI_HEADERIMAGE_BITMAP &#34;logo.bmp&#34; ; optional
+    
+;!define MUI_COMPONENTSPAGE_SMALLDESC
+!define MUI_INSTFILESPAGE_COLORS &#34;FFFFFF 000000&#34; ;Два цвета
+
+
+!define MUI_ABORTWARNING
+!define MUI_FINISHPAGE_RUN_NOTCHECKED
+!define MUI_FINISHPAGE_RUN_TEXT &#34;Выберите что бы запустить DC++&#34;
+!define MUI_FINISHPAGE_RUN &#34;$INSTDIR\greylink\greylink.exe&#34;
+
+!insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE &#34;License.txt&#34;
+!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+!insertmacro MUI_PAGE_FINISH
+
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+
+; Set languages (first is default language)
+;!insertmacro MUI_LANGUAGE &#34;English&#34;
+!insertmacro MUI_LANGUAGE &#34;Russian&#34;
+!insertmacro MUI_RESERVEFILE_LANGDLL
+
+
+Section /o  &#34;Windows x86 32bit&#34; Section1
+    
+    ; Set Section properties
+    SetOverwrite on
+
+    ; Set Section Files and Shortcuts
+    SetOutPath &#34;$INSTDIR\greylink\&#34;
+    File /r &#34;greylink0025\greylink\*.*&#34;
+    
+    SetOutPath &#34;$INSTDIR\homenet\&#34;
+    File /r &#34;homenet_tool\*.*&#34;
+
+    SetOutPath &#34;$INSTDIR\tightvnc\&#34;
+    File /r &#34;tightvnc\*.*&#34;
+    
+    CreateShortCut &#34;$DESKTOP\Greylink.lnk&#34; &#34;$INSTDIR\greylink\greylink.exe&#34;
+    CreateDirectory &#34;$SMPROGRAMS\Home&#34;
+    CreateShortCut &#34;$SMPROGRAMS\Home\ping_test.lnk&#34; &#34;$INSTDIR\homenet\ping.exe&#34;
+    
+    ;сайты
+    CreateShortCut &#34;$SMPROGRAMS\Home\Сайт Home.lnk&#34; &#34;http://home/&#34; &#34;&#34; &#34;$INSTDIR\home\home.ico&#34;
+    CreateShortCut &#34;$DESKTOP\Сайт Home.lnk&#34; &#34;http://home/&#34; &#34;&#34; &#34;$INSTDIR\home\homenet.ico&#34;
+    CreateShortCut &#34;$SMPROGRAMS\Home\WinMTR.lnk&#34; &#34;$INSTDIR\home\winmtr_0.8\WinMTR.exe&#34;
+    CreateShortCut &#34;$SMPROGRAMS\Home\Статистика Интернета.lnk&#34; &#34;https://stat/&#34; &#34;&#34; &#34;$INSTDIR\home\home.ico&#34;
+    CreateShortCut &#34;$DESKTOP\Статистика Интернета.lnk&#34; &#34;https://stat/&#34; &#34;&#34; &#34;$INSTDIR\home\home.ico&#34;
+    CreateShortCut &#34;$SMPROGRAMS\Home\Медиасервер.lnk&#34; &#34;http://media.home/&#34; &#34;&#34; &#34;$INSTDIR\home\mediahome.ico&#34;
+
+    
+    CreateShortCut &#34;$SMPROGRAMS\Home\Greylink.lnk&#34; &#34;$INSTDIR\greylink\greylink.exe&#34;
+  CreateShortCut &#34;$SMPROGRAMS\Home\VNC.lnk&#34; &#34;$INSTDIR\tightvnc\WinVNC.exe&#34;
+
+    CreateShortCut &#34;$SMPROGRAMS\Home\Uninstall.lnk&#34; &#34;$INSTDIR\uninstall.exe&#34;
+        CreateShortCut &#34;$SMPROGRAMS\Home\IPTV.lnk&#34; &#34;$INSTDIR\IPTVplayer\IpTvPlayer.exe&#34;
+    
+SectionEnd
+Section /o &#34;IPTV beta1&#34; Section11
+    SetOutPath &#34;$INSTDIR\IPTVplayer&#34;
+    
+    File /r &#34;IP-TV_Playerb1\*.*&#34;
+    
+    SectionEnd
+Section /o &#34;Windows x64 64bit&#34; Section2
+
+    ; Set Section properties
+    SetOverwrite on
+
+    ; Set Section Files and Shortcuts
+    SetOutPath &#34;$INSTDIR\greylink\&#34;
+    File /r &#34;greylink0022-x64\greylink\*.*&#34;
+
+    SetOutPath &#34;$INSTDIR\home\&#34;
+    File /r &#34;home_tool\*.*&#34;
+
+    SetOutPath &#34;$INSTDIR\tightvnc\&#34;
+    File /r &#34;tightvnc\*.*&#34;
+    
+    CreateShortCut &#34;$DESKTOP\Greylink.lnk&#34; &#34;$INSTDIR\greylink\greylink.exe&#34;
+    CreateDirectory &#34;$SMPROGRAMS\Home&#34;
+
+    CreateShortCut &#34;$SMPROGRAMS\Home\ping_test.lnk&#34; &#34;$INSTDIR\home\ping.exe&#34;
+  CreateShortCut &#34;$SMPROGRAMS\Home\Greylink.lnk&#34; &#34;$INSTDIR\greylink\greylink.exe&#34;
+ 
+    ;сайты
+    CreateShortCut &#34;$SMPROGRAMS\Home\Сайт Home-net.lnk&#34; &#34;http://home/&#34; &#34;&#34; &#34;$INSTDIR\home\home.ico&#34;
+    CreateShortCut &#34;$SMPROGRAMS\Home\WinMTR.lnk&#34; &#34;$INSTDIR\home\winmtr_0.8\WinMTR.exe&#34;
+    CreateShortCut &#34;$DESKTOP\Сайт Home.lnk&#34; &#34;http://home/&#34; &#34;&#34; &#34;$INSTDIR\home\home.ico&#34;
+    CreateShortCut &#34;$SMPROGRAMS\Home\Статистика Интернета.lnk&#34; &#34;https://stat/&#34; &#34;&#34; &#34;$INSTDIR\home\home.ico&#34;
+    CreateShortCut &#34;$DESKTOP\Статистика Интернета.lnk&#34; &#34;https://stat/&#34; &#34;&#34; &#34;$INSTDIR\home\home.ico&#34;
+    CreateShortCut &#34;$SMPROGRAMS\Homenet\Медиасервер home.lnk&#34; &#34;http://media.home/&#34; &#34;&#34; &#34;$INSTDIR\home\home.ico&#34;
+
+  CreateShortCut &#34;$SMPROGRAMS\Home\VNC.lnk&#34; &#34;$INSTDIR\tightvnc\WinVNC.exe&#34;
+ 
+    CreateShortCut &#34;$SMPROGRAMS\Home\Uninstall.lnk&#34; &#34;$INSTDIR\uninstall.exe&#34;
+    CreateShortCut &#34;$SMPROGRAMS\Home\IPTV.lnk&#34; &#34;$INSTDIR\IPTVplayer\IpTvPlayer.exe&#34;
+
+SectionEnd
+;служба DHCP-клиент (DHCP Client)
+Section /o &#34;включить DHCP-клиент&#34; Section3
+    ; Set Section properties
+    SetOverwrite on
+    GetVersion::WindowsName
+    Pop $R0
+    
+    StrCmp $R0 &#34;7&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dhcp&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+    StrCmp $R0 &#34;Vista&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dhcp&#34; &#34;Start&#34; &#34;00000002&#34;
+
+    StrCmp $R0 &#34;XP&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dhcp&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+    StrCmp $R0 &#34;XP x64&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dhcp&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+SectionEnd
+;DNS-клиент (DNS Client)
+Section /o &#34;включить DNS-клиент&#34; Section4
+    ; Set Section properties
+    SetOverwrite on
+    GetVersion::WindowsName
+    Pop $R0
+    
+    StrCmp $R0 &#34;7&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dnscache&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+    StrCmp $R0 &#34;Vista&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dnscache&#34; &#34;Start&#34; &#34;00000002&#34;
+
+    StrCmp $R0 &#34;XP&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dnscache&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+    StrCmp $R0 &#34;XP x64&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dnscache&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+SectionEnd
+
+;IPSEC Services (Службы IPSEC)
+Section /o &#34;Отключить службу IPSEC&#34; Section5
+    ; Set Section properties
+    SetOverwrite on
+    GetVersion::WindowsName
+    Pop $R0
+    
+    StrCmp $R0 &#34;7&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\PolicyAgent&#34; &#34;Start&#34; &#34;00000004&#34;
+    
+    StrCmp $R0 &#34;Vista&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\PolicyAgent&#34; &#34;Start&#34; &#34;00000004&#34;
+
+    StrCmp $R0 &#34;XP&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\PolicyAgent&#34; &#34;Start&#34; &#34;00000004&#34;
+    
+    StrCmp $R0 &#34;XP x64&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\PolicyAgent&#34; &#34;Start&#34; &#34;00000004&#34;
+    
+SectionEnd
+
+;автозагрузка ДС+++
+Section /o &#34;автозагрузка DC++&#34; Section6
+    ;autostart 
+    WriteRegStr HKLM &#34;Software\Microsoft\Windows\CurrentVersion\Run&#34; &#34;home&#34; &#34;$INSTDIR\greylink\greylink.exe&#34;
+SectionEnd
+
+Section /o &#34;отключить IP версии 6&#34; Section7
+    ;ipv6
+    GetVersion::WindowsName
+    Pop $R0
+    
+    StrCmp $R0 &#34;Vista&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters\&#34; &#34;DisabledComponents&#34; &#34;0xffffffff&#34;
+    
+    StrCmp $R0 &#34;7&#34; 0 +2
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters\&#34; &#34;DisabledComponents&#34; &#34;4294967295&#34;
+
+SectionEnd
+;службы для создания подключения
+Section /o &#34;службы для создания подключения&#34; Section8
+    ; Set Section properties
+    SetOverwrite on
+    ;Remote Access Connection Manager (Диспетчер подключений удаленного доступа)
+    ;Remote Procedure Call (Локатор удаленного вызова процедур (RPC))
+    ;Plug and Play (Plug and Play)
+  ;Telephony (Телефония)
+    ;TCP/IP NetBIOS Helper Service (Модуль поддержки NetBIOS через TCP/IP)
+    ;DCOM Server Process Launcher (Запуск серверных процессов DCOM)
+    ;Server (Сервер)
+    GetVersion::WindowsName
+    Pop $R0
+    
+    StrCmp $R0 &#34;7&#34; 0 +8
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RasAuto&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RasMan&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RpcLocator&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\TapiSrv&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\lmhosts&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\DcomLaunch&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\LanmanServer&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+    StrCmp $R0 &#34;Vista&#34; 0 +8
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RasAuto&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RasMan&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RpcLocator&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\TapiSrv&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\lmhosts&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\DcomLaunch&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\LanmanServer&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+
+    StrCmp $R0 &#34;XP&#34; 0 +8
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RasMan&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RpcLocator&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\PlugPlay&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\TapiSrv&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\LmHosts&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\DcomLaunch&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\lanmanserver&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+    StrCmp $R0 &#34;XP x64&#34; 0 +8
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RasMan&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RpcLocator&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\PlugPlay&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\TapiSrv&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\LmHosts&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\DcomLaunch&#34; &#34;Start&#34; &#34;00000002&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\lanmanserver&#34; &#34;Start&#34; &#34;00000002&#34;
+    
+SectionEnd
+Section /o &#34;отключить Брандмауэр Windows&#34; Section9
+    ;ipv6
+    GetVersion::WindowsName
+    Pop $R0
+    ;Общий доступ к подключению к Интернету (ICS) (Internet Connection Sharing (ICS))
+  ;Брандмауэр Windows (Windows Firewall)
+    ;Security Center (Центр обеспечения безопасности)
+    StrCmp $R0 &#34;7&#34; 0 +4
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\SharedAccess&#34; &#34;Start&#34; &#34;00000004&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\MpsSv&#34; &#34;Start&#34; &#34;00000004&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\wscsvc&#34; &#34;Start&#34; &#34;00000004&#34;
+    
+    StrCmp $R0 &#34;Vista&#34; 0 +4
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\SharedAccess&#34; &#34;Start&#34; &#34;00000004&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\MpsSv&#34; &#34;Start&#34; &#34;00000004&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\wscsvc&#34; &#34;Start&#34; &#34;00000004&#34;
+    
+    StrCmp $R0 &#34;XP x64&#34; 0 +3
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\SharedAccess&#34; &#34;Start&#34; &#34;00000004&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\wscsvc&#34; &#34;Start&#34; &#34;00000004&#34;    
+    
+    StrCmp $R0 &#34;XP&#34; 0 +3
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\SharedAccess&#34; &#34;Start&#34; &#34;00000004&#34;
+    WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\wscsvc&#34; &#34;Start&#34; &#34;00000004&#34;
+    
+SectionEnd
+Section /o &#34;Перезаписать список Хабов&#34; Section10
+    SetOverwrite on
+    ;       SetOutPath &#34;$INSTDIR\greylink\Settings\&#34;
+    ;       File &#34;homenet_tool\Favorites.xml&#34;
+    
+    
+        IfFileExists &#34;$INSTDIR\greylink\Settings\Favorites.xml&#34; 0 true_section10 
+        MessageBox MB_YESNO &#34;Файл с списком Хабов существует - Вы хотите его переписать? Если Вы его перепишете то пароли от хабов потеряются!!!&#34; IDYES true_section10 IDNO false_section10
+        true_section10: 
+            SetOutPath &#34;$INSTDIR\greylink\Settings\&#34;
+            File &#34;settings\homenet\Favorites.xml&#34;
+            MessageBox MB_OK &#34;Текущий список хабов: home: hub.home (10.1.1.1). Если он у Вас другой - добавьте их. Внимание ИП адресс может меняться.&#34;
+          Goto next_section10
+        false_section10:
+            MessageBox MB_OK &#34;Текущий список хабов: home: hub.home (10.1.1.1). Если он у Вас другой - добавьте их. Внимание ИП адресс может меняться.&#34;
+        next_section10:
+        
+        
+SectionEnd
+
+Function .onSelChange 
+ SectionGetFlags ${section1} $1 
+ SectionGetFlags ${section2} $2 
+
+StrCmp $1 &#34;1&#34; 0 N1 
+ SectionGetFlags ${section2} $0 
+ IntOp $0 $0 &amp; ${SECTION_OFF} 
+ SectionSetFlags ${section2} $0
+ 
+
+N1: 
+StrCmp $2 &#34;1&#34; 0 N2 
+ SectionGetFlags ${section1} $0 
+ IntOp $0 $0 &amp; ${SECTION_OFF} 
+ SectionSetFlags ${section1} $0  
+ 
+N2:
+
+
+FunctionEnd
+
+Section -FinishSection
+
+    WriteRegStr HKLM &#34;Software\${APPNAME}&#34; &#34;&#34; &#34;$INSTDIR&#34;
+    WriteRegStr HKLM &#34;Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}&#34; &#34;DisplayName&#34; &#34;${APPNAME}&#34;
+    WriteRegStr HKLM &#34;Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}&#34; &#34;UninstallString&#34; &#34;$INSTDIR\uninstall.exe&#34;
+    WriteUninstaller &#34;$INSTDIR\uninstall.exe&#34;
+
+    ;vnc section
+    ;seven
+    GetVersion::WindowsName
+    Pop $R0
+    ;DHCP-клиент (DHCP Client)
+    ;DNS-клиент (DNS Client)
+    ;Агент политики IPsec (IPsec Policy Agent)
+    ;Маршрутизация и удаленный доступ (Routing and Remote Access)
+    ;StrCmp $R0 &#34;7&#34; 0 +7
+    ;WriteRegBin  HKCU &#34;Software\ORL\WinVNC3&#34; &#34;Password&#34; &#34;04a80c01b072856f&#34;
+    ;WriteRegBin  HKCU &#34;Software\ORL\WinVNC3&#34; &#34;PasswordViewOnly&#34; &#34;04a80c01b072856f&#34;
+    ;WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dhcp&#34; &#34;Start&#34; &#34;00000002&#34;
+    ;WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\Dnscache&#34; &#34;Start&#34; &#34;00000002&#34;
+    ;WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\PolicyAgent&#34; &#34;Start&#34; &#34;00000003&#34;
+    ;WriteRegDWORD HKLM &#34;SYSTEM\CurrentControlSet\Services\RemoteAccess&#34; &#34;Start&#34; &#34;00000004&#34;
+    ;GetVersion::WindowsName
+    ;Pop $R0
+    ;StrCmp $R0 &#34;xp&#34; 0 +3
+    ;WriteRegBin  HKCU &#34;S-1-5-21-1801674531-1343024091-789743027-1004\Software\ORL\WinVNC3&#34; &#34;Password&#34; &#34;04a80c01b072856f&#34;
+    ;WriteRegBin  HKCU &#34;S-1-5-21-1801674531-1343024091-789743027-1004\Software\ORL\WinVNC3&#34; &#34;PasswordViewOnly&#34; &#34;04a80c01b072856f&#34;
+    
+MessageBox MB_YESNO|MB_ICONQUESTION &#34;Нужно перезегрузиться. Хотите выполнить перезагрузку сейчас?&#34; IDNO +3
+Exec &#39;&#34;$INSTDIR\home\route_f.bat&#34;&#39;
+Reboot
+SectionEnd
+
+; Modern install component descriptions
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section1} &#34;Windows XP,Vista,7 32bit&#34;
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section2} &#34;Widows XP, Vista, 7 64bit&#34;
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section3} &#34;Включить службу DHCP-клиент (DHCP Client)&#34;
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section4} &#34;Включить службу DNS-клиент (DNS Client)&#34;
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section5} &#34;Отключить службу IPSEC&#34;  
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section6} &#34;включить автозагрузку ДС++&#34;  
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section7} &#34;отключить TCP/IP версии 6 Windows Vista, 7 у Нас не используется но является брешью в безопасности&#34;  
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section8} &#34;службы для создания подключения:     Remote Access Connection Manager (Диспетчер подключений удаленного доступа), Remote Procedure Call (Локатор удаленного вызова процедур (RPC)), Plug and Play (Plug and Play), Telephony (Телефония), TCP/IP NetBIOS Helper Service (Модуль поддержки NetBIOS через TCP/IP), DCOM Server Process Launcher (Запуск серверных процессов DCOM),Server (Сервер)&#34; 
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section9} &#34;Отключить службы: Общий доступ к подключению к Интернету (ICS) (Internet Connection Sharing (ICS)), Брандмауэр Windows (Windows Firewall), Security Center (Центр обеспечения безопасности)&#34;
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section10} &#34;Записывает файл со списком хабов. Однако в этом же файле хранятся и пароли. Будьте внимательны если Вы не хотите потерять пароли!&#34;
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+
+;Uninstall section
+Section Uninstall
+
+    ;Remove from registry...
+    DeleteRegKey HKLM &#34;Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}&#34;
+    DeleteRegValue HKLM &#34;Software\Microsoft\Windows\CurrentVersion\Run&#34; &#34;homenet&#34;
+    DeleteRegKey HKLM &#34;SOFTWARE\${APPNAME}&#34;
+
+    ; Delete self
+    Delete &#34;$INSTDIR\uninstall.exe&#34;
+
+    ; Delete Shortcuts
+    Delete &#34;$DESKTOP\Greylink.lnk&#34;
+    Delete &#34;$SMPROGRAMS\Home\ping_test.lnk&#34; 
+    Delete &#34;$SMPROGRAMS\Home\Greylink.lnk&#34;
+    Delete &#34;$SMPROGRAMS\Home\Uninstall.lnk&#34;
+    ;Delete &#34;$SMPROGRAMS\Home\VNC.lnk&#34;
+    Delete &#34;$SMPROGRAMS\Home\ping_test.lnk&#34; 
+    ; RMDir /r &#34;$SMPROGRAMS\Home\&#34;
+    RMDir /r &#34;$INSTDIR\greylink\&#34;
+
+SectionEnd
+
+Function .onGUIEnd
+    NSIS_SkinCrafter_Plugin::destroy
+FunctionEnd
+
+Function un.onInit
+    ;User defined skin
+    ;SetOutPath $TEMP
+    ;File /oname=Stylish.skf &#34;Stylish.skf&#34;
+    ;NSIS_SkinCrafter_Plugin::skin /NOUNLOAD $TEMP\Stylish.skf
+    ;Delete $TEMP\Stylish.skf
+
+    ;Default Skin
+    NSIS_SkinCrafter_Plugin::skin /NOUNLOAD
+FunctionEnd
+
+Function un.onGUIEnd
+    NSIS_SkinCrafter_Plugin::destroy
+FunctionEnd
+
+; On initialization
+Function .onInit
+        ;User defined skin
+    SetOutPath $TEMP
+    File /oname=Gloss.skf &#34;Gloss.skf&#34;
+    NSIS_SkinCrafter_Plugin::skin /NOUNLOAD $TEMP\Gloss.skf
+    Delete $TEMP\Gloss.skf
+
+    ;Default Skin
+    ;NSIS_SkinCrafter_Plugin::skin /NOUNLOAD
+        
+    
+    ;enable DHCP client by default
+    SectionSetFlags ${section3} 1
+    ;enable DNS client by default
+    SectionSetFlags ${section4} 1   
+    ;disable IPSEC Services (Службы IPSEC)
+    SectionSetFlags ${section5} 1   
+    ;autostart dc++
+    SectionSetFlags ${section6} 1   
+    ;ип версии 6
+    SectionSetFlags ${Section7} 1
+    SectionSetFlags ${Section8} 1
+    SectionSetFlags ${Section9} 0
+    ;IfFileExists &#34;$INSTDIR\greylink\Settings\Favorites.xml&#34; 0  
+    ;SectionSetFlags ${Section10} 0
+    ;Goto
+    SectionSetFlags ${Section10} 1
+    
+    ;IfFileExists &#34;$INSTDIR\greylink\Settings\Favorites.xml&#34; 0 true_section10 
+    ;   MessageBox MB_YESNO &#34;Файл с списком Хабов существует - Вы хотите его переписать? Если Вы его перепишете то пароли от хабов потеряются!!!&#34; IDYES true_section10 IDNO false_section10
+    ;   true_section10: 
+    ;       SectionSetFlags ${Section10} 1
+    ;     Goto next_section10
+    ;   false_section10:
+    ;       SectionSetFlags ${Section10} 0
+    ;       MessageBox MB_OK &#34;Текущий список хабов: home: hub.homenet (10.1.1.1). Если он у Вас другой - добавьте их. Внимание ИП адресс может меняться.&#34;
+    ;   next_section10:
+    ;   
+    ;if 32 bit set for 32bit
+    GetVersion::WindowsPlatformId
+    Pop $R0
+    SectionSetFlags ${section1} 0
+    SectionSetFlags ${section2} 1
+    ;Goto +7
+    StrCmp $R0 &#34;64&#34; 0 +4
+    SectionSetFlags ${section1} 0
+    SectionSetFlags ${section2} 1
+    Goto +3
+    SectionSetFlags ${section1} 1
+  SectionSetFlags ${section2} 0
+    ;;;;;;;;;;;;;;;;;
+Goto start
+end:
+    Quit
+start:  
+    ${nsProcess::FindProcess} &#34;greylink.exe&#34; $R0
+    StrCmp $R0 0 0 +5
+    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION &#39;Закрыть &#34;ДС++&#34; для продолжения установки?&#39; IDOK loop IDCANCEL end
+loop:
+    ${nsProcess::KillProcess} &#34;greylink.exe&#34; $R0
+    MessageBox MB_OK &#34;Приложение ДС++ было завершено&#34; ; Errorlevel: [$R0]&#34;
+    ${nsProcess::Unload}
+
+    ;end:
+    ; kill DC++
+  ; nsExec::Exec &#39;$INSTDIR\home\wkill.exe -n &#34;greylink.exe&#34;&#39;
+    !insertmacro MUI_LANGDLL_DISPLAY
+
+FunctionEnd
+
+BrandingText &#34;home&#34;
+
+; eof
+
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://depositfiles.com/files/6zcndegap&#34; title=&#34;tools.rar&#34; rel=&#34;nofollow&#34;&gt;исходные программы нужные для сборки&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

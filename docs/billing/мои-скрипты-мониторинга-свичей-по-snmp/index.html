@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Мои скрипты мониторинга свичей по snmp  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="Cisco, Dlink, netgear, Zyxel, ">
+
+
+<meta property="og:title" content="Мои скрипты мониторинга свичей по snmp  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/billing/%D0%BC%D0%BE%D0%B8-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-%D1%81%D0%B2%D0%B8%D1%87%D0%B5%D0%B9-%D0%BF%D0%BE-snmp" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2011-02-19T21:01:34Z" />
+<meta property="og:article:modified_time" content="2011-02-19T21:01:34Z" />
+
+  
+    
+<meta property="og:article:tag" content="Cisco">
+    
+<meta property="og:article:tag" content="Dlink">
+    
+<meta property="og:article:tag" content="netgear">
+    
+<meta property="og:article:tag" content="Zyxel">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Мои скрипты мониторинга свичей по snmp" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/billing/%D0%BC%D0%BE%D0%B8-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-%D1%81%D0%B2%D0%B8%D1%87%D0%B5%D0%B9-%D0%BF%D0%BE-snmp" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Мои скрипты мониторинга свичей по snmp",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2011-02-19",
+    "description": "",
+    "wordCount":  3542 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/billing/%D0%BC%D0%BE%D0%B8-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-%D1%81%D0%B2%D0%B8%D1%87%D0%B5%D0%B9-%D0%BF%D0%BE-snmp" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Мои скрипты мониторинга свичей по snmp
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2011-02-19">19 Feb, 2011</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 17 min
+  &middot; (3542 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/cisco" class="label label-primary">Cisco</a>
+  
+  <a href="http://b-comm.ru/tags/dlink" class="label label-primary">Dlink</a>
+  
+  <a href="http://b-comm.ru/tags/netgear" class="label label-primary">netgear</a>
+  
+  <a href="http://b-comm.ru/tags/zyxel" class="label label-primary">Zyxel</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <h2 id="мои-скрипты-мониторинга-свичей-по-snmp">Мои скрипты мониторинга свичей по snmp</h2>
+
+<p>Я синхронизирую данные с базай FreeNIBS 1.x где беру данные;) Это можно пофиксить в принципе.</p>
+
+<p>Так выглядит результат:</p>
+
+<div id="attachment_170" style="width: 1034px" class="wp-caption alignleft">
+  <a href="http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028.jpg"><img src="http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028-1024x159.jpg" alt="SNMP Dlink 3028" title="SNMP Dlink 3028" width="1024" height="159" class="size-large wp-image-170" srcset="http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028-1024x159.jpg 1024w, http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028-300x46.jpg 300w, http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028.jpg 1270w" sizes="(max-width: 1024px) 100vw, 1024px" /></a>
+  
+  <p class="wp-caption-text">
+    SNMP Dlink 3028
+  </p>
+</div>
+
+<p>В общем скрипт раз в х минут по крону скрипт сканирует свичи. Так же идёт синхронизация с базой в которой содержатся данные о пользователях их дипозитах и макадрессах.</p>
+
+<p><strong>crontab:</strong></p>
+
+<pre lang="php" line="1">*/30 *  * * *   root   rm /var/www/skmsw/pid/*
+*/5 *  * * *   root    /usr/bin/php -q /var/www/skmsw/cron.php  >/dev/null 2>1&
+</pre>
+
+<pre lang="sql" line="1">-- phpMyAdmin SQL Dump
+-- version 3.3.9.2
+
+-- Время создания: Фев 21 2011 г., 00:24
+-- Версия сервера: 5.5.9
+-- Версия PHP: 5.3.5
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- База данных: `skmsw`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `freenibs`
+--
+
+DROP TABLE IF EXISTS `freenibs`;
+CREATE TABLE IF NOT EXISTS `freenibs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mac` varchar(100) NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `deposit` double(16,3) NOT NULL,
+  `en` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mac` (`mac`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10869793 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mac`
+--
+
+DROP TABLE IF EXISTS `mac`;
+CREATE TABLE IF NOT EXISTS `mac` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `port` int(11) NOT NULL,
+  `mac` varchar(255) NOT NULL,
+  `sw_id` int(11) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `port` (`port`,`mac`,`sw_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5293 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `packets`
+--
+
+DROP TABLE IF EXISTS `packets`;
+CREATE TABLE IF NOT EXISTS `packets` (
+  `gid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `credit` float(16,4) NOT NULL,
+  `activated` smallint(6) NOT NULL DEFAULT '1',
+  `month_traffic_limit` float(25,6) NOT NULL,
+  `framed_ip` varchar(255) NOT NULL,
+  `     framed_mask` varchar(40) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `stat`
+--
+
+DROP TABLE IF EXISTS `stat`;
+CREATE TABLE IF NOT EXISTS `stat` (
+  `mac_n` bigint(255) NOT NULL,
+  `login_n` bigint(255) NOT NULL,
+  `sw_n` bigint(255) NOT NULL,
+  `all_traf` float(30,3) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `sw`
+--
+
+DROP TABLE IF EXISTS `sw`;
+CREATE TABLE IF NOT EXISTS `sw` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT 'sw',
+  `type_res` varchar(25) NOT NULL DEFAULT 'switch',
+  `ip` bigint(255) NOT NULL,
+  `parent_sw_id` int(11) NOT NULL,
+  `snmppass` varchar(100) NOT NULL DEFAULT 'public',
+  `snmpversion` varchar(5) NOT NULL DEFAULT '1',
+  `snmpuser` varchar(100) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `ports` int(11) NOT NULL,
+  `addr` varchar(255) NOT NULL,
+  `disallow_ports` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=256 ;
+</pre>
+
+<p>Примеры данных:</p>
+
+<pre lang="sql" line="1">INSERT INTO `freenibs` VALUES(373, '00:e0:4c:75:00:48', 'olya18', 415, 7.690, 0);
+INSERT INTO `freenibs` VALUES(7855579, '40:61:86:2c:89:d8', '192.168.1.100', 0, -2048.000, 0);
+INSERT INTO `sw` VALUES(1, 'sw', 'switch', 2886730242, 0, 'public', '1', '', 'dlink', ' D-Link DES-3028 Fast Ethernet Switch', 24, '', '25,26,27,28');
+
+</pre>
+
+<p>index.php:</p>
+
+<pre lang="php" line="1"><?php
+ include_once("engine.php");
+ $db=new db_mysql(HOST,USER,DB_PASS,DB,DEBUG_DB);
+ if(DEBUG_DB=="true") echo '$db obj is ok'."<br>\n";
+ //$db->SET_NAMES("cp1251");
+ //$db->SET_COLLATE("latin1_swedish_ci");
+ $db->SET_COLLATE("cp1251_general_ci");
+ 
+ $db_nibs=new db_mysql(HOST_NIBS,USER_NIBS,DB_NIBS_PASS,DB_NIBS,DEBUG_DB);
+  if(DEBUG_DB=="true") echo '$db_nibs obj is ok'."
+
+<br />\n";
+ //$db_nibs->SET_NAMES("cp1251");
+ //$db->SET_COLLATE("latin1_swedish_ci");
+ $db_nibs->SET_COLLATE("cp1251_general_ci");
+ 
+ $page=new page(&$db,&$db_nibs);
+ if(DEBUG_DB=="true") echo '$page obj is ok'."<br />\n";
+ switch($_GET['page']){
+    case "sw":
+        break;
+    default:
+        $page->top();
+        $page->show_all_sw();
+        $page->bottom();
+        break;
+ }
+ 
+?>
+</pre>
+
+<p>engine.php:</p>
+
+<pre lang="php" line="1"><?php
+@include_once("define.php");
+include_once("PHPTelnet.php");
+include_once("telnet.class.php");
+if(DEBUG_DB==true){
+    include_once("db.php");
+    include_once("page.php");   
+}
+else{
+    @include_once("db.php");
+    @include_once("page.php");  
+}
+
+function quote_smart($value)
+{
+    // если magic_quotes_gpc включена - используем stripslashes
+    if (get_magic_quotes_gpc()) {
+        $value = stripslashes($value);
+    }
+    // Если переменная - число, то экранировать её не нужно
+    // если нет - то окружем её кавычками, и экранируем
+    if (!is_numeric($value)) {
+        $value = mysql_real_escape_string($value);
+    }
+    return $value;
+}
+function crypt_password($clear,$cryptscheme, $salt = '')
+    {
+        
+
+        if ($cryptscheme == 'sha')
+        {
+            $hash = sha1($clear);
+            $cryptedpass = '{SHA}' . base64_encode(pack('H*', $hash));
+        }
+        else
+        {
+            if ($salt != '')
+            {
+                if ($cryptscheme == 'des')
+                {
+                    $salt = substr($salt, 0, 2);
+                }
+                else
+                if ($cryptscheme == 'md5')
+                {
+                    $salt = substr($salt, 0, 12);
+                }
+                else
+                {
+                    $salt = '';
+                }
+            }
+            $cryptedpass = crypt($clear, $salt);
+        }
+
+        return $cryptedpass;
+    }
+    function dec_hex($int){
+        $res=dechex($int);
+        if (strlen($res)==1) $res='0'.$res;
+        $res=strtoupper($res);
+        return $res;
+    }
+    function snmptable($host, $community, $oid) {
+    // TODO: get original state and restore at bottom
+    snmp_set_oid_numeric_print(TRUE);
+    snmp_set_quick_print(TRUE);
+    snmp_set_enum_print(TRUE);
+
+    $retval = array();
+    $raw = snmprealwalk($host, $community, $oid);
+    if (count($raw) == 0) return ($retval); // no data
+   
+    $prefix_length = 0;
+    $largest = 0;
+    foreach ($raw as $key => $value) {
+        if ($prefix_length == 0) {
+            // don't just use $oid's length since it may be non-numeric
+            $prefix_elements = count(explode('.',$oid));
+            $tmp = '.' . strtok($key, '.');
+            while ($prefix_elements > 1) {
+                $tmp .= '.' . strtok('.');
+                $prefix_elements--;
+            }
+            $tmp .= '.';
+            $prefix_length = strlen($tmp);
+        }
+        $key = substr($key, $prefix_length);
+        $index = explode('.', $key, 2);
+        isset($retval[$index[1]]) or $retval[$index[1]] = array();
+        if ($largest &lt; $index[0]) $largest = $index[0];
+        $retval[$index[1]][$index[0]] = $value;
+    }
+
+    if (count($retval) == 0) return ($retval); // no data
+
+    // fill in holes and blanks the agent may "give" you
+    foreach($retval as $k => $x) {
+        for ($i = 1; $i &lt;= $largest; $i++) {
+        if (! isset($retval[$k][$i])) {
+                $retval[$k][$i] = '';
+            }
+        }
+        ksort($retval[$k]);
+    }
+    return($retval);
+}
+
+?>
+</pre>
+
+<p>define.php:</p>
+
+<pre lang="php" line="1"><?php
+    define("DEBUG_DB","false");
+    
+    define("ADMIN_MAIL","valeranew@ukr.net");
+    define("DB","skmsw");
+    define("USER","skmsw");
+    define("HOST","localhost");
+    define("DB_PASS","password");
+    
+    define("DB_NIBS","freenibs");
+    define("USER_NIBS","freenibs");
+    define("HOST_NIBS","localhost");
+    define("DB_NIBS_PASS","password");
+  
+    define("COMUNITY_READ","public");
+    define("COMUNITY_READ2","public_snmp");
+    define("COMUNITY_DEF_DLINK_READ","public");
+    /* OID  нормально работает, но приколы вывода:
+     * smc: SMC Networks SMC8624T 1
+     * dlink : D-Link DES-3026 Fast Ethernet Switch  (D-Link DES-3016 Fast Ethernet Switch)
+     * dell :  Ethernet Stackable Switching System  
+          PowerConnect 3348 
+                    юзать=>"OID_DELL_sysDescr" 
+     * extreem : Summit200-48 - Version 7.3e.2 (Build 4) by Release_Master 02/24/05 19:20:09 
+     * */
+   define("OID_sysDescr",".1.3.6.1.2.1.1.1"); 
+   define("OID_DELL_sysDescr",".1.3.6.1.2.1.1.5.0");
+   define("OID_DELL_enterprises",".1.3.6.1.4.1.674");
+
+    
+  define("OID_standart_ports",".1.3.6.1.2.1.2.1.0");
+  define("OID_dell_ports",".1.3.6.1.2.1.2.2.1.7"); /* Включают и вланы IF-MIB::ifAdminStatus.46 = INTEGER: up(1) */
+  define("OID_dell_ports_descr",".1.3.6.1.2.1.2.2.1.2");    
+  define("OID_dell_ports_speed",".1.3.6.1.2.1.2.2.1.5");
+
+  
+  define("OID_mac_on_ports",".1.3.6.1.2.1.17.7.1.2.2.1.2");
+  define("OID_cisco_mac_on_ports",".1.3.6.1.2.1.17.4.3.1.1");
+  define("OID_ports_updown",".1.3.6.1.2.1.2.2.1.8");
+  
+  
+  
+  define("PAGE_MES_1","Данные не доступны");
+  define("PAGE_MES_2","Данные o свиче");
+  define("PAGE_MES_3","Тип");
+  define("PAGE_MES_4","Версия");
+  define("PAGE_MES_5","Количество портов");
+?>
+
+</pre>
+
+<p>PHPTelnet.php:</p>
+
+<pre lang="php" line="1"><?php
+/*
+PHPTelnet 1.1.1
+by Antone Roundy
+adapted from code found on the PHP website
+public domain
+*/
+
+class PHPTelnet {
+    var $show_connect_error=1;
+
+    var $use_usleep=0;  // change to 1 for faster execution
+        // don't change to 1 on Windows servers unless you have PHP 5
+    var $sleeptime=125000;
+    var $loginsleeptime=1000000;
+
+    var $fp=NULL;
+    var $loginprompt;
+
+    var $conn1;
+    var $conn2;
+    
+    /*
+    0 = success
+    1 = couldn't open network connection
+    2 = unknown host
+    3 = login failed
+    4 = PHP version too low
+    */
+    function Connect($server,$user,$pass) {
+        $rv=0;
+        $vers=explode('.',PHP_VERSION);
+        $needvers=array(4,3,0);
+        $j=count($vers);
+        $k=count($needvers);
+        if ($k<$j) $j=$k;
+        for ($i=0;$i<$j;$i++) {
+            if (($vers[$i]+0)>$needvers[$i]) break;
+            if (($vers[$i]+0)&lt;$needvers[$i]) {
+                $this->ConnectError(4);
+                return 4;
+            }
+        }
+        
+        $this->Disconnect();
+        
+        if (strlen($server)) {
+            if (preg_match('/[^0-9.]/',$server)) {
+                $ip=gethostbyname($server);
+                if ($ip==$server) {
+                    $ip='';
+                    $rv=2;
+                }
+            } else $ip=$server;
+        } else $ip='127.0.0.1';
+        
+        if (strlen($ip)) {
+            if ($this->fp=fsockopen($ip,23)) {
+                fputs($this->fp,$this->conn1);
+                $this->Sleep();
+                
+                fputs($this->fp,$this->conn2);
+                $this->Sleep();
+                $this->GetResponse($r);
+                $r=explode("\n",$r);
+                $this->loginprompt=$r[count($r)-1];
+
+                fputs($this->fp,"$user\r");
+                $this->Sleep();
+
+                fputs($this->fp,"$pass\r");
+                if ($this->use_usleep) usleep($this->loginsleeptime);
+                else sleep(1);
+                $this->GetResponse($r);
+                $r=explode("\n",$r);
+                if (($r[count($r)-1]=='')||($this->loginprompt==$r[count($r)-1])) {
+                    $rv=3;
+                    $this->Disconnect();
+                }
+            } else $rv=1;
+        }
+        
+        if ($rv) $this->ConnectError($rv);
+        return $rv;
+    }
+    
+    function Disconnect($exit=1) {
+        if ($this->fp) {
+            if ($exit) $this->DoCommand('exit',$junk);
+            fclose($this->fp);
+            $this->fp=NULL;
+        }
+    }
+
+    function DoCommand($c,&$r) {
+        if ($this->fp) {
+            fputs($this->fp,"$c\r");
+            $this->Sleep();
+            $this->GetResponse($r);
+            $r=preg_replace("/^.*?\n(.*)\n[^\n]*$/","$1",$r);
+        }
+        return $this->fp?1:0;
+    }
+    
+    function GetResponse(&$r) {
+        $r='';
+        do { 
+            $r.=fread($this->fp,1000);
+            $s=socket_get_status($this->fp);
+        } while ($s['unread_bytes']);
+    }
+    
+    function Sleep() {
+        if ($this->use_usleep) usleep($this->sleeptime);
+        else sleep(1);
+    }
+    
+    function PHPTelnet() {
+        $this->conn1=chr(0xFF).chr(0xFB).chr(0x1F).chr(0xFF).chr(0xFB).
+            chr(0x20).chr(0xFF).chr(0xFB).chr(0x18).chr(0xFF).chr(0xFB).
+            chr(0x27).chr(0xFF).chr(0xFD).chr(0x01).chr(0xFF).chr(0xFB).
+            chr(0x03).chr(0xFF).chr(0xFD).chr(0x03).chr(0xFF).chr(0xFC).
+            chr(0x23).chr(0xFF).chr(0xFC).chr(0x24).chr(0xFF).chr(0xFA).
+            chr(0x1F).chr(0x00).chr(0x50).chr(0x00).chr(0x18).chr(0xFF).
+            chr(0xF0).chr(0xFF).chr(0xFA).chr(0x20).chr(0x00).chr(0x33).
+            chr(0x38).chr(0x34).chr(0x30).chr(0x30).chr(0x2C).chr(0x33).
+            chr(0x38).chr(0x34).chr(0x30).chr(0x30).chr(0xFF).chr(0xF0).
+            chr(0xFF).chr(0xFA).chr(0x27).chr(0x00).chr(0xFF).chr(0xF0).
+            chr(0xFF).chr(0xFA).chr(0x18).chr(0x00).chr(0x58).chr(0x54).
+            chr(0x45).chr(0x52).chr(0x4D).chr(0xFF).chr(0xF0);
+        $this->conn2=chr(0xFF).chr(0xFC).chr(0x01).chr(0xFF).chr(0xFC).
+            chr(0x22).chr(0xFF).chr(0xFE).chr(0x05).chr(0xFF).chr(0xFC).chr(0x21);
+    }
+    
+    function ConnectError($num) {
+        if ($this->show_connect_error) switch ($num) {
+        case 1: echo '
+
+<br />[PHP Telnet] <a href="http://www.geckotribe.com/php-telnet/errors/fsockopen.php">Connect failed: Unable to open network connection</a><br />'; break;
+        case 2: echo '<br />[PHP Telnet] <a href="http://www.geckotribe.com/php-telnet/errors/unknown-host.php">Connect failed: Unknown host</a><br />'; break;
+        case 3: echo '<br />[PHP Telnet] <a href="http://www.geckotribe.com/php-telnet/errors/login.php">Connect failed: Login failed</a><br />'; break;
+        case 4: echo '<br />[PHP Telnet] <a href="http://www.geckotribe.com/php-telnet/errors/php-version.php">Connect failed: Your server\'s PHP version is too low for PHP Telnet</a><br />'; break;
+        }
+    }
+}
+
+return;
+?>
+
+</pre>
+
+<p>telnet.class.php:</p>
+
+<pre lang="php" line="1"><?php
+/*
+$Id: telnet.class.php,v 1.2 2004/03/22 10:01:35 mb Exp $
+
+Originally written by Marc Ennaji (in french),
+modified by Matthias Blaser <mb@adfinis.ch>
+
+- translated most function- and variable names from french to english
+- added get_buffer-method to get results of the last command
+  sent to server
+- added hack to get socket_strerror working on old systems
+
+You can find the original class which this translation is based on
+on this url: http://px.sklar.com/code.html?id=634
+
+The original class includes a small documentation about using it
+in your own applications, but be aware, all functions are in french there, this
+one is partly translated.
+*/
+
+// hack to get socket_strerror working on old systems
+if(!function_exists("socket_strerror")){
+    function socket_strerror($sh){
+        if(function_exists("strerror")){
+            return strerror($sh);
+        } else {
+            return false;
+        }
+    }
+}
+
+// telnet class
+define ("TELNET_ERROR", 0);
+define ("TELNET_OK", 1);
+define ("TELNET_ASK_CONFIRMATION", 2);
+define ("LIBELLE_CONFIRMATION", "[confirm]");
+
+class telnet {
+
+    var $socket  = NULL;
+    var $host = "";
+    var $port = "23";
+    var $error = "";
+    var $codeError = "";
+    var $prompt = "\$ ";
+    var $log = NULL;  // file handle
+    var $repertoireLog= "";
+    var $nomFichierLog = "";
+    var $test;
+
+    var $buffer = "";
+
+    //------------------------------------------------------------------------
+    function connect(){
+        $this->socket = fsockopen($this->host,$this->port);
+
+        if (!$this->socket){
+            $this->error = "unable to open a telnet connection: " . socket_strerror($this->socket) . "\n";
+            return TELNET_ERROR;
+        }
+
+        socket_set_timeout($this->socket,1,0);
+        return TELNET_OK;
+    }
+
+    //------------------------------------------------------------------------
+    function read_to($chaine){
+        $NULL = chr(0);
+        $IAC = chr(255);
+        $buf = '';
+
+        if (!$this->socket){
+            $this->error = "telnet socket is not open";
+            return TELNET_ERROR;
+        }
+
+        while (1){
+            $c = $this->getc();
+
+            if ($c === false){
+             // plus de caracteres a lire sur la socket
+                if ($this->contientErreur($buf)){
+                    return TELNET_ERROR;
+                }
+
+                $this->error = " Couldn't find the requested : '" . $chaine . "', it was not in the data returned from server : '" . $buf . "'" ;
+                $this->logger($this->error);
+                return TELNET_ERROR;
+            }
+
+            if ($c == $NULL || $c == "\021"){
+                continue;
+            }
+
+            if ($c == $IAC){
+                // Interpreted As Command
+                $c = $this->getc();
+
+                if ($c != $IAC){
+                    // car le 'vrai' caractere 255 est doublé pour le differencier du IAC
+                    if (! $this->negocierOptionTelnet($c)){
+                        return TELNET_ERROR;
+                    } else {
+                        continue;
+                    }
+                }
+
+            }
+
+            $buf .= $c;
+
+            // append current char to global buffer
+            $this->buffer .= $c;
+
+            // indiquer à l'utilisateur de la classe qu'il a une demande de confirmation
+            if (substr($buf,strlen($buf)-strlen(LIBELLE_CONFIRMATION)) == LIBELLE_CONFIRMATION){
+                $this->logger($this->getDernieresLignes($buf));
+                return TELNET_ASK_CONFIRMATION;
+            }
+
+            if ((substr($buf,strlen($buf)-strlen($chaine))) == $chaine){
+                // on a trouve la chaine attendue
+
+                $this->logger($this->getDernieresLignes($buf));
+
+                if ($this->contientErreur($buf)){
+                    return TELNET_ERROR;
+                } else {
+                    return TELNET_OK;
+                }
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------
+    function getc(){
+        return fgetc($this->socket);
+    }
+
+    //------------------------------------------------------------------------
+    function get_buffer(){
+        $buf = $this->buffer;
+
+        // cut last line (is always prompt)
+        $buf = explode("\n", $buf);
+        unset($buf[count($buf)-1]);
+        $buf = join("\n",$buf);
+        return trim($buf);
+    }
+
+    //------------------------------------------------------------------------
+    function negocierOptionTelnet($commande){
+        // on negocie des options minimales
+
+        $IAC = chr(255);
+        $DONT = chr(254);
+        $DO = chr(253);
+        $WONT = chr(252);
+        $WILL = chr(251);
+
+        if (($commande == $DO) || ($commande == $DONT)){
+            $opt = $this->getc();
+            //echo "wont ".ord($opt)."\n";
+            fwrite($this->socket,$IAC.$WONT.$opt);
+        } else if (($commande == $WILL) || ($commande == $WONT)) {
+            $opt = fgetc($this->socket);
+            //echo "dont ".ord($opt)."\n";
+            fwrite($this->socket,$IAC.$DONT.$opt);
+        } else {
+            $this->error = "Error : unknown command ".ord($commande)."\n";
+            return false;
+        }
+
+        return true;
+    }
+
+    //------------------------------------------------------------------------
+    function write($buffer, $valeurLoggee = "", $ajouterfinLigne = true){
+
+        // clear buffer from last command
+        $this->buffer = "";
+
+        if (! $this->socket){
+            $this->error = "telnet socket is not open";
+            return TELNET_ERROR;
+        }
+
+        if ($ajouterfinLigne){
+            $buffer .= "\n";
+        }
+
+        if (fwrite($this->socket,$buffer) &lt; 0){
+            $this->error = "error writing to socket";
+            return TELNET_ERROR;
+        }
+
+        if ($valeurLoggee != ""){
+            // cacher les valeurs confidentielles dans la log (mots de passe...)
+            $buffer = $valeurLoggee . "\n";
+        }
+
+        if (! $ajouterfinLigne){
+            // dans la log (mais pas sur la socket), rajouter tout de meme le caractere de fin de ligne
+            $buffer .= "\n";
+        }
+
+        $this->logger("> " .$buffer);
+
+        return TELNET_OK;
+    }
+
+    //------------------------------------------------------------------------
+    function disconnect(){
+        if ($this->socket){
+            if (! fclose($this->socket)){
+                $this->error = "error while closing telnet socket";
+                return TELNET_ERROR;
+            }
+
+            $this->socket = NULL;
+        }
+
+        $this->setLog(false,"");
+        return TELNET_OK;
+    }
+
+    //------------------------------------------------------------------------
+    function contientErreur($buf){
+        $messagesErreurs[] = "nvalid";       // Invalid input, ...
+        $messagesErreurs[] = "o specified";  // No specified atm, ...
+        $messagesErreurs[] = "nknown";       // Unknown profile, ...
+        $messagesErreurs[] = "o such file or directory"; // sauvegarde dans un repertoire inexistant
+        $messagesErreurs[] = "llegal";       // illegal file name, ...
+
+        foreach ($messagesErreurs as $erreur){
+            if (strpos ($buf, $erreur) === false)
+                continue;
+
+                // une erreur est détectée
+                $this->error =  "Un message d'erreur a été détecté dans la réponse de l'hôte distant : " .
+                    "
+
+<BR /><BR />" . $this->getDernieresLignes($buf,"<BR />") . "<BR />";
+
+                return true;
+            }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------
+    function wait_prompt(){
+        return $this->read_to($this->prompt);
+    }
+
+    //------------------------------------------------------------------------
+    function set_prompt($s){
+        $this->prompt = $s;
+        return TELNET_OK;
+    }
+
+    //------------------------------------------------------------------------
+    function set_host($s){
+        $this->host = $s;
+    }
+
+    //------------------------------------------------------------------------
+    function set_port($s){
+        $this->port = $s;
+    }
+
+    //------------------------------------------------------------------------
+    function get_last_error(){
+        return $this->error;
+    }
+
+    //------------------------------------------------------------------------
+    function setLog($activerLog, $traitement){
+
+        if ($this->log && $activerLog){
+            return TELNET_OK;
+        }
+
+        if ($activerLog){
+            $this->repertoireLog =  "/log/" . date("m");
+
+            // repertoire mensuel inexistant ?
+            if (! file_exists($this->repertoireLog)){
+                if (mkdir($this->repertoireLog, 0700) === false){
+                    $this->error = "Impossible de créer le repertoire de log " .  $this->repertoireLog;
+                    return TELNET_ERROR;
+                }
+            }
+
+            global $HTTP_SERVER_VARS;
+
+            $this->nomFichierLog =  date("d") . "_" .
+                date("H:i:s") . "_" .
+
+            $traitement . "_" .
+                $HTTP_SERVER_VARS["PHP_AUTH_USER"]
+                . ".log";
+
+            $this->log = fopen($this->repertoireLog . "/" . $this->nomFichierLog,"a");
+
+            if (empty($this->log)){
+                $this->error = "Impossible de créer le fichier de log " . $this->nomFichierLog;
+                return TELNET_ERROR;
+            }
+
+            $this->logger("----------------------------------------------\r\n");
+            $this->logger("Début de la log de l'utilisateur " . $HTTP_SERVER_VARS["PHP_AUTH_USER"] .
+                ", adresse IP " . $HTTP_SERVER_VARS["REMOTE_ADDR"] . "\r\n");
+
+            $this->logger("Connexion telnet sur " . $this->host . ", port " . $this->port . "\r\n");
+            $this->logger("Date : " . date("d-m-Y").  "  à " . date("H:i:s") . "\r\n");
+            $this->logger("Type de traitement effectué : " . $traitement . "\r\n");
+            $this->logger("----------------------------------------------\r\n");
+            return TELNET_OK;
+
+        } else {
+            if ($this->log){
+                $this->logger("----------------------------------------------\r\n");
+                $this->logger("Fin de la log\r\n");
+
+                fflush($this->log);
+
+                if (! fclose($this->log)){
+                    $this->error = "erreur a la fermeture du fichier de log";
+                    return TELNET_ERROR;
+                }
+
+                $this->log = NULL;
+            }
+
+            return TELNET_OK;
+        }
+    }
+
+    //------------------------------------------------------------------------
+    function logger($s){
+        if ($this->log){
+            fwrite($this->log, $s);
+        }
+    }
+
+    //------------------------------------------------------------------------
+    function getDernieresLignes($s, $separateur="\n"){
+        // une reponse telnet contient (en principe) en premiere ligne l'echo de la commande utilisateur.
+        // cette methode renvoie tout sauf la premiere ligne, afin de ne pas polluer les logs telnet
+
+        $lignes = split("\n",$s);
+        $resultat = "";
+        $premiereLigne = true;
+
+        while(list($key, $data) = each($lignes)){
+            if ($premiereLigne){
+                $premiereLigne = false;
+            } else {
+                if ($data != ""){
+                    $resultat .= $data . $separateur;
+                }
+            }
+        }
+
+        $resultat == substr($resultat,strlen($resultat)-1); // enlever le dernier caractere de fin de ligne
+
+        return $resultat;
+    }
+
+    //------------------------------------------------------------------------
+}   //    Fin de la classe
+?>
+
+</pre>
+
+<p>db.php:</p>
+
+<pre lang="php" line="1"><?php
+
+class db_mysql{
+    protected $query;
+    protected $res;
+    public $num;
+    protected $link;
+    protected $debug;
+    protected $collation;
+    protected $collate;
+    protected $host;
+    protected $user;
+    protected $passw;
+    protected $db;
+    protected $set_force_featch;
+        
+    public function  __construct ($HOST,$USER,$PASSW,$DB)
+        {
+                $this->query=NULL;
+                self::set_debug(false);
+                self::set_force_featch(true);
+                self::init($HOST,$USER,$PASSW,$DB,false);
+        }
+
+        function __destruct()
+        {
+                    @mysql_close($this->link); //       @self::close_db();      
+        }
+        
+        public function set_debug($d)   {
+                    if(is_bool($d)){
+                        $this->debug=$d;
+                    }
+                    else{
+                        $this->debug=false;
+                    }
+        }
+                
+        public function set_force_featch($d){
+                if(is_bool($d)) {
+                        $this->set_force_featch=$d; 
+                }
+                else    {
+                        $this->set_force_featch=true;
+                }
+        }
+                        
+        public function SET_NAMES($names="utf8"){
+            $this->collation="SET NAMES ".$names;
+            self::query($this->collation);
+        }
+
+        public function SET_COLLATE($names="utf8_general_ci"){
+            $this->collate="SET COLLATE ".$names;
+            self::query($this->collation);
+        }
+        public function  init($HOST,$USER,$PASSW,$DB,$init_collation_setup=false){
+                if(!is_bool($init_collation_setup)) {
+                        $init_collation_setup=false;    
+                }
+                self::set_host($HOST);
+                self::set_user($USER);
+                self::set_passw($PASSW);
+                self::set_db($DB);
+                $this->query=NULL;
+                if($this->debug==false){
+                        $this->link=@mysql_connect($this->host,$this->user, $this->passw)or die(ERR1);
+                        @mysql_select_db($this->db,$this->link) or die(ERR2);
+                }
+                else
+                {
+                    $this->link=@mysql_connect($this->host,$this->user, $this->passw)or die(mysql_error());
+                    mysql_select_db($this->db,$this->link) or die(mysql_error());
+                }
+                
+                if($init_collation_setup==true){
+                        self::query($this->collation);
+                }
+        }
+
+        function connect(){
+                $this->query=NULL;
+                //$this->ar=array();
+                                
+                if($this->debug==false){
+                        $this->link=@mysql_connect($this->host,$this->user, $this->passw)or die(ERR1);
+                        @mysql_select_db($this->db,$this->link) or die(ERR2);
+                }
+                else
+                {
+                    $this->link=mysql_connect($this->host,$this->user, $this->passw)or die(mysql_error());
+                    mysql_select_db($this->db,$this->link) or die(mysql_error());
+                }
+
+        }
+
+        public function set_host($host){    $this->host=$host;  }
+        public function set_user($user){    $this->user=$user;  }
+        public function set_passw($passw){  $this->passw=$passw;    }
+        public function set_db($db){    $this->db=$db;  }
+        public function  query($q){
+            if($this->set_force_featch==true)
+            {
+                $this->query=@mysql_db_query($this->db,$q,$this->link);
+            }
+            else
+            {
+                    if($this->debug==false){
+                                $this->query=@mysql_db_query($this->db,$q,$this->link) or die(ERR3);    
+                    }
+                    else
+                    {
+                            $this->query=mysql_db_query($this->db,$q,$this->link) or die(mysql_error());
+                    }
+            }
+                
+        }
+        
+        public function num_rows(){
+                   $this->num=mysql_num_rows($this->query);
+                    return $this->num;
+        }
+        public function  fetch_row(){
+                if($this->set_force_featch==true)
+                    {
+                        $this->res=@mysql_fetch_row($this->query);
+                    }
+                    else
+                    {
+                            if($this->debug==false){
+                                        $this->res=@mysql_fetch_row($this->query) or die(ERR4); 
+                            }
+                            else
+                            {
+                                    $this->res=mysql_fetch_row($this->query) or die(mysql_error());
+                            }
+                    }
+                return $this->res;
+        }
+        public function  fetch_array(){
+            
+            
+                   if($this->set_force_featch==true)
+                    {
+                        $this->res=mysql_fetch_array($this->query);
+                    }
+                    else
+                    {
+                            if($this->debug==false){
+                                    $this->res=@mysql_fetch_array($this->query) or die(ERR5);   
+                            }
+                            else
+                            {
+                                    $this->res=mysql_fetch_array($this->query) or die(mysql_error());
+                            }
+                    }
+                return $this->res;
+        }
+
+        public function db_select()
+        {
+                            if($this->debug==false){
+                                    @mysql_select_db($this->db,$this->link) or die(ERR2);   
+                            }
+                            else
+                            {
+                                    mysql_select_db($this->db,$this->link) or die(mysql_error());
+                            }
+        }
+    public function free_result()
+    {
+        mysql_free_result($this->res);
+    }
+    public function mysql_error(){
+        return mysql_error($this->link);
+    }
+
+    public function close_db()
+    {
+        if($this->debug==false){
+                    @mysql_close($this->link)or die(ERR6);  
+        }
+        else
+        {
+                    mysql_close($this->link)or die(mysql_error());
+        }
+    }
+
+}
+?>
+
+</pre>
+
+<p>page.php:</p>
+
+<pre lang="php" line="1"><?php 
+class page{
+    protected $db;
+    protected $db_nibs;
+    protected $telnet;
+    protected $result_telnet_connect;
+    protected $sw_type;
+    public function __construct (&#038;$db,&#038;$db_nibs){
+            $this->db=&$db;
+            $this->db_nibs=&$db_nibs;
+    }
+    public function top(){ 
+            @include_once("pages/top.php"); 
+    }
+    public function bottom(){ 
+            @include_once("pages/bottom.php"); 
+    }
+
+    public function telnet_disconnect(){ $this->telnet->Disconnect(); }
+    public function telnet($ip,$login,$pass){
+        $this->telnet=new PHPTelnet();
+        $this->telnet->show_connect_error=0;
+
+        // if the first argument to Connect is blank,
+        // PHPTelnet will connect to the local host via 127.0.0.1
+        $this->result_telnet_connect = $this->telnet->Connect($ip,$login,$pass);
+        
+        switch ($this->result_telnet_connect) {
+        case 0:
+        //$this->telnet->DoCommand('enter command here', $result);
+        // NOTE: $result may contain newlines
+        //echo $result;
+        //$this->telnet->DoCommand('another command', $result);
+        //echo $result;
+        // say Disconnect(0); to break the connection without explicitly logging out
+        
+            return true;
+        break;
+        case 1:
+        echo '[PHP Telnet] Connect failed: Unable to open network connection';
+        break;
+        case 2:
+        echo '[PHP Telnet] Connect failed: Unknown host';
+        break;
+        case 3:
+        echo '[PHP Telnet] Connect failed: Login failed';
+        break;
+        case 4:
+        echo '[PHP Telnet] Connect failed: Your PHP version does not support PHP Telnet';
+        break;
+        }
+        return false;
+    }
+    public function initial_config_sw($ip){
+    }
+    public function initial_extreme_config_sw($ip){
+        //delete vlan Mac
+        
+    }
+
+    public function save_current_sw_config(){
+    }
+    public function save_extreme_current_sw_config(){
+        $this->telnet->DoCommand("save", $this->result_telnet_connect);
+        $this->telnet->DoCommand("yes", $this->result_telnet_connect);
+        $this->telnet->DoCommand("
+", $this->result_telnet_connect);
+    }
+    /* $ports_tagged=1,2,3,4,5.... */
+    public function create_vlan($vlanid,$ports_tagged,$ports_untagged,$debug=false){
+        switch($this->sw_type){
+            case "dlink":
+            break;
+            case "dell":
+            break;
+            case "extreme":
+                self::create_extreem_vlan($vlanid,$ports_tagged,$ports_untagged,$debug);
+            break;
+        }
+        
+    }
+    public function create_extreem_vlan($vlanid,$ports_tagged,$ports_untagged,$debug=false){
+    if($debug==true){
+        echo "create vlan vlan$vlanid\n";
+        echo "configure vlan vlan$vlanid tag $vlanid\n";
+        echo "configure vlan vlan$vlanid add ports  $ports_tagged tagged\n";
+        echo "configure vlan vlan$vlanid add ports  $ports_untagged untagged\n";
+    }
+    $this->telnet->DoCommand("create vlan vlan$vlanid", $this->result_telnet_connect);
+            //create vlan vlan$vlanid
+    $this->telnet->DoCommand("configure vlan vlan$vlanid tag $vlanid", $this->result_telnet_connect);
+
+    $this->telnet->DoCommand("configure vlan vlan$vlanid add ports  $ports_tagged tagged", $this->result_telnet_connect);
+    
+            //configure vlan vlan$vlanid add ports  $ports_tagged tagged
+    $this->telnet->DoCommand("configure vlan vlan$vlanid add ports  $ports_untagged untagged", $this->result_telnet_connect);
+    
+            //configure vlan vlan$vlanid add ports  $ports_untagged untagged
+    }
+
+    public function create_dell_vlan($vlanid,$ports_tagged,$ports_untagged,$debug=false){
+    if($debug==true){
+        echo "configure\n";
+        echo "vlan database\n";
+        echo "vlan $vlanid\n";
+        echo "exit\n";
+    
+
+    }
+
+    /*$this->telnet->DoCommand("configure", $this->result_telnet_connect);
+    $this->telnet->DoCommand("vlan database", $this->result_telnet_connect);
+    $this->telnet->DoCommand("vlan $vlanid", $this->result_telnet_connect);
+    $this->telnet->DoCommand("exit", $this->result_telnet_connect);
+    */
+     $script = new telnet; 
+    
+    $ar_of_ports_tagged=explode(",",$ports_tagged);
+    $c=0;
+        foreach($ar_of_ports_tagged as $port){
+            if(is_numeric($port)&&($port>0)){
+                
+                if($c==0)
+                    $port_line="1/e".$port.",";
+                else
+                    $port_line=",1/e".$port."";
+                $c++;
+            }
+        }
+        //exist any ports
+        if($c>0){
+            
+            //$this->telnet->DoCommand("interface range ethernet $port_line", $this->result_telnet_connect);
+            $this->telnet->DoCommand("switchport access vlan $vlanid", $this->result_telnet_connect);
+        }
+    }
+
+
+    public function delete_vlan($vlanid){
+    }
+    public function delete_extreme_vlan($vlanid,$debug=false){
+        if($debug==true){
+            echo "delete vlan vlan$vlanid\n";
+        }
+        $this->telnet->DoCommand("delete vlan vlan$vlanid", $this->result_telnet_connect);
+        
+    }   
+
+    public function remove_port_from_vlan($vlanid,$port_remove){
+    }
+    public function remove_extreme_port_from_vlan($vlanid,$port_remove){
+        //configure vlan vlan$vlanid delete ports  $port_remove
+    }
+    
+    public function add_port_to_vlan($vlanid,$port,$type){
+        switch($type){
+            case "T":
+            break;
+            case "U":
+            break;
+        }
+    }
+
+    public function scan_sw_by_ip($ip){
+                $type=unknown;
+                $version=no_version;
+                $ports=48;
+                $SNMP_COMUNITY_READ=COMUNITY_READ;  
+                echo "snmpwalk(".$ip.",".$SNMP_COMUNITY_READ.",".OID_sysDescr.",".")";
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                
+                if(strlen($result[0])<2){
+                    $SNMP_COMUNITY_READ=COMUNITY_DEF_DLINK_READ;
+                //session.version = SNMP_VERSION_2c;
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                }
+                if(strlen($result[0])<2){
+                    $SNMP_COMUNITY_READ=COMUNITY_READ2;
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                }
+                if(strlen($result[0])<2){
+                    $type=PAGE_MES_1;
+                    $version=no_version;
+                    $ports=48;
+                    return array("version"=>$version,"type"=>$type,"ports"=>$ports,"ip"=>$ip);
+                }
+                else{
+                    $result=$result[0];
+                    //echo print_r($result);
+                    /* OID  ????????? ????????, ?? ??????? ??????:
+                    * dlink : D-Link DES-3026 Fast Ethernet Switch
+                    * dell :  Ethernet Stackable Switching System  
+                        PowerConnect 3348 
+                                    ?????=>"OID_DELL_sysDescr" 
+                    * extreem : Summit200-48 - Version 7.3e.2 (Build 4) by Release_Master 02/24/05 19:20:09 
+                    * SMC: SMC Networks SMC8624T 1
+                    * */
+                    $dlink_oid_pattern="/\bD-Link\b/i";
+                    $dlink_oid_pattern2="/\bDLink\b/i";
+                    $dlink_oid_pattern3="/\bDES\b/i";
+                    $extreem_oid_pattern="/\bSummit/i";
+                    $smc_oid_pattern="/\bSMC/i";
+                    $dell_oid_pattern="/\bStackable\b/i";
+                    $dell__oid_pattern="/\bEthernet\b/i";
+                    $dell2_oid_pattern="/\bPowerConnect\b/i";
+                    $dell_ports_24_patern="/\d\d24/";
+                    $dell_ports_48_patern="/\d\d48/";
+                    $cisco_oid_pattern="/\bcisco\b/i";
+                    $cisco2_oid_pattern="/\bCISCO \b/i";
+                    $netgear_FSM_pattern="/\bFSM/i";
+                    
+                if( ( preg_match($dlink_oid_pattern,$result))|| (preg_match($dlink_oid_pattern2,$result)) || (preg_match($dlink_oid_pattern3,$result))){
+                    $type=dlink;
+                    $version=$result;
+                    $result=@snmpwalk($ip,$SNMP_COMUNITY_READ,OID_standart_ports);
+                    $ports=48;
+                        if(preg_match("/3026/",$version)){
+                                    $ports=24;
+                        }elseif(preg_match("/3028/",$version)){
+                                    $ports=24;
+                        }elseif(preg_match("/3528/",$version)){
+                                    $ports=24;
+                        }elseif(preg_match("/3526/",$version)){
+                                    $ports=24;
+                        }elseif(preg_match("/3026/",$version)){
+                                    $ports=24;
+                        }elseif(preg_match("/3016/",$version)){
+                                    $ports=16;
+                        }elseif(preg_match("/3010/",$version)){
+                                    $ports=10;
+                        }
+                         
+                }
+                elseif(preg_match($extreem_oid_pattern,$result)){
+                    $type="extreem";
+                    $version=$result;
+                    $result=@snmpwalk($ip,$SNMP_COMUNITY_READ,OID_standart_ports);
+                    $ports=48;
+                    
+                }elseif(preg_match($netgear_FSM_pattern,$result)){
+                    $type="netgear";
+                    $version=str_replace("Stackable Switch","",$result);
+                    $ports=48;                  
+                    if(preg_match("/FSM7328S/",$version)){
+                                    $ports=24;
+                        }elseif(preg_match("/FSM7352S/",$version)){
+                                    $ports=48;
+                        }
+                    
+                }
+                elseif((preg_match($cisco_oid_pattern,$result))|| (preg_match($cisco2_oid_pattern,$result)) ){
+                    $type="cisco";
+                    $version=$result;
+                    //$result=@snmpwalk($ip,$SNMP_COMUNITY_READ,OID_standart_ports);
+                    $ports=48;
+                        if(preg_match("/C3500/",$version)){
+                            $ports=48;
+                            $version="Cisco C3500XL";
+                        }else if(preg_match("/WS-C2948/",$version)){
+                                                         $ports=48;
+                                                         $version="Cisco WS-C2948";
+                                                 }
+                }
+                elseif(preg_match($smc_oid_pattern,$result)){
+                    $type="SMC";
+                    $version=$result;
+                    $ports=48;
+                        if(preg_match("/8624/",$version)){
+                                    $ports=24;
+                        }
+                    
+                }
+                elseif((preg_match($dell_oid_pattern,$result))||(preg_match($dell__oid_pattern,$result))){
+                    $result=@snmpwalk($ip,$SNMP_COMUNITY_READ,OID_DELL_enterprises);
+                        $type="dell_un";
+                        $version=$result;
+                        $ports=48;
+                        foreach($result as $key){
+                        if(preg_match($dell2_oid_pattern,$key)){
+                            $version="Dell ".str_replace("\"","",$key);
+                            $type="dell";
+                            if(preg_match($dell_ports_48_patern,$key)){
+                                $ports=48;
+                            }elseif(preg_match($dell_ports_24_patern,$key)){
+                                $ports=24;
+                            }
+                            $arr=array();
+                            break;
+                        }
+                    }
+
+                }
+                echo "type $type \"ports\"=>$ports,\"ip\"=>$ip)\n";
+                return array("version"=>str_replace("STRING:","",$version),"type"=>$type,"ports"=>$ports,"ip"=>$ip);
+            }
+            
+    }
+    public function arpwatch_macs(){
+        $q="DELETE FROM  `freenibs`  WHERE `user` LIKE '10.%'";
+        $this->db->query($q);
+        $q="DELETE FROM 
+                `arpwatch`
+                WHERE `date` < FROM_UNIXTIME( UNIX_TIMESTAMP( NOW( ) ) -604000 )";
+        $this->db_nibs->query($q);
+        $q="SELECT *
+            FROM `arpwatch` ORDER BY `date";
+        $this->db_nibs->query($q);
+        $n=$this->db_nibs->num_rows();
+        if($n>0){
+            for($i=0;$i<$n;$i++){
+                $row=$this->db_nibs->fetch_array();
+                $ip=$row['ip'];
+                $mac=$row['arp'];
+                $q="INSERT INTO `freenibs` (
+                        `mac` ,
+                        `user` ,
+                        `deposit`
+                        )
+                        VALUES (
+                        '".quote_smart(strtolower($mac))."','".quote_smart($ip)."', '-2048'
+                        )
+                         ON DUPLICATE KEY UPDATE
+                        `user`='".quote_smart($ip)."'
+                    ;";
+                $this->db->query($q);
+            }
+                
+       }
+    }
+    public function clear_(){   
+    $q="DELETE FROM `mac` WHERE `date` < FROM_UNIXTIME( UNIX_TIMESTAMP( NOW( ) ) -86400 )
+        AND `mac` NOT
+        IN (
+        
+        SELECT `mac`
+        FROM `freenibs`
+        )";
+    $this->db->query($q);
+        $q="DELETE FROM `mac` WHERE `date` < FROM_UNIXTIME( UNIX_TIMESTAMP( NOW( ) ) -259200 )
+        AND `mac` 
+        IN (
+        
+        SELECT `mac`
+        FROM `freenibs`
+        )";
+    $this->db->query($q);
+    }
+    public function cron (){
+        self::clear_();
+        self::arpwatch_macs();
+        self::users_macs();
+        $field_to_select="INET_NTOA(`ip`) AS `nas_ip`,`id`,`type`,`name`,`model` AS `version`,`ports`";
+        $q="SELECT 
+                ".$field_to_select."
+            FROM `sw`
+                  ORDER BY `id`";
+        //echo $q;
+        $this->db->query($q);
+        $n=$this->db->num_rows();
+        $query=array();
+        if($n>0){
+            echo '#!/bin/sh'."\n";
+            $zzz=0;
+            for($i=0;$i<$n;$i++){
+            $zzz++; 
+                $row=$this->db->fetch_array();
+                echo "/usr/bin/php -q /var/www/skmsw/cron_one_ip.php ".$row['nas_ip']." >>/dev/null &\n";
+                passthru("/usr/bin/php -q /var/www/skmsw/cron_one_ip.php ".$row['nas_ip']." >>/dev/null &");
+            if(zzz>4){ sleep(5); $zzz=0; }
+            }
+        }
+        $dis=self::clear_disallow();
+    }
+    public function cron_one_ip($ip){
+        echo "clear_disallow_ip($ip)\n";
+        $dis=self::clear_disallow_ip($ip);
+        echo " done clear_disallow_ip($ip)\n";
+        echo "scan_by_ip_switch($dis,$ip);\n";
+        self::scan_by_ip_switch($dis,$ip);
+        echo " done scan";
+        //$dis=self::clear_disallow();
+    }
+    public function clear_disallow_ip($ip){
+        if(strlen($ip)>0)
+        $q="SELECT 
+                INET_NTOA(`ip`) AS `nas_ip`,`id`,`disallow_ports` AS `ports`
+            FROM `sw`
+            WHERE `ip`=INET_ATON('".$ip."')";
+        else
+        $q="SELECT 
+                INET_NTOA(`ip`) AS `nas_ip`,`id`,`disallow_ports` AS `ports`
+            FROM `sw`";
+        $this->db->query($q);
+        $n=$this->db->num_rows();
+        //echo $q."\n";
+        if($n>0){
+            for($i=0;$i<$n;$i++){
+                 $row=$this->db->fetch_array();
+                     if(strlen($row['ports'])>0)
+                         $disallow[]=array("ip"=>$row['nas_ip'],"ports"=>$row['ports'],"id"=>$row['id']);
+                         $dis[$row['nas_ip']]=array("ip"=>$row['nas_ip'],"ports"=>$row['ports'],"id"=>$row['id']);
+                         
+            }
+        }
+        foreach($disallow as $disallow_array){
+            $ip=$disallow_array['ip'];
+            $id=$disallow_array['id'];
+            $p=explode(",",$disallow_array['ports']);
+            foreach($p as $port_val){
+                $q="DELETE FROM `mac` WHERE `sw_id` = '".quote_smart($id)."' AND `port`='".quote_smart($port_val)."'";
+                //echo $q."\n";
+                $this->db->query($q);
+            }
+        }
+        return $dis;
+    }
+    public function clear_disallow(){
+        $q="SELECT 
+                INET_NTOA(`ip`) AS `nas_ip`,`id`,`disallow_ports` AS `ports`
+            FROM `sw`";
+        $this->db->query($q);
+        $n=$this->db->num_rows();
+        //echo $n."\n";
+        if($n>0){
+            for($i=0;$i<$n;$i++){
+                 $row=$this->db->fetch_array();
+                     if(strlen($row['ports'])>0)
+                         $disallow[]=array("ip"=>$row['nas_ip'],"ports"=>$row['ports'],"id"=>$row['id']);
+                         $dis[$row['nas_ip']]=array("ip"=>$row['nas_ip'],"ports"=>$row['ports'],"id"=>$row['id']);
+                         
+            }
+        }
+        foreach($disallow as $disallow_array){
+            $ip=$disallow_array['ip'];
+            $id=$disallow_array['id'];
+            $p=explode(",",$disallow_array['ports']);
+            foreach($p as $port_val){
+                $q="DELETE FROM `mac` WHERE `sw_id` = '".quote_smart($id)."' AND `port`='".quote_smart($port_val)."'";
+                //echo $q."\n";
+                $this->db->query($q);
+            }
+        }
+        return $dis;
+    }
+    public function users_macs(){   
+        $q="SELECT `actions`.`call_from`,`actions`.`user`,`users`.`uid`,`users`.`deposit`,`users`.`credit`
+            FROM `actions`, `users`
+            WHERE 
+                `actions`.`call_from` LIKE '%:%'
+            AND 
+                `users`.`user`=`actions`.`user`
+                AND
+                    `start_time`>FROM_UNIXTIME(UNIX_TIMESTAMP(NOW() )-90000)
+            GROUP BY `actions`.`call_from`";
+        $this->db_nibs->query($q);
+        $n=$this->db_nibs->num_rows();
+        if($n>0){
+            for($i=0;$i<$n;$i++){
+             $row=$this->db_nibs->fetch_array();
+            $m=explode("/",$row['call_from']); //10.200.30.16 / 00:1d:92:f7:46:60 / vlan51
+            $mac=strtolower(trim($m[1]));
+            $user=$row['user'];
+            $uid=$row['uid'];
+            $deposit=$row['deposit']+$row['credit'];
+            $q="INSERT INTO  `freenibs` (
+                    `mac` ,
+                    `user`,
+                    `uid`,
+                    `deposit`
+                    )
+                    VALUES (
+                    '".quote_smart($mac)."', '".quote_smart($user)."','".quote_smart($uid)."','".quote_smart($deposit)."'
+                    )
+                    ON DUPLICATE KEY UPDATE
+                    `mac`='".quote_smart($mac)."', `user`='".quote_smart($user)."',`uid`='".quote_smart($uid)."',`deposit`='".quote_smart($deposit)."';";
+                $this->db->query($q);
+            }
+        }
+        $q="SELECT `blocked`,`mac_addr`,`user`,`uid`,`deposit`,`credit` FROM `users` WHERE `mac_addr` LIKE '%:%'";
+        $this->db_nibs->query($q);
+        $n=$this->db_nibs->num_rows();
+    if($n>0){
+        for($i=0;$i<$n;$i++){
+             $row=$this->db_nibs->fetch_array();
+            $mac=strtolower($row['mac_addr']);
+            $user=$row['user'];
+            $uid=$row['uid'];
+            $deposit=$row['deposit']+$row['credit'];
+            //echo $user." ".$mac."\n";
+            $blocked=$row['blocked'];
+
+            $q="INSERT INTO `freenibs` (
+                    `mac` ,
+                    `user`,
+                    `uid`,
+                    `deposit`
+                    )
+                    VALUES (
+                    '".quote_smart($mac)."', '".quote_smart($user)."','".quote_smart($uid)."','".quote_smart($deposit)."'
+                    )
+                    ON DUPLICATE KEY UPDATE
+                    `en`='".quote_smart($blocked)."',`mac`='".quote_smart($mac)."', `user`='".quote_smart($user)."',`uid`='".quote_smart($uid)."',`deposit`='".quote_smart($deposit)."';";
+                    $this->db->query($q);
+        }
+      }
+    }
+    public function user_to_port_sw(){
+
+        
+    }
+    
+    public function scan_macs_from_ip($ip,$nas_id,$dis,$type,$model){
+                $disallow=$dis[$ip];
+                $p=explode(",",$disallow['ports']);
+                $SNMP_COMUNITY_READ=COMUNITY_READ;
+                if($ip=='127.0.0.1'){
+                    //трюк для ЦИСКИ, так как ей надо указывать комьюнити в виде community@vlan
+                     $SNMP_COMUNITY_READ="public@25";
+                }
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                if(strlen($result[0])<2){
+                    $SNMP_COMUNITY_READ=COMUNITY_DEF_DLINK_READ;
+                    $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                }
+                if(strlen($result[0])<2){
+                    $SNMP_COMUNITY_READ=COMUNITY_READ2;
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                }
+                echo "SNMP_COMUNITY_READ $SNMP_COMUNITY_READ\n";
+                if(strlen($result[0])<2){
+                    return array();
+                }
+                else{
+                    if($type=="cisco")
+                        $res=snmprealwalk($ip,$SNMP_COMUNITY_READ,OID_cisco_mac_on_ports);
+                    else{
+                        //$res=snmp2_real_walk($ip,$SNMP_COMUNITY_READ,OID_mac_on_ports);
+                        $res=snmprealwalk($ip,$SNMP_COMUNITY_READ,OID_mac_on_ports);
+                        //print_r($res);
+                    }
+
+                    /*  old cisco
+                     $res=snmprealwalk($ip,"public@54",".1.3.6.1.2.1.17.4.3.1.2");
+                                         foreach ($res as $ind=>$port){
+                                             $arr=explode('.',$ind);
+                                                $c=count($arr);
+                                                 $port=explode(':',$port);
+                                                 $port_temp=$port;
+                                                 $port=(int)$port[1];
+                                         if($ip=='172.16.2.26'){
+                                                $port=$cisco_rp[$port];
+                                          }
+
+                                          $mc=dec_hex($arr[$c-6]).':'.dec_hex($arr[$c-5]).':'.dec_hex($arr[$c-4]).':'.dec_hex($arr[$c-3]).':'.dec_hex($arr[$c-2]).':'.dec_hex($arr[$c-1]);
+                                                 $mac=strtolower($mc);
+                                             $main[$mac]=$port;
+                                             echo $mac." - $port - $port_t[0]--.1.3.6.1.2.1.17.1.4.1.2.".$port."\n";
+                                         }
+                    */
+
+                    foreach ($main as $mac=>$port){
+                        if(!(in_array($port,$p))){
+                        $query="
+                         INSERT INTO `mac` (
+                            
+                            `mac` ,
+                            `sw_id`,
+                            `port`,
+                            `date`
+                            )
+                            VALUES (
+                            '".quote_smart($mac)."' , '".quote_smart($nas_id)."', '".quote_smart($port)."',NOW()
+                            )
+                            ON DUPLICATE KEY UPDATE
+                            `mac`='".quote_smart($mac)."' , 
+                            `sw_id`='".quote_smart($nas_id)."', 
+                            `port`='".quote_smart($port)."',
+                            `date`=NOW();";
+                            
+                        $this->db->query($query);
+                    }
+                    }
+                                        
+                }
+    }
+    
+    public function scan_all_switches($dis){
+        $field_to_select="INET_NTOA(`ip`) AS `nas_ip`,`id`,`type`,`name`,`model` AS `version`,`ports`";
+        $q="SELECT 
+                ".$field_to_select."
+            FROM `sw`
+                  ORDER BY `id`";
+        $this->db->query($q);
+        $n=@$this->db->num_rows();
+        $query=array();
+        if($n>0){
+            for($i=0;$i<$n;$i++){
+                $row=$this->db->fetch_array();
+                $sw=self::scan_sw_by_ip($row['nas_ip'],$dis);
+                $switches[]=array(
+                        "ip"=>$row['nas_ip'],
+                        "id"=>$row['id'],
+                        "type"=>$row['type'],
+                        "model"=>$row['model'],
+                        "disallow_ports"=>$row['disallow_ports']
+                        );
+                
+                echo "process ".$row['nas_ip']."\n";
+                if($sw['type']!="unknown"){
+                $q1="UPDATE
+                    `sw`    SET
+                            `type`='".quote_smart($sw['type'])."',  
+                            `model`='".quote_smart($sw['version'])."', 
+                            `ports`='".quote_smart($sw['ports'])."'
+                    WHERE
+                        `id`='".quote_smart($row['id'])."'";
+                $query[]=array("d"=>$q,"u"=>$q1);
+                }
+            }
+            foreach($query as $qw){
+                $this->db->query($qw['u']);
+            }
+            foreach($switches as $switch){
+                echo "process mas on ".$switch['ip']." id:".$switch['id']."\n";
+                self::scan_macs_from_ip($switch['ip'],$switch['id'],$dis,$switch['type'],$switch['model']);
+            }
+        }
+        if(DEBUG_DB=="true")
+                    echo $this->db->mysql_error();  
+    }
+    public function scan_by_ip_switch($dis,$ip){
+        $field_to_select="INET_NTOA(`ip`) AS `nas_ip`,`id`,`type`,`name`,`model` AS `version`,`ports`";
+        $q="SELECT 
+                ".$field_to_select."
+            FROM `sw`
+            WHERE
+                `ip`=INET_ATON('".$ip."')
+                  ORDER BY `id`";
+        $this->db->query($q);
+        $n=$this->db->num_rows();
+        $query=array();
+        if($n>0){
+            
+            for($i=0;$i<$n;$i++){
+                $row=$this->db->fetch_array();
+                $sw=self::scan_sw_by_ip($row['nas_ip'],$dis);
+                $switches[]=array(
+                        "ip"=>$row['nas_ip'],
+                        "id"=>$row['id'],
+                        "type"=>$row['type'],
+                        "model"=>$row['model'],
+                        "disallow_ports"=>$row['disallow_ports']
+                        );
+                
+                echo "process ".$row['nas_ip']."\n";
+                $q="D ELETE FROM `sw` WHERE `id`='".quote_smart($row['id'])."';";
+                $q1="UPDATE
+                    `sw`    SET
+                            `type`='".quote_smart($sw['type'])."',  
+                            `model`='".quote_smart($sw['version'])."', 
+                            `ports`='".quote_smart($sw['ports'])."'
+                    WHERE
+                        `id`='".quote_smart($row['id'])."'";
+                $query[]=array("d"=>$q,"u"=>$q1);               
+            }
+            foreach($query as $qw){
+                //echo $qw['u']."\n";
+                $this->db->query($qw['u']);
+            }
+            foreach($switches as $switch){
+                echo "process on switch: ".$switch['ip']." id:".$switch['id']."\n";
+                self::scan_macs_from_ip($switch['ip'],$switch['id'],$dis,$switch['type'],$switch['model']);
+            }
+        }
+        if(DEBUG_DB=="true")
+                    echo $this->db->mysql_error();  
+    }
+    
+    public function show_all_sw(){
+    $field_to_select="
+            `freenibs`.`mac`,`freenibs`.`user`,`freenibs`.`uid`,`freenibs`.`deposit`,
+            `mac`.`port`,`mac`.`sw_id`,
+            `sw`.`name`,`sw`.`id`, INET_NTOA(`sw`.`ip`) AS `nas_ip`,`sw`.`type`,`sw`.`model` AS `version`,`sw`.`ports`,`sw`.`addr`
+             ";                 
+    switch($_GET['sort']){
+    case "ul":
+        $q="SELECT 
+                ".$field_to_select."
+            FROM `freenibs`,`mac`,`sw`
+            WHERE
+                    `mac`.`mac`=`freenibs`.`mac`
+                AND
+                    `sw`.`id`=`mac`.`sw_id` 
+                  ORDER BY `sw`.`id`    ";
+    break;
+    case "id":
+        if(strlen($_GET['id'])>1){
+            $add_=" 
+                    `id`='".quote_smart($_GET['id'])."'";
+        }
+        $q="SELECT  
+                ".$field_to_select."
+            FROM 
+                    `freenibs`,`mac`,`sw`
+            WHERE
+                ".$add_."
+                AND
+                    `mac`.`mac`=`freenibs`.`mac`
+                AND
+                    `sw`.`id`=`mac`.`sw_id` 
+                  ORDER BY 
+                        `sw`.`id`,`sw`.`ports`
+                        ";
+            //echo $q;
+    break;
+    case "type":
+        switch($_GET['sub_type']){
+        default:
+            if(strlen($_GET['sub_type'])>1){
+                $add_="
+                     
+                        `sw`.`type` ='".quote_smart($_GET['sub_type'])."'
+                        ";
+            }
+            
+            $q="SELECT  
+                ".$field_to_select."
+            FROM 
+                    `freenibs`,`mac`,`sw`
+            WHERE
+                    `mac`.`mac`=`freenibs`.`mac`
+                AND
+                    `sw`.`id`=`mac`.`sw_id` 
+                AND
+                        
+                  ".$add_."
+                
+                
+                  ORDER BY 
+                        `sw`.`type`,`sw`.`name`,`mac`.`port`
+                        ";
+        break;
+        }
+    break;
+
+
+    default:
+        $q="SELECT  
+                ".$field_to_select."
+            FROM 
+                    `freenibs`,`mac`,`sw`
+            WHERE
+                    `mac`.`mac`=`freenibs`.`mac`
+                AND
+                    `sw`.`id`=`mac`.`sw_id` 
+                
+                  ORDER BY `sw`.`id`,`mac`.`port`
+                        ";
+        
+    break;      
+    }
+        $this->db->query($q);
+        $n=$this->db->num_rows();
+        $c=0;
+            if($n>0){
+                
+                $nasid=-1;
+                $nastemp=-1;
+                $ports=array();
+
+                $n_of_ports=48;
+                        $header_sw.="
+
+<td>
+  <a href=\"?sort=ul\">Àäðåññ</a>
+  
+  <td>
+    <td>
+      <a href=\"?sort=id\">ID</a>
+      
+      <td>
+        <td>
+          <a href=\"?sort=type\">type</a>
+          
+          <td>
+            ";
+                                
+                                    echo $header_sw;
+                                echo "
+                                <div style=\"font-size:12px\"><table  border=\"1px\">
+            
+            <tr>
+              ";
+                            if(strlen($_GET['id'])>1) $n++;
+                            for($i=0;$i<$n;$i++){
+                                if( !( (strlen($_GET['id'])>1)&&($i==$n))){
+                                     $row=$this->db->fetch_array();
+                                    $nasid=$row['id'];
+                                    
+                                }
+                                else{
+                                  $nasid++;
+                                 
+                                }
+                                
+                                    if($i==0) {
+                                        $nasid=$row['id'];
+                                        $nastemp=$nasid;
+                                        $temp_nas_ip=$row['nas_ip'];
+                                        $temp_name=$row['name'];
+                                        $temp_type=$row['type'];
+                                        $temp_id=$row['id'];
+                                        $temp_ports=$row['ports'];
+                                        $temp_version=$row['version'];
+                                        if(preg_match("/\bVersion/i",$row['version'])){
+                                                $temp_version=explode("Version",$row['version']);
+                                                $row['version']=$temp_version['0'];
+                                                $temp_version=$row['version'];
+                                            }
+                                    }
+                                    
+                                    if($nastemp!=$nasid){
+                                        if($_GET['snmp']=="true")
+                                            $sw_res=self::scan_sw_by_ip($temp_nas_ip);
+              
+                                              if( ($temp_ports>0)&&($temp_ports<100))
+                                                $n_of_ports=$temp_ports;
+                                              else
+                                                $n_of_ports=48;
+              
+                                            $c++;
+                                            if($c>1){
+                                                $c=0;
+                                                $td_pre=" border=\"1px\" ";
+                                            }
+                                            else {
+                                                $td_pre=' ';
+                                            }
+                                            echo "
+                                            
+                                            <tr ".$td_pre.">
+                                                 <td  rowspan=\"2\" nowrap=\"nowrap\" bgcolor=\"#999999\">
+                                            <a href=\"http://".$temp_nas_ip."\"  target=\"_blank\">".$temp_name."</a>
+                                                <br />".str_replace("Fast Ethernet Switch","",$temp_version)."
+                                        </td>
+                                        <td rowspan=\"2\">
+                                            <a href=\"?sort=id&id=".$temp_id."\" target=\"_blank\"> ".$temp_id."</a></td>
+                                        <td ".$td_pre." rowspan=\"2\">
+                                            <a href=\"?sort=type&sub_type=".$temp_type."\">
+                                                    ".$temp_type."
+                                            </a>
+                                        </td>";
+                                            $nastemp=$nasid;    
+                                            $header_ports='';
+                                            for($i=1;$i<$n_of_ports+1;$i++){
+                                                
+                                                $header_ports.="<td ".$td_pre."  bgcolor=\"#CCCCCC\">".$i."</td>";
+                                            }
+                                        
+                                            echo "  <tr ".$td_pre.">$header_ports
+            </tr>
+                                                
+            
+            <tr>
+              <td>
+                
+              </td>
+                                                
+              
+              <td>
+                
+              </td>
+                                                
+              
+              <td>
+                
+              </td> ";
+                                            for($i=1;$i<$n_of_ports+1;$i++){
+                                                if(strlen($ports[$i])>0){
+                                                echo "
+              
+              <td>
+                ".$ports[$i]."
+              </td>";
+                                                        
+                                                }
+                                                else{
+                                                    echo "<td bgcolor=\"#FFFF00\"> </td>";
+                                                }
+                                                
+                                            }
+                                            echo "
+            </tr>";
+                                            $ports='';
+                                            $ports=array();
+                                    }else{
+                                        
+                                        $temp_nas_ip=$row['nas_ip'];
+                                        $temp_name=$row['name'];
+                                        $temp_type=$row['type'];
+                                        $temp_id=$row['id'];
+                                        $temp_ports=$row['ports'];
+                                        $temp_version=$row['version'];
+                                        if(preg_match("/\bVersion/i",$row['version'])){
+                                                $temp_version=explode("Version",$row['version']);
+                                                $row['version']=$temp_version['0'];
+                                                $temp_version=$row['version'];
+                                            }
+                                    }
+            
+            
+                                if(!(strlen($row['user'])>0))
+                                        $row['user']=$row['mac'];
+                                if($row['deposit']>=0){
+                                    $ports[$row['port']].="<a href=\"http://admin/edit_user.php?uid=".$row['uid']."\" target=\"_blank\" >".$row['user']."</a>
+            
+            <br />";    
+                                }else{
+                                    $ports[$row['port']].="<b><a style=\"color: red\" href=\"https://admin/edit_user.php?uid=".$row['uid']."\" target=\"_blank\">".$row['user']."</a></b><br />";   
+                                }
+                            }
+                            if($_GET['id']>1){
+                                switch($_GET['snmp']){
+                                case "true":
+                                    echo "</tr>
+                                    </table></div>";
+                                    echo "
+            
+            <p>
+              ".PAGE_MES_2.":
+            </p>
+                                    
+            
+            <p>
+              ".PAGE_MES_3.":   $sw_res[type]
+            </p>
+                                    
+            
+            <p>
+              ".PAGE_MES_4."    $sw_res[version]
+            </p>
+                                    
+            
+            <p>
+              ".PAGE_MES_5."    $sw_res[ports]
+            </p>
+                                    
+            
+            <p>
+              Ip    $sw_res[ip]
+            </p>";
+                                break;
+                                default:
+                                    echo "</tr>
+                                    </table></div>";
+                                    echo "
+                                    
+            
+            <p>
+              <a href=\"?sort=id&id=".$temp_id."&snmp=true\">Get data by snmp</a>
+                                    
+              
+              <p>
+                ".PAGE_MES_2.":
+              </p>
+                                    
+              
+              <p>
+                ".PAGE_MES_3.": $temp_type
+              </p>
+                                    
+              
+              <p>
+                ".PAGE_MES_4."  
+              </p>
+                                    
+              
+              <p>
+                ".PAGE_MES_5."  
+              </p>
+                                    
+              
+              <p>
+                Ip  $temp_nas_ip
+              </p>";
+                                break;
+                                }
+                            }
+                        }
+                    
+                    
+                }
+              }
+              ?>
+              
+              </pre>
+              
+
+<pre><code>          &lt;p&gt;
+            pages/top.php:
+          &lt;/p&gt;
+
+
+          &lt;pre lang=&quot;php&quot; line=&quot;1&quot;&gt;
+</code></pre>
+
+<p>&lt;?php ?&gt;</p>
+
+<p></pre></p>
+
+<p>
+  pages/bottom.php:
+</p>
+
+<pre lang="php" line="1">
+<?php ?>
+&lt;/html>
+</pre>
+
+<p>
+  cron.php:
+</p>
+
+<pre lang="php" line="1">
+#!/usr/bin/php
+<?php
+ include_once("engine.php");
+  $db=new db_mysql(HOST,USER,DB_PASS,DB,DEBUG_DB);
+ if(DEBUG_DB=="true") echo '$db obj is ok'."<br>\n";
+ 
+ $db->SET_NAMES("utf8");
+ 
+ $db_nibs=new db_mysql(HOST_NIBS,USER_NIBS,DB_NIBS_PASS,DB_NIBS,DEBUG_DB);
+ if(DEBUG_DB=="true") echo '$db_nibs obj is ok'."
+
+<br />\n";
+ //$db_nibs->SET_NAMES("cp1251");
+ //$db->SET_COLLATE("latin1_swedish_ci");
+ //$db_nibs->SET_COLLATE("cp1251_general_ci");
+ $db_nibs->SET_NAMES("utf8");
+ $page=new page(&$db,&$db_nibs);
+ 
+ $page->cron();
+ 
+?>
+</pre>
+
+<p>
+  cron_one_ip.php:
+</p>
+
+<pre lang="php" line="1">
+#!/usr/bin/php -q
+<?php 
+$path="/var/www/skmsw";
+ $ip=$argv['1'];
+if(file_exists($path."/pid/".str_replace(".","",$ip))){
+    echo "exist";
+}
+else{
+$f=fopen($path."/pid/".str_replace(".","",$ip),"w"); 
+fwrite($f,"do"); 
+include_once("engine.php");
+  $db=new db_mysql(HOST,USER,DB_PASS,DB,DEBUG_DB);
+ if(DEBUG_DB=="true") echo '$db obj is ok'."<br>\n";
+     $db->SET_NAMES("utf8");
+ 
+ $db_nibs=new db_mysql(HOST_NIBS,USER_NIBS,DB_NIBS_PASS,DB_NIBS,DEBUG_DB);
+ if(DEBUG_DB=="true") echo '$db_nibs obj is ok'."
+
+<br />\n";
+ //$db_nibs->SET_NAMES("cp1251");
+ //$db->SET_COLLATE("latin1_swedish_ci");
+ //$db_nibs->SET_COLLATE("cp1251_general_ci");
+ $db_nibs->SET_NAMES("utf8");
+ $page=new page(&$db,&$db_nibs);
+ $page->cron_one_ip($ip);
+
+
+
+unlink($path."/pid/".str_replace(".","",$ip)); 
+}
+ ?>
+
+</pre>
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="http://b-comm.ru/%D1%80%D0%B0%D1%81%D1%81%D1%83%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F/%D1%82%D0%BE%D1%80%D1%80%D0%B5%D0%BD%D1%82%D1%8B-%D0%B8-%D1%82%D0%BE%D1%80%D1%80%D0%B5%D0%BD%D1%82-%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%B8%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D1%8C-c" title="Торренты и торрент-действительность: cкачал и за решётку &amp;#8212; реальность">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/4isp/%D0%B1%D0%B5%D0%BA%D0%B0%D0%BF-%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D0%B8-cisco" title="Бекап конфигурации Cisco">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

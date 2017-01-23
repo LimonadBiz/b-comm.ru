@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Add_packet.Php on </title>
+    <link>http://b-comm.ru/tags/add_packet.php/index.xml</link>
+    <description>Recent content in Add_packet.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/add_packet.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>add_packet.php</title>
+      <link>http://b-comm.ru/billing/add_packet-php</link>
+      <pubDate>Sat, 14 Jan 2012 22:00:15 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/add_packet-php</guid>
+      <description>&lt;pre lang=&#34;php&#34;&gt;&lt;?
+include_once(&#34;mysql.php&#34;);
+
+mysql_query(&#34;INSERT INTO &#34;.NIBS_PACKETS_TABLE.&#34; (packet) VALUES (&#39;&#34;.$packet.&#34;&#39;)&#34;,$LINK) or die(&#34;save_packet.php -&gt; err1 &#34;.mysql_error($LINK));
+$gid=mysql_insert_id($LINK);
+
+$result=mysql_query(&#34;SELECT * FROM &#34;.NIBS_PACKETS_TABLE.&#34; WHERE gid=&#34;.$gid,$LINK);
+$packet=mysql_fetch_array($result);
+mysql_free_result($result);
+
+$TOP = &#34;Изменение пакета `&#34;.$packet[packet].&#34;&#39;&#34;;
+include(&#34;top.php&#34;);
+?&gt;
+  &amp;lt;FONT SIZE=+2 COLOR=green&gt;Изменение пакета `&amp;lt;FONT COLOR=blue&gt;
+
+&lt;? echo $packet[packet]; ?&gt;&amp;lt;/FONT&gt;&#39; (
+
+&lt;? echo $gid; ?&gt;)&amp;lt;/FONT&gt;
+  
+
+&lt;HR /&gt;
+
+&lt;?
+include(&#34;edit_packet_menu.php&#34;);
+?&gt;
+  
+
+&lt;HR /&gt;
+&amp;lt;A HREF=/&gt;Вернуться&amp;lt;/A&gt;
+
+&lt;?
+include(&#34;bottom.php&#34;);
+?&gt;
+
+&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

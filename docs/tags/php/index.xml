@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Php on </title>
+    <link>http://b-comm.ru/tags/php/index.xml</link>
+    <description>Recent content in Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Как заставить окончательно перейти абонентов на другой тип подключения?</title>
+      <link>http://b-comm.ru/billing/%D0%BA%D0%B0%D0%BA-%D0%B7%D0%B0%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BE%D0%BA%D0%BE%D0%BD%D1%87%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BF%D0%B5%D1%80%D0%B5%D0%B9%D1%82%D0%B8-%D0%B0</link>
+      <pubDate>Fri, 31 Dec 2010 09:50:02 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D0%BA%D0%B0%D0%BA-%D0%B7%D0%B0%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BE%D0%BA%D0%BE%D0%BD%D1%87%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BF%D0%B5%D1%80%D0%B5%D0%B9%D1%82%D0%B8-%D0%B0</guid>
+      <description>&lt;p&gt;Я уже писал &lt;a href=&#34;http://b-comm.ru/?p=69&#34;&gt;про Скрипт для сервера доступа mpd5: up-script для информирования абонентов&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Но это не сработает на 100% и тем более сразу.&lt;/p&gt;
+
+&lt;p&gt;**Почему?&lt;/p&gt;
+
+&lt;p&gt;** Да потому, что люди включают компьютер подключают Интернет и через х-минут начинают пользоваться. &lt;strong&gt;Они просто не увидят сообщение&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Что делать?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Показывать данное сообщение каждые х-минут!&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;*/10    *   *   *   *   root /perevesti_vseh.php  2&gt;&amp;1&lt;/pre&gt;
+
+&lt;p&gt;/perevesti_vseh.php&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/php                                                                                                                                                               
+&lt;?php
+//наша таблица в фаерволе из прошлого поста)))
+//http://b-comm.ru/?p=69 - тут
+$table_ipfw_for_warn_up=7;
+$link = mysql_connect(&#39;10.1.1.1&#39;, &#39;freenibs&#39;, &#39;freenibs&#39;);
+               
+if (!$link) {                                                                                                                                                                      
+            die(&#39;Could not connect: &#39; . mysql_error());                                                                                                                            
+}                                                                                                                                               mysql_select_db(&#34;freenibs&#34;);
+$q=&#34;SELECT `ip`                                                                                                                                                                    
+FROM `actions`                                                                                                                                                                     
+WHERE `terminate_cause` = &#39;Online&#39;&#34;;                                                                                                                                               
+                                                                                                                                                                                   
+$result = mysql_query($q);                                                                                                                                                         
+$num_rows = mysql_num_rows($result);                                                                                                                                               
+if($num_rows&gt;0){                                                                                                                                                                   
+                                                                                                                                                                                   
+                                                                                                                                                                                   
+                                                                                                                                                                                   
+         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {                                                                                                                  
+                 $userip=$row[&#39;ip&#39;];                                                                                                                                               
+                 //echo &#34;session: &#34;.$unique_id.&#34; will rise :)\n&#34;;                                                                                                                  
+                $last_line = system(&#39;/sbin/ipfw table &#39;.$table_ipfw_for_warn_up.&#39; add &#39;.$userip.&#34;&#34;, $retval);                                                                                                                                                                                                                                                         
+         }                                                                                                                                                                         
+                                                                                                                                                                                   
+}                                                                                                                                                                                  
+sleep(60);                                                                                                                                                                         
+                                                                                                                                                                                   
+                                                                                                                                                                                   
+ $last_line = system(&#39;/sbin/ipfw table 7 flush&#39;, $retval);                                                                                                                         
+                                                                                                                                                                                   
+?&gt;                                                         
+&lt;/pre&gt;
+
+&lt;p&gt;Вот так вот просто)))&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Скрипт для сервера доступа mpd5: up-script для информирования абонентов</title>
+      <link>http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0-mpd5-up-script-%D0%B4%D0%BB%D1%8F-%D0%B8%D0%BD%D1%84</link>
+      <pubDate>Sun, 28 Nov 2010 11:19:09 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0-mpd5-up-script-%D0%B4%D0%BB%D1%8F-%D0%B8%D0%BD%D1%84</guid>
+      <description>&lt;p&gt;Скрипт для сервера доступа mpd5: up-script для информирования абонентов.&lt;/p&gt;
+
+&lt;p&gt;Этот скрипт Мне понадобился при переводе людей с PPPtP на PPPoE. Дело в том, что обзванивать ВСЕХ не всегда лучшая идея, а вот уведомить людей можно при подключении)))&lt;/p&gt;
+
+&lt;p&gt;Скрипт до безобразия простой, Мы добавляем ИП-адрес клиента в таблицу фаервола&lt;/p&gt;
+
+&lt;p&gt;/usr/local/etc/mpd5/up_warn.php &lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;#!/usr/loca/bin/php                          
+&lt;?php                                                                                                                                         /*
+* Скрипт для информирования абонентов при подключении к 
+* серверу доступа
+*/                                     
+//$interface=$argv[&#39;1&#39;];                         
+$table_ipfw_for_warn_up=7; // ЭТО таблица в фаерволе ipfw 
+$fr_ip=$argv[&#39;4&#39;];                                                                                                                          $last_line = system(&#39;/sbin/ipfw table &#39;.$table_ipfw_for_warn_up.&#39; add &#39;.$fr_ip.&#34;&#34;, $retval);
+                        
+?&gt;                                                         
+&lt;/pre&gt;
+
+&lt;p&gt;Далее у Меня OS freeBSD ! Это будет работать на любой freebsd 5, freebsd 6, freebsd 7, freebsd 8, freebsd 9, freebsd 10 =)&lt;/p&gt;
+
+&lt;p&gt;Вот простой скрипт. Всё что он делает &amp;#8212; это создаёт правило для редиректа всего трафика от подключившихся абонентов на страницу которая висит на этом же сервере. Надо обратить внимание, что ИП-адреса &amp;#171;у Меня&amp;#187; включают все диапазоны фейковых адресов + реальных &amp;#8212; то есть абоненто сможет спокойно сходить на страницу статистики, игровой сервер или еще что&amp;#8230;.&lt;/p&gt;
+
+&lt;p&gt;/usr/local/etc/rc.d/ipfw.sh&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;#!/bin/sh
+/sbin/ipfw delete 6
+/sbin/ipfw table 6 flush                 
+ #table 6 содержит ИП-адреса НАШЕГО адресного пространства, тут как минимум должен быть ВПН-сервер
+/sbin/ipfw table 6 add 10.0.0.0/8;               
+/sbin/ipfw table 6 add 192.168.0.0/16;    
+
+#перенаправленние всего трафика абонента на траницу, котороя у нас висит на сервере: 
+#server 127.0.0.1 port 9988
+
+/sbin/ipfw add 6 fwd 127.0.0.1,9988 all from table\(7\) to not table\(6\);
+                                                                        
+&lt;/pre&gt;
+
+&lt;p&gt;Теперь настраиваем тот самый сервер &amp;#8212; server 127.0.0.1 port 9988.&lt;/p&gt;
+
+&lt;p&gt;Я использовал nginx &amp;#8212; что бы не грузить сервер)))&lt;/p&gt;
+
+&lt;p&gt;/usr/local/etc/nginx/nginx.conf:&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;server {                                                                                                                                                                        
+        listen       9988;                                                                                                                                                         
+      location / {                                                                                                                                                                 
+           index index.php;                                                                                                                                                        
+                root  /usr/local/www/perevod_info;                                                                                                                                 
+                error_page  404 /index.php;                                                                                                                                        
+                error_page 403 /index.php;                                                                                                                                         
+                 if (!-e $request_filename) {                                                                                                                                      
+                        rewrite ^(.*)$ /index.php last;                                                                                                                            
+                }                                                                                                                                                                  
+       }                                                                                                                                                                           
+        location ~ \.php$ {                                                                                                                                                        
+               fastcgi_pass    127.0.0.1:9000;                                                                                                                                     
+                                                                                                                                                                                   
+               fastcgi_index   index.php;                                                                                                                                          
+         #      fastcgi_param     SCRIPT_FILENAME       /usr/local/www/forbid_inet/index.php;                                                                                      
+                fastcgi_param     SCRIPT_FILENAME       /usr/local/www/perevod_info$fastcgi_script_name;                                                                           
+             include      fastcgi_params;                                                                                                                                          
+        }                                                                                                                                                                          
+                                                                                                                                                                                   
+        error_page  404 /index.php;                                                                                                                                                
+        error_page   500 502 503 504  /index.php;                                                                                                                                  
+        location = /50x.html {                                                                                                                                                     
+            root   /usr/local/www/nginx-dist;                                                                                                                                      
+        }                                                                                                                                                                          
+}    
+&lt;/pre&gt;
+
+&lt;p&gt;index.php&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?php include_once(&#34;index_.html&#34;); ?&gt;      
+&lt;/pre&gt;
+
+&lt;p&gt;index_.html&lt;/p&gt;
+
+&lt;pre lang=&#34;html&#34; line=&#34;1&#34;&gt;                                                          
+                                                                                                                                        
+                                                                                                                                                                    
+                                                                                                                                                                                   
+                                                                                                                                                                             
+                                                                                                                                                                                   
+
+
+&lt;div class=&#34;container&#34;&gt;
+  &lt;div class=&#34;header&#34;&gt;
+    &lt;a href=&#34;http://www.isp.pl.ua&#34;&gt;home&lt;/a&gt;                                                                                                                     
+        &lt;!-- end .header --&gt;
+  &lt;/div&gt;                                                                                                                                                     
+    
+  
+  &lt;div class=&#34;content&#34;&gt;
+    &lt;h1 align=&#34;center&#34; style=&#34;color:#F00&#34;&gt;
+      Внимание!!!
+    &lt;/h1&gt;                                                                                                                         
+        
+    
+    &lt;p align=&#34;center&#34; style=&#34;color:#F00&#34;&gt;
+      &lt;em&gt;Прочитайте полность, что бы это сообщение больше не появлялось!!!&lt;/em&gt;
+    &lt;/p&gt;                                                            
+                                                                                                                                                                                       
+        
+    
+    &lt;div&gt;
+      Уважаемые клиент в связи с переходом на новый биллинг, произошли изменения. 
+    &lt;/div&gt;                                               
+                                                                                                                                  
+        
+    
+    &lt;div&gt;
+      &lt;br /&gt;                                                                                                                                                                   
+          
+    &lt;/div&gt;                                                                                                                                                                         
+        
+    
+    &lt;div&gt;
+      Так же со сменой серверов изменился и способ подключения, теперь доступ к Интернету предоставляется по протоколу PPPoE(Инструкция для &lt;a href=&#34;http://b-comm.ru:9988/pppoe_winxp.html&#34;&gt;Windows XP&lt;/a&gt; &lt;a href=&#34;http://b-comm.ru:9988/pppoe_win7.html&#34;&gt;Windows 7&lt;/a&gt;!!!).  
+    &lt;/div&gt;                                                                        
+        
+    
+    &lt;div&gt;
+      &lt;p&gt;
+        &lt;span class=&#34;gggggggg&#34;&gt;!!! Старые сервера будут отключены первого января 2011 года, уважительная просьба к этому времени создать новые подключения!!! &lt;/span&gt;&lt;!-- end .content --&gt;
+      &lt;/p&gt;                  
+            
+      
+      &lt;div&gt;
+        
+      &lt;/div&gt;                                                                                                                                                                       
+            
+      
+      &lt;div&gt;
+        
+      &lt;/div&gt;                                                                                                                                                                 
+               
+      
+      &lt;p align=&#34;center&#34; style=&#34;color:#F00; font-style: italic;&#34;&gt;
+        (!!!это сообщение пропадёт только через 10 минут!!!
+      &lt;/p&gt;                                                                                                                                                                 
+            
+      
+      &lt;p&gt;
+        &amp;nbsp;
+      &lt;/p&gt;                                                                                                                                                                
+          
+    &lt;/div&gt;                                                                                                                                                                         
+    
+  &lt;/div&gt;                                                                                                                                                                             
+    
+  
+  &lt;div class=&#34;footer&#34;&gt;
+    &lt;p&gt;
+      К Вам обращается Администрация сети &#34;home&#34;
+    &lt;/p&gt;                                                                                                                 
+      
+    
+    &lt;!-- end .footer --&gt;
+  &lt;/div&gt;                                                                                                                                                       
+    
+  
+  &lt;!-- end .container --&gt;
+&lt;/div&gt;                                                                                                                                                    
+                                                                                                                                                                            
+  
+&lt;/pre&gt;
+
+&lt;p&gt;И самое последнее &amp;#8212; если Вам всё же нужно что бы пользователи работали в Интернете делайте так:&lt;/p&gt;
+
+&lt;p&gt;/etc/crontab&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;*/10    *       *       *       *       root /sbin/ipfw table 7 flush  2&gt;&amp;1                                                                                                        
+&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Работа с зависшими пользователями</title>
+      <link>http://b-comm.ru/billing/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D1%88%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F%D0%BC%D0%B8</link>
+      <pubDate>Thu, 23 Jul 2009 11:09:52 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D1%88%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F%D0%BC%D0%B8</guid>
+      <description>&lt;p&gt;Работа с зависшими пользователями, zapped users)))&lt;/p&gt;
+
+&lt;p&gt;В наличии FreeBSD сервер, mpd5/mpd4 сервер доступа.&lt;/p&gt;
+
+&lt;p&gt;Давно нарыл скрипт, который киляет зависших пользователей при таймауте сессии в 180сек. Я пытался меньше сделать &amp;#8212; но ничего не получается, нормальные сессии падают(((&lt;/p&gt;
+
+&lt;p&gt;freez_user_kill.sh:&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;#!/bin/sh
+
+USER=&#39;freenibs&#39;
+PASSWORD=&#39;freenibs&#39;
+DATABASE=&#39;freenibs&#39;
+#USER=&#39;root&#39;
+
+TIMEOUT=180
+
+res=`/usr/local/bin/mysql -B -s -u $USER -p$PASSWORD $DATABASE -e \
+&#34;select unique_id from actions \
+where terminate_cause = &#39;Online&#39; and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;`
+
+#Можно использовать and server=&#39;127.0.0.1&#39; или любой другой ИП для СЕРВЕРА доступа)))
+
+nasport=`/usr/local/bin/mysql -B -s -u $USER -p$PASSWORD $DATABASE -e \
+&#34;select port from actions \
+where terminate_cause = &#39;Online&#39;   and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;`
+
+
+
+if [ -n &#34;$res&#34; ]; then
+echo &#34;session ids:&#34; $res
+echo &#34;nasport:&#34; $nasport
+
+res=`/usr/local/bin/mysql -B -s -u $USER -p$PASSWORD $DATABASE -e \
+&#34;update actions set terminate_cause = &#39;User-Request&#39;, \
+stop_time = date_add(start_time, interval ifnull(time_on, 0) second) \
+where terminate_cause = &#39;Online&#39;  and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;`
+fi
+
+for p in $nasport; do
+/usr/local/etc/raddb/userkill.pl 1 2 3 $p
+
+done
+
+
+&lt;/pre&gt;
+
+&lt;p&gt;Скрипт непосредственного &amp;#171;сбрасывания&amp;#187; пользователя -/usr/local/etc/raddb/userkill.pl.&lt;/p&gt;
+
+&lt;p&gt;Но с этим скриптом есть беда после использования mpd5.4 &amp;#8212; у него такой параметр как nasport в базе billng&amp;#8217;a FreeNIBS не совпадает с тем чем надо))):&lt;/p&gt;
+
+&lt;pre lang=&#34;perl&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/perl
+#
+#Это старая версия скрипта
+#Тут надо вручную указывать сервер доступа
+$hostname=&#34;127.0.0.1&#34;;
+$port=&#34;5005&#34;;
+if( $ARGV[3] eq &#39;&#39; ) { die &#39;Usage:  user nasip userip nasport&#39;; };
+
+$user=$ARGV[0];
+$nasip=$ARGV[1];
+$userip=$ARGV[2];
+$nasport=$ARGV[3];
+
+#$nasport=$nasport+1;
+
+$hostname=&#34;127.0.0.1&#34;;
+
+$port=&#34;5005&#34;;
+
+use Net::Telnet ();
+
+$t = new Net::Telnet (Timeout =&gt; 2,Port =&gt; $port,Binmode =&gt; &#39;\015\012&#39;,
+                               Prompt =&gt; &#39;/\[\]/&#39;);
+$t-&gt;open(&#34;$hostname&#34;);
+$t-&gt;login(&#34;mpd&#34;, &#34;mpd_password&#34;);
+
+$t-&gt;print(&#34;link L-&#34;.$nasport);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;close&#34;);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;exit&#34;);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;close();
+exit 0;
+&lt;/pre&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;#pkg_info |grep perl
+libtext-charwidth-perl-0.04 Documentation gettext tools
+libtext-wrapi18n-perl-0.06 Documentation gettext tools
+p5-DBI-1.60.7       The perl5 Database Interface.  Required for DBD::* modules
+p5-Net-Radius-1.56  A perl module to manipulate RADIUS packets
+p5-SNMP_Session-1.12 A perl5 module providing rudimentary access to SNMPv1 and v
+p5-Scalar-List-Utils-1.19,1 Perl subroutines that would be nice to have in the perl cor
+p5-Storable-2.18    Persistency for perl data structures
+p5-Term-ReadKey-2.30 A perl5 module for simple terminal control
+p5-Test-Harness-3.14_2 Run perl standard test scripts with statistics
+p5-Test-Simple-0.86 Basic utilities for writing tests in perl
+p5-Time-HiRes-1.9719,1 A perl5 module implementing High resolution time, sleep, an
+perl-5.8.9_1        Practical Extraction and Report Language
+
+[13:20] wel@server  /usr/home/wel #uname -a
+FreeBSD server.home 6.2-RELEASE-p12 FreeBSD 6.2-RELEASE-p12 #11: Mon Jan  5 02:37:52 EET 2009     wel@server.home:/usr/obj/usr/src/sys/SERVER  i386
+&lt;/pre&gt;
+
+&lt;p&gt;Нам надо &amp;#171;подконфигурировать&amp;#187; mpd5:&lt;/p&gt;
+
+&lt;p&gt;/usr/local/etc/mpd5/mpd.conf а именно надо следить, что бы в конце были заветные admin!!!:&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;startup:
+    set user foo bar admin
+&lt;/pre&gt;
+
+&lt;p&gt;Дальше пример сессии:&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;/home/wel &gt;telnet 127.0.0.1 5005
+Connected to 127.0.0.1.
+Escape character is &#39;^]&#39;.
+Multi-link PPP daemon for FreeBSD
+
+Username: mpd
+Password:
+
+Welcome!
+Mpd pid 5377, version 5.5 (root@nas1 03:47  1-Dec-2010)
+[] show summary
+Current daemon status summary
+Iface   Bund            Link    LCP     Device          User            From
+                        L       Initial pptp    DOWN                    UNSPEC
+                        L1      Initial pptp    DOWN                    UNSPEC
+                        L2      Initial pptp    DOWN                    UNSPEC
+        B       Down
+        B1      Down
+        B2      Down
+ng44    B-47    Up      L-47    Opened  pptp    UP          slim        10.1.20.18
+[]
+[]
+Available commands:
+ authname : Choose link by auth name     bundle   : Choose/list bundles
+ close    : Close a layer                create   : Create new item
+ destroy  : Destroy item                 exit     : Exit console
+ iface    : Choose bundle by iface       help     : Help on any command
+ link     : Choose link                  load     : Read from config file
+ log      : Set/view log options         msession : Ch. bundle by msession-id
+ open     : Open a layer                 quit     : Quit program
+ repeater : Choose/list repeaters        session  : Choose link by session-id
+ set      : Set parameters               show     : Show status
+[] authname slim
+[L-47]
+
+&lt;/pre&gt;
+
+&lt;p&gt;Как видно по имени пользователя Я перешёл на [L-47]&lt;/p&gt;
+
+&lt;p&gt;Новая версия /usr/local/etc/raddb/userkill_nas_new.pl:&lt;/p&gt;
+
+&lt;pre lang=&#34;perl&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/perl
+#
+#Это новая версия скрипта
+#Тут не надо вручную указывать сервер доступа
+$hostname=&#34;127.0.0.1&#34;;
+$port=&#34;5005&#34;;
+if( $ARGV[3] eq &#39;&#39; ) { die &#39;Usage:  user nasip userip nasport&#39;; };
+
+$user=$ARGV[0];
+$nasip=$ARGV[1];
+$userip=$ARGV[2];
+$nasport=$ARGV[3];
+
+#$nasport=$nasport+1;
+
+#$hostname=&#34;127.0.0.1&#34;;
+$hostname=$nasip;
+
+$port=&#34;5005&#34;;
+
+use Net::Telnet ();
+
+$t = new Net::Telnet (Timeout =&gt; 2,Port =&gt; $port,Binmode =&gt; &#39;\015\012&#39;,
+                               Prompt =&gt; &#39;/\[\]/&#39;);
+$t-&gt;open(&#34;$hostname&#34;);
+$t-&gt;login(&#34;mpd&#34;, &#34;mpd_password&#34;);
+
+$t-&gt;print(&#34;link L-&#34;.$nasport);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;authname &#34;.$user);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;close&#34;);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;exit&#34;);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;close();
+exit 0;
+&lt;/pre&gt;
+
+&lt;p&gt;Новая версия скрипта для сбрасывания пользователей:&lt;/p&gt;
+
+&lt;p&gt;freez_user_kill.php&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/php
+&lt;?php
+$link = mysql_connect(&#39;10.1.1.1&#39;, &#39;freenibs&#39;, &#39;freenibs&#39;);
+if (!$link) {
+        die(&#39;Could not connect: &#39; . mysql_error());
+}
+/*  */
+
+mysql_select_db(&#34;freenibs&#34;);
+
+$TIMEOUT=180;
+
+
+$q=&#34;select 
+       `unique_id`,
+       `port`,
+       `user`,
+       `client_ip`,
+       `server`
+from 
+       `actions`
+where 
+         `terminate_cause` = &#39;Online&#39; and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;;
+
+$result = mysql_query($q);
+$num_rows = mysql_num_rows($result);
+if($num_rows&gt;0){
+         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+                $unique_id=$row[&#39;unique_id&#39;];
+                $port=$row[&#39;port&#39;];
+                $user=$row[&#39;user&#39;];
+                $server=$row[&#39;server&#39;];
+                 $userip=$row[&#39;client_ip&#39;];
+                 echo &#34;session: &#34;.$unique_id.&#34; will rise :)\n&#34;;
+                $last_line = system(&#39;/usr/local/etc/raddb/userkill_nas_new.pl &#39;.$user.&#39; &#39;.$server.&#39; &#39;.$userip.&#39; &#39;.$port.&#34;&#34;, $retval);
+         }
+
+
+//чистим сессии
+//только смотрите - могут новые появиться, пока выполнялся скрипт
+//можно так)))
+$TIMEOUT=+2;
+
+$q=&#34;update actions set terminate_cause = &#39;User-Request&#39;, \
+stop_time = date_add(start_time, interval ifnull(time_on, 0) second) \
+where terminate_cause = &#39;Online&#39;  and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;;
+$result = mysql_query($q);
+
+}
+
+&lt;/pre&gt;
+
+&lt;p&gt;В кронтаб (crontab)&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;*/5        *    *       *       *       root    /usr/local/etc/mpd5/freez_user_kill.php  2&gt;&amp;1
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

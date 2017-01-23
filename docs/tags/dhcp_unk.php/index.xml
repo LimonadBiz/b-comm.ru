@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dhcp_unk.Php on </title>
+    <link>http://b-comm.ru/tags/dhcp_unk.php/index.xml</link>
+    <description>Recent content in Dhcp_unk.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/dhcp_unk.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>dhcp_unk.php</title>
+      <link>http://b-comm.ru/billing/dhcp_unk-php</link>
+      <pubDate>Sat, 14 Jan 2012 23:39:50 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/dhcp_unk-php</guid>
+      <description>&lt;p&gt;dhcp_unk.php&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?php
+include_once(&#34;top.php&#34;);
+$link = @mysql_connect(&#39;10.200.205.224&#39;, &#39;dhcpd_log_unknow&#39;, &#39;hcpd_log_unknow&#39;);
+if (!$link) {
+            die(&#39;Could not connect: &#39; . mysql_error());
+}
+$db_selected = mysql_select_db(&#39;freenibs&#39;, $link);
+
+$q=&#34;SELECT *
+FROM `dhcp_arp_unkn`
+ORDER BY `date` DESC&#34;;
+$q=&#34;
+
+SELECT `dhcp_arp_unkn`.`mac`, FROM_UNIXTIME(`dhcp_arp_unkn`.`date`) AS `date`,`dhcp_arp_unkn`.`vlan`,`users`.`user`,`users`.`uid`
+ FROM `dhcp_arp_unkn` LEFT JOIN
+ `users`
+ ON
+  `dhcp_arp_unkn`.`mac`=`users`.`mac_addr`
+
+  ORDER BY `dhcp_arp_unkn`.`date` DESC
+  &#34;;
+
+$result = mysql_query($q,$link);
+$num_rows = mysql_num_rows($result);
+echo &#34;&lt;table border=1&gt;
+    
+
+&lt;tr&gt;
+  &lt;td&gt;
+    N
+            
+  &lt;/td&gt;
+          
+  
+  &lt;td&gt;
+    mac
+  &lt;/td&gt;
+          
+  
+  &lt;td&gt;
+    vlan
+  &lt;/td&gt;
+          
+  
+  &lt;td&gt;
+    date
+  &lt;/td&gt;
+  
+      
+&lt;/tr&gt;&#34;;
+    $i=0;
+while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+           // printf (&#34;ID: %s  Name: %s&#34;, $row[0], $row[1]);
+            $i++;
+             echo &#34;
+              
+
+&lt;tr&gt;
+  &lt;td&gt;
+    $i
+  &lt;/td&gt;
+                  &#34;;
+                  if( (int)($row[&#39;uid&#39;]) &gt;1){
+                      echo &#34;
+  
+  &lt;td&gt;
+    &amp;lt;a target=\&#34;_blank\&#34;  href=\&#34;/edit_user.php?uid=&#34;.$row[&#39;uid&#39;].&#34; \&#34;&gt;&#34;.$row[&#39;mac&#39;].&#34;&amp;lt;/a&gt;
+  &lt;/td&gt;&#34;;
+                  }else{
+                      echo &#34;
+  
+  &lt;td&gt;
+    &#34;.$row[&#39;mac&#39;].&#34;
+  &lt;/td&gt;&#34;;
+                  }
+  
+                  echo &#34;
+  
+  &lt;td&gt;
+    &#34;.$row[&#39;vlan&#39;].&#34;
+  &lt;/td&gt;
+                  
+  
+  &lt;td&gt;
+    &#34;.$row[&#39;date&#39;].&#34;
+  &lt;/td&gt;
+                
+&lt;/tr&gt;
+             &#34;;
+
+
+                }
+echo &#34;&amp;lt;/table&gt;&#34;;
+                    mysql_free_result($result);
+
+@mysql_close($link);
+
+
+
+?&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mac on </title>
+    <link>http://b-comm.ru/tags/mac/index.xml</link>
+    <description>Recent content in Mac on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/mac/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Скрипт для логгирования мак-адресов пользователей</title>
+      <link>http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D0%BB%D0%BE%D0%B3%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D0%BF</link>
+      <pubDate>Tue, 15 Dec 2009 00:23:33 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D0%BB%D0%BE%D0%B3%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D0%BF</guid>
+      <description>&lt;p&gt;Данный скрипт и его копии на серверах доступа и роутерах стоят, что бы сливать инфу о мак-адресах в базу&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;Эти данные потом используется другими скриптами. Отсюда видно кто куда и зачем )))&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;cat /etc/crontab|grep arp&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;*/10    *       *       *       *       root /arpwatch.sh  &gt; /dev/null
+&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;cat /arpwatch.sh&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/bash
+#для моих реальников - начинаются с 91.203., но это не правильно)))
+#тут надо было использовать egrep
+#в общем не пишите так скрипты))) 
+#@www.isp.pl.ua
+############
+
+arp -a -n | tr &#39;(&#39; &#39; &#39; | tr &#39;)&#39; &#39; &#39; | awk &#39;{print$2&#34;K&#34;$4&#34;L&#34;}&#39; | grep 10. | grep -v &#34;incomplet&#34; | grep -v &#34;ff:ff&#34;|grep -v &#34;91.203.&#34;&gt;/arpwatch.table
+
+arp -a -n | tr &#39;(&#39; &#39; &#39; | tr &#39;)&#39; &#39; &#39; | awk &#39;{print$2,$4}&#39; | grep 10. | grep -v &#34;incomplet&#34; | grep -v &#34;ff:ff&#34;|grep -v &#34;91.203.&#34;&gt;/arpwatch.table
+
+arp -a -n | tr &#39;(&#39; &#39; &#39; | tr &#39;)&#39; &#39; &#39; | awk &#39;{print$2,$4}&#39; | grep 10. | grep -v &#34;incomplet&#34; | grep -v &#34;ff:ff&#34;|grep -v &#34;91.203.&#34;&gt;/arpwatch.table
+arp -a -n | tr &#39;(&#39; &#39; &#39; | tr &#39;)&#39; &#39; &#39; | awk &#39;{print$2,$4}&#39; | grep &#34;172.168&#34; | grep -v &#34;incomplet&#34; | grep -v &#34;ff:ff&#34;&gt;&gt;/arpwatch.table
+arp -a -n | tr &#39;(&#39; &#39; &#39; | tr &#39;)&#39; &#39; &#39; | awk &#39;{print$2,$4}&#39; | grep &#34;91.&#34; | grep -v &#34;incomplet&#34; | grep -v &#34;ff:ff&#34;&gt;&gt;/arpwatch.table
+
+/arpwatch.php
+&lt;/pre&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/php
+&lt;?php
+include_once(&#34;/engine.php&#34;);
+$a=new db_mysql();
+$a-&gt;init(&#34;10.1.1.1&#34;,&#34;arpwatch&#34;,&#34;arpwatch&#34;,&#34;freenibs&#34;);
+$f=&#34;/arpwatch.table&#34;;
+
+$f_array=file($f);
+$n=count($f_array);
+for ($i=1; $i&amp;lt;$n;$i++)
+{
+            $str=explode(&#34; &#34;,$f_array[$i]);
+$q=&#34;INSERT INTO `arpwatch` (`ip`,`arp`) VALUES (&#39;&#34;.quote_smart(trim($str[0])).&#34;&#39;,&#39;&#34;.quote_smart(trim($str[1])) .&#34;&#39;) ON DUPLICATE KEY UPDATE `ip`=&#39;&#34;.quote_smart(trim($str[0])).&#34;&#39;,`date`=NOW()&#34;;
+//          echo $q.&#34;\n&#34;;
+            $a-&gt;query($q);
+}
+
+$a-&gt;close_db();
+?&gt;
+&lt;/pre&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;&lt;?php
+function quote_smart($value)
+{
+
+    if (get_magic_quotes_gpc()) {
+        $value = stripslashes($value);
+    }
+
+    if (!is_numeric($value)) {
+        $value = mysql_real_escape_string($value);
+    }
+    return $value;
+}
+
+
+
+class db_mysql{
+    public $query;
+    public $host;
+    public $user;
+    public $passw;
+    public $db;
+    public $link;
+    public $res;
+    public $temp_q;
+    public $num;
+    public $ar;
+        public function  __construct ()
+        {
+                $this-&gt;query=NULL;
+                $this-&gt;ar=array();
+        }
+
+        function __destruct()
+        {
+                @mysql_close($this-&gt;link);
+        }
+
+        public function  init($HOST,$USER,$PASSW,$DB)
+        {
+                self::set_host($HOST);
+                self::set_user($USER);
+                self::set_passw($PASSW);
+                self::set_db($DB);
+                $this-&gt;query=NULL;
+                $this-&gt;ar=array();
+                $this-&gt;link=@mysql_connect($this-&gt;host,$this-&gt;user, $this-&gt;passw)or die(ERR1);
+                mysql_select_db($this-&gt;db,$this-&gt;link) or die(ERR2);
+                //$q=&#34;SET NAMES utf8&#34;;
+                self::query($q);
+        }
+
+        function connect(){
+                $this-&gt;query=NULL;
+                $this-&gt;ar=array();
+                $this-&gt;link=@mysql_connect($this-&gt;host,$this-&gt;user, $this-&gt;passw)or die(ERR1);
+                mysql_select_db($this-&gt;db,$this-&gt;link) or die(ERR2);
+        }
+
+        public function set_host($host){$this-&gt;host=$host;}
+        public function set_user($user){$this-&gt;user=$user;}
+        public function set_passw($passw){$this-&gt;passw=$passw;}
+        public function set_db($db){$this-&gt;db=$db;}
+
+        public function  query($q){
+                $this-&gt;query=mysql_db_query($this-&gt;db,$q,$this-&gt;link);//or die(ERR3);
+        }
+        public function num_rows(){
+                $this-&gt;num=mysql_num_rows($this-&gt;query);
+                return $this-&gt;num;
+        }
+        public function  fetch_row(){
+                $this-&gt;res=mysql_fetch_row($this-&gt;query);
+                return $this-&gt;res;
+        }
+        public function  fetch_array(){
+                $this-&gt;res=mysql_fetch_array($this-&gt;query); //or die(mysql_error());
+                return $this-&gt;res;
+        }
+
+        public function db_select()
+        {
+                mysql_select_db($this-&gt;db,$this-&gt;link) or die(ERR2);
+        }
+        public function free_result()
+        {
+                mysql_free_result($this-&gt;res);
+        }
+
+        public function close_db()
+        {
+                mysql_close($this-&gt;link);
+        }
+
+}
+
+
+?&gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;dump:&lt;/p&gt;
+
+&lt;pre lang=&#34;sql&#34; line=&#34;1&#34;&gt;-- phpMyAdmin SQL Dump
+-- version 3.1.2
+-- http://www.phpmyadmin.net
+--
+
+SET SQL_MODE=&#34;NO_AUTO_VALUE_ON_ZERO&#34;;
+
+--
+-- База данных: `freenibs`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `arpwatch`
+--
+
+DROP TABLE IF EXISTS `arpwatch`;
+CREATE TABLE IF NOT EXISTS `arpwatch` (
+  `id` int(255) NOT NULL auto_increment,
+  `ip` varchar(255) NOT NULL,
+  `arp` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL default &#39;0000-00-00 00:00:00&#39; on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `ip` (`ip`,`arp`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4648 ;
+
+--
+-- Дамп данных таблицы `arpwatch`
+--
+
+INSERT INTO `arpwatch` (`id`, `ip`, `arp`, `date`) VALUES(4, &#39;10.1.5.1&#39;, &#39;00:02:b3:1e:01:e1&#39;, &#39;2009-12-24 02:27:14&#39;);
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

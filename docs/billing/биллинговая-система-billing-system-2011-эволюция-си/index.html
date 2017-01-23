@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Биллинговая система (billing system) 2011 &amp;#8212; Эволюция систем учета трафика в Интернет за 6-ть лет  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="freebsd, freeNIBS, freeradius, mpd, netflow, ">
+
+
+<meta property="og:title" content="Биллинговая система (billing system) 2011 &amp;#8212; Эволюция систем учета трафика в Интернет за 6-ть лет  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/billing/%D0%B1%D0%B8%D0%BB%D0%BB%D0%B8%D0%BD%D0%B3%D0%BE%D0%B2%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-billing-system-2011-%D1%8D%D0%B2%D0%BE%D0%BB%D1%8E%D1%86%D0%B8%D1%8F-%D1%81%D0%B8" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2011-01-17T11:29:27Z" />
+<meta property="og:article:modified_time" content="2011-01-17T11:29:27Z" />
+
+  
+    
+<meta property="og:article:tag" content="freebsd">
+    
+<meta property="og:article:tag" content="freeNIBS">
+    
+<meta property="og:article:tag" content="freeradius">
+    
+<meta property="og:article:tag" content="mpd">
+    
+<meta property="og:article:tag" content="netflow">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Биллинговая система (billing system) 2011 &amp;#8212; Эволюция систем учета трафика в Интернет за 6-ть лет" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/billing/%D0%B1%D0%B8%D0%BB%D0%BB%D0%B8%D0%BD%D0%B3%D0%BE%D0%B2%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-billing-system-2011-%D1%8D%D0%B2%D0%BE%D0%BB%D1%8E%D1%86%D0%B8%D1%8F-%D1%81%D0%B8" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Биллинговая система (billing system) 2011 \x26#8212; Эволюция систем учета трафика в Интернет за 6-ть лет",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2011-01-17",
+    "description": "",
+    "wordCount":  1303 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/billing/%D0%B1%D0%B8%D0%BB%D0%BB%D0%B8%D0%BD%D0%B3%D0%BE%D0%B2%D0%B0%D1%8F-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-billing-system-2011-%D1%8D%D0%B2%D0%BE%D0%BB%D1%8E%D1%86%D0%B8%D1%8F-%D1%81%D0%B8" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Биллинговая система (billing system) 2011 &amp;#8212; Эволюция систем учета трафика в Интернет за 6-ть лет
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2011-01-17">17 Jan, 2011</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 7 min
+  &middot; (1303 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/freebsd" class="label label-primary">freebsd</a>
+  
+  <a href="http://b-comm.ru/tags/freenibs" class="label label-primary">freeNIBS</a>
+  
+  <a href="http://b-comm.ru/tags/freeradius" class="label label-primary">freeradius</a>
+  
+  <a href="http://b-comm.ru/tags/mpd" class="label label-primary">mpd</a>
+  
+  <a href="http://b-comm.ru/tags/netflow" class="label label-primary">netflow</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <h1 id="биллинговая-система-2011-8212-эволюция-систем-учета-трафика-в-интернет-за-6-ть-лет">Биллинговая система 2011 &#8212; Эволюция систем учета трафика в Интернет за 6-ть лет</h1>
+
+<p>Короткие и логичные выводы по пунктам в конце, а сейчас рок-н-ролл)))</p>
+
+<h2 id="2005-2006-время-freenibs">2005-2006 время FreeNIBS )))</h2>
+
+<p>Сказать по правде с FreeNIBS Я очень долго мучался пока не запустил биллинг, а для этого Я походил по всем возможным граблям и невозможным(то есть Я их сам сочинил))).</p>
+
+<p><strong>В 2006-2008 году:</strong> Мы еще сидели на 64-128Кбитных безлимитных пакетах (сладкие безлимы))), причём большая часть людей на помегабайтном тарифе (помегабайтке). Биллинговая типичного провайдера состояла из пресловутых FreeBSD или Linux или же Windows Server у крутых парней был Solaris :).</p>
+
+<p>Но потом всё резко начало меняться&#8230;</p>
+
+<p></p>
+
+<p>В том же 2008 году стало ясно, что &#171;умные&#187; (а вообще &#8212; управляемые свичи) рулят!</p>
+
+<p>На тот момент пошёл отток б/у Cisco, ZyXel, Planet, 3COM, etc. На лице появлялась улыбка &#8212; Вот ОНО, СЧАСТЬЕ на нашей улице!!! Монтажники в робах тягали оптику, сварочный аппарат для &#171;оптики&#187; уже не был в диковинку, а некоторые на этом начали подниматься. Хотя всё еще кто-то использовал переходники на оптику без пайки 😉</p>
+
+<p>Нам казалась, что настал золотой век провайдеров)))</p>
+
+<p>Цены резко упали вниз и в 2008 году доступно было ЦЕЛЫХ 256Кбит/с простым украинцем.</p>
+
+<p>Я использовал всё это время на своём стареньком сервере Целероне 1.6 512МБ FreeBSD 6.0 потом FreeBSD 6.2 и FreeRadius 1.1.0 + FreeNIBS 1.x. Дальше сервера доступа и биллинговый сервер &#8212; разделились, вот он <a href="http://wel.org.ua/lang/bras-на-freebsd-freenibs">мой брас на freeBSD 7.2</a></p>
+
+<h3 id="прикол-со-старой-freenibs-1-x-и-новой-версией-freenibs-2-x">Прикол со старой freeNibs 1.x и новой версией FreeNIBS 2.x</h3>
+
+<p>Итак у Меня сейчас FreeNIBS интегрированный в FreeRADIUS 1.1.0 а собран аж в апреле 2007 года.</p>
+
+<pre lang="bash">#/usr/local/sbin/radiusd -v
+radiusd: FreeRADIUS Version 1.1.0, for host , built on Apr 27 2007 at 01:50:14
+Copyright (C) 2000-2003 The FreeRADIUS server project.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+You may redistribute copies of FreeRADIUS under the terms of the
+GNU General Public License.
+For more information about these matters, see the file named COPYRIGHT.
+</pre>
+
+<p>Дело в том, что Я на радостях собрал FreeNIBS 2.0.x, прикрутил &#171;новый&#187; интерфейс и уехал. Но Мне начал звонить директор, дескать: &#171;Что Ты наделал? Людям деньги снимает по 100-200 грн за сессию!!!&#187; В общем Я промучался 3-и часа и так и не выяснил почему такая лажа. было решено, что сервер просто напросто откатится на FreeNIBS первой ветки. Но боже мой Я совсем забыл какой FreeNIBS Я накатывал на какой FreeRADIUS.</p>
+
+<p>В общем с горем пополам на 9-ти или более вариациях Я закончил под утро. Лёг спать, а потом в ужасе не смог найти какой из вариантов Я засетапил)))</p>
+
+<pre lang="bash">#ls -la
+total 16
+drwxr-xr-x   7 root  wheel   512 Apr 25  2007 .
+drwxr-xr-x  39 root  wheel  2560 Dec  5 11:37 ..
+drwxr-xr-x  11 root  wheel   512 Apr 25  2007 1.1.9_radius1.1.0
+drwxr-xr-x  10 root  wheel   512 Apr 25  2007 1.1.9_radius1.1.1
+drwxr-xr-x  11 root  wheel   512 Apr 25  2007 1.1.9_radius1.1.4
+drwxr-xr-x  12 root  wheel   512 Apr 24  2007 2.2.0_radius1.1.4
+drwxr-xr-x  12 root  wheel   512 Apr 24  2007 3.0.0.b3_radius1.1.4
+
+</pre>
+
+<p>В общем Я скрупулёзно копировал данные папки периодически Себе на винт &#8212; переодически)))</p>
+
+<p>Потом с винта 6.2Гбайта в 2008 году Я перенёс на 30+Gb винт с помощью dump+restore.</p>
+
+<pre lang="bash">#fdisk
+******* Working on device /dev/ad8 *******
+parameters extracted from in-core disklabel are:
+cylinders=155061 heads=16 sectors/track=63 (1008 blks/cyl)
+
+Figures below won't work with BIOS for partitions not in cyl 1
+parameters to be used for BIOS calculations are:
+cylinders=155061 heads=16 sectors/track=63 (1008 blks/cyl)
+
+Media sector size is 512
+Warning: BIOS sector numbering starts with sector 1
+Information from DOS bootblock is:
+The data for partition 1 is:
+sysid 165 (0xa5),(FreeBSD/NetBSD/386BSD)
+    start 63, size 1044162 (509 Meg), flag 0
+        beg: cyl 0/ head 1/ sector 1;
+        end: cyl 64/ head 254/ sector 63
+The data for partition 2 is:
+sysid 165 (0xa5),(FreeBSD/NetBSD/386BSD)
+    start 1044225, size 71665965 (34993 Meg), flag 80 (active)
+        beg: cyl 65/ head 0/ sector 1;
+        end: cyl 1023/ head 254/ sector 63
+The data for partition 3 is:
+sysid 165 (0xa5),(FreeBSD/NetBSD/386BSD)
+    start 72710190, size 83586195 (40813 Meg), flag 0
+        beg: cyl 1023/ head 255/ sector 63;
+        end: cyl 1023/ head 254/ sector 63
+The data for partition 4 is:
+&lt;UNUSED>
+</pre>
+
+<p><strong>За 2008-2009</strong> год скорость увеличилась с 256Кбит/с до 10Мбит/с.</p>
+
+<p>Я, нет &#8212; мой старый Целерон вздохнул с облегчением, когда Я вынес на новенький Атлон 4600++ + настоящая сетевай карта Intel Desctop PRO Gigabit)))</p>
+
+<p>Теперь у Меня гемора стала в 2-а раза больше, пока Я не освоил загрузку FreeBSD без зависимости от названия раздела.</p>
+
+<p>Правда Я часто когда был в отъезде говорил по телефону, что печатать &#8212; а Мне говорили результат &#8212; так и восстанавливали очень жестокие сбои подачи электричества)))</p>
+
+<p>В общем IP KVM switch &#8212; это весчь)))</p>
+
+<p><strong>В 2008-2009-ом году Мне сильно поднадоела FreeNIBS</strong> &#8212; переписывать веб-интерфейс Я не хотел, так как Меня беспокоил падающий радиус, не обновлённая FreeBSD до 6.3, а потом и 6.4 и не радужные перспективы если это всё не запуститься, а Я за 400км и без бекапов.</p>
+
+<h3 id="время-netflow">Время NetFlow</h3>
+
+<p><strong>Я решил всё переписать используя netflow</strong>. Взял С++ библиотеку для mysql, хранимые процедуры mysql 5.0.x и начал пытаться. Создал логику и всё такое. Но потом Я обнаружил, что труЪ способ снятия netflow прямо с нод mpd4.4 у Меня не заработал, и даже на mpd5.0 )))</p>
+
+<p>Я отложил все эти потуги и забил. Я еще пытался написать биллинг под FreeRADIUS. Так же пытался проинсталить или найти нормальный биллинг. Всё Мне попадалось что-то &#171;не то&#187;)))</p>
+
+<p>Уже после выхода mpd5.1 Я с радостью обнаружил работающую функцию экспорта NetFlow потока. Я подвесил сенсор и ждал, пока сервер пару раз не завис. Я сказал ХМ&#8230;</p>
+
+<p>Я посчитал скорость роста траффика, и количество И/О операций. Так же Я сделал тестовый скрипт,который &#171;расчитывал траффик и снимал деньги&#187;. В общем Я был огорчён &#8212; Нетфлоу был настолько &#171;тяжёлым&#187; &#8212; до безобразия. Я еще удивлялся как у знакомого на сетке в 3-и раза больше не дохнет сервак. Как потом оказалось его КСЕОНЫ дохли раз за разом ))) Он еще в РРРtP соеденении считал отдельно локалку+инет безлимитный)))</p>
+
+<p><strong>В 2009-2010</strong> Я несколько раз пробовал abills, но Меня тошнило от пёрла.</p>
+
+<p>С выходом новой фичи для Меня в mpd5.2 ext acc Я захотел реализовать биллинг средствами скриптов.</p>
+
+<p><a rel="nofollow" href="https://sourceforge.net/projects/mpd/forums/forum/44692/topic/3036343">mpd 5 External authentication</a> как было сказано надо выдавать:</p>
+
+<pre lang="cpp">USER_NT_HASH
+USER_LM_HASH
+RESULT:UNDEF
+</pre>
+
+<p>Я помыкался, поискал как это сделано в abills&#8217;е и забил)))</p>
+
+<p>Замаячила возможная продажа моей любимой сети)))</p>
+
+<p>Я работать стал в еще одной сети. На написание костылей времени не было.</p>
+
+<p><strong>Потом летом 2010</strong> Я решил сделать свой биллинг на FreeRADIUS&#8217;e.</p>
+
+<p>В принципе Я относительно быстро на последнем 2.х радиусе поднял сервер. Дальше Я подруби его к mpd 5.5 на freeBSD 7.2 и сделал небольшой PPTP/PPPoE сервер. начал писать морду.</p>
+
+<p>А потом стало реально понятно, что Мы будем скоро проданы в рабство &#8212; так Я и забросил написание биллинга)))</p>
+
+<h2 id="выводы">Выводы</h2>
+
+<p>За 6-ть лет траффик шагнул, да нет &#8212; взлетел на реактивной ракете просто на невероятные высоты. С помегабайтного Интернета с общей скоростью на 50 человек 64Кбит/с до 240Мбит/сек с динамическим шейпингом в зависимости от нагрузки канала и пределом в 100Мбит/с.</p>
+
+<p>Биллинг как прилип изначально FreeNIBS &#8212; так Я им и пользовался на FreeBSD, хоть и железо было &#8212; обычный старый компьютер, хоть жесткий диск &#8212; был с бедами, хоть электричество отключали и потом до часу беды фиксились. Не останавливало то, что было переполнение 32bit-ых counter-ов и трафик больше 4-х Гбайт обнулялся &#8212; Я костылём пофиксил)))</p>
+
+<p>В итоге Я реализовал FreeRadius + ipfw redirect на nginx, реализовал динамический шейпинг в зависимости от нагрузки. А всего-лишь навсего надо было победить в Себе лень и не мучаться со всем этим старьём)))</p>
+
+<h2 id="будущее">Будущее</h2>
+
+<p>Мы все знаем, что IPv4 доживает свой час.</p>
+
+<p>Что траффик считать &#8212; неприлично, легче дать реальный ИП-к.</p>
+
+<p>НАТить &#8212; позорно, ибо сервера больше перенапрягаются.</p>
+
+<p>И тем не менее будущее росийчких провайдеров с СОРМ-ом не сильно прельщает.</p>
+
+<p>Так же бешеный рост траффика просто поражает))) Мы &#171;кору&#187; меняли несколько раз, а &#171;Им все мало&#187;)))</p>
+
+<p>И это не учитывая, что у пользователей 10/100Мбит последней мили и 10-40% торрент трафика оседает в сети провайдера.</p>
+
+<p><a href="http://electrobrand.ru/index.php">Дрели и шлифмашины</a></p>
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="http://b-comm.ru/4isp/%D0%BE-%D1%82%D0%BE%D0%BC-%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B2%D0%B0%D0%B9%D0%B4%D0%B5%D1%80%D1%83-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%BD%D0%B5%D1%82%D0%B0-%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%BE" title="О том как провайдеру Интернета распространять программы  с помощью Nullsoft Scriptable Install System (NSIS)">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/%D1%80%D0%B0%D1%81%D1%81%D1%83%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F/%D0%B1%D1%80%D0%B0%D1%83%D0%B7%D0%B5%D1%80-%D0%B1%D1%83%D0%B4%D1%83%D1%89%D0%B5%D0%B3%D0%BE-%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D0%BC-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D0%B8" title="Браузер будущего: применяем виртуализацию">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

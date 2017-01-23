@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Add_user.Php on </title>
+    <link>http://b-comm.ru/tags/add_user.php/index.xml</link>
+    <description>Recent content in Add_user.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/add_user.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>add_user.php</title>
+      <link>http://b-comm.ru/billing/add_user-php</link>
+      <pubDate>Sat, 14 Jan 2012 22:01:29 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/add_user-php</guid>
+      <description>&lt;p&gt;add_user.php&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?
+include_once (&#34;mysql.php&#34;);
+include_once (&#34;extern.php&#34;);
+
+$ext_add = extern_check($user);
+
+if ($ext_add &gt; 0)
+{
+  $TOP = &#34;Пользователь &#34;.$user.&#34; уже существует в системе!&#34;;
+  include(&#34;top.php&#34;);
+  echo &#34;  &amp;lt;FONT SIZE=+2 COLOR=red&gt;Пользователь `&amp;lt;FONT COLOR=blue&gt;$user&amp;lt;/FONT&gt;&#39; &amp;lt;U&gt;уже существует в системе&amp;lt;/U&gt;!&amp;lt;/FONT&gt;
+
+&lt;BR /&gt;\n&#34;;
+  include(&#34;bottom.php&#34;);
+}
+
+$result=mysql_query(&#34;SELECT * FROM &#34;.NIBS_PACKETS_TABLE.&#34; WHERE gid=$gid&#34;,$LINK) or die(&#34;users.php(new_user_form2)  Неверный запрос к &#34;.NIBS_PACKETS_TABLE);
+$packet=mysql_fetch_array($result);
+mysql_free_result($result);
+
+$result=mysql_query(&#34;SELECT * FROM &#34;.NIBS_AUTH_TABLE.&#34; WHERE user=&#39;&#34;.$user.&#34;&#39;&#34;,$LINK);
+if (mysql_num_rows($result) &gt; 0) {
+  $tmp_u=mysql_fetch_array($result);
+  mysql_free_result($result);
+  $TOP = &#34;Пользователь &#34;.$user.&#34; уже существует в базе!&#34;;
+  include(&#34;top.php&#34;);
+  echo &#34;  &amp;lt;FONT SIZE=+2 COLOR=red&gt;Пользователь `&amp;lt;A HREF=\&#34;edit_user.php?uid=&#34;.$tmp_u[uid].&#34;\&#34;&gt;&#34;.$user.&#34;&amp;lt;/A&gt;&#39; &amp;lt;U&gt;уже существует в базе&amp;lt;/U&gt;!&amp;lt;/FONT&gt;&lt;BR /&gt;\n&#34;;
+  include(&#34;bottom.php&#34;);
+}
+
+if (($packet[create_system_user] &gt; 0) AND (extern_add($user) &amp;lt;= 0))
+{
+  $TOP = &#34;Ощибка создания системного пользователя &#34;.$user;
+  include(&#34;top.php&#34;);
+  echo &#34;  &amp;lt;FONT SIZE=+2 COLOR=red&gt;Ощибка создания системного пользователя `&amp;lt;FONT COLOR=blue&gt;$user&amp;lt;/FONT&gt;&#39;&amp;lt;/FONT&gt;&lt;BR /&gt;\n&#34;;
+  include(&#34;bottom.php&#34;);
+}
+
+if ($packet[activated] == 1) {
+  $packet[add_date] = date(&#34;Y-m-d&#34;,mktime());
+} else {
+  $packet[add_date] = &#34;0000-00-00&#34;;
+}
+
+
+//#mysql_query(&#34;INSERT INTO &#34;.NIBS_AUTH_TABLE.&#34; (user,gid,deposit,credit,add_date,blocked,activated) values (&#39;$user&#39;, $gid, $packet[deposit], $packet[credit], &#39;$packet[add_date]&#39;, $packet[blocked], $packet[activated])&#34;,$LINK) or die(&#34;add_user.php -&gt; err1 &#34;.mysql_error($LINK));
+
+$result=mysql_query(&#34;SELECT `last_ip`,`last_local_ip` FROM `freenibs`.`system` LIMIT 1&#34;,$LINK);
+$res=mysql_fetch_array($result);
+mysql_free_result($result);
+$last_ip_ar=explode(&#34;.&#34;,$res[&#39;last_ip&#39;]);
+$last_local_ip_ar=explode(&#34;.&#34;,$res[&#39;last_local_ip&#39;]);
+//foreach($a as $val){
+//}
+$last_ip_ar[3]++;
+if($last_ip_ar[3]&gt;255){
+    $last_ip_ar[2]++;
+    $last_ip_ar[3]=1;
+}
+if($last_ip_ar[2]&gt;255){
+    $last_ip_ar[1]++;
+    $last_ip_ar[2]=1;
+}
+
+
+
+$last_local_ip_ar[3]--;
+if($last_local_ip_ar[3]&gt;255){
+    $last_local_ip_ar[3]=255;
+}
+
+if($last_local_ip_ar[3]&amp;lt;0){
+    $last_local_ip_ar[2]--;
+    $last_local_ip_ar[3]=255;
+}
+if($last_local_ip_ar[2]&gt;255){
+    $last_local_ip_ar[1]--;
+    $last_local_ip_ar[2]=1;
+}
+if($last_local_ip_ar[2]&amp;lt;0){
+        $last_local_ip_ar[1]--;
+        $last_local_ip_ar[2]=255;
+}
+
+
+$last_ip=$last_ip_ar[0].&#34;.&#34;.$last_ip_ar[1].&#34;.&#34;.$last_ip_ar[2].&#34;.&#34;.$last_ip_ar[3];
+$last_local_ip=$last_local_ip_ar[0].&#34;.&#34;.$last_local_ip_ar[1].&#34;.&#34;.$last_local_ip_ar[2].&#34;.&#34;.$last_local_ip_ar[3];
+
+//echo &#34;INSERT INTO &#34;.NIBS_AUTH_TABLE.&#34; (user,gid,deposit,credit,add_date,blocked,activated,framed_ip) values (&#39;$user&#39;, $gid, $packet[deposit], $packet[credit], &#39;$packet[add_date]&#39;, $packet[blocked], $packet[activated]),$last_ip&#34;;
+
+mysql_query(&#34;UPDATE `freenibs`.`system` SET `freenibs`.`system`.`last_ip`=&#39;$last_ip&#39;,`freenibs`.`system`.`last_local_ip`=&#39;$last_local_ip&#39;&#34;,$LINK) or die(&#34;add_user.php last_ip -&gt; err1 &#34;.mysql_error($LINK));
+
+$result=mysql_query(&#34;SELECT MAX(`rule`) AS `max` FROM `bezlim`.`all`&#34;,$LINK);
+$res=mysql_fetch_array($result);
+mysql_free_result($result);
+$max_rule=$res[&#39;max&#39;]+2;
+$bw=0;
+
+
+mysql_query(&#34;INSERT INTO `bezlim`.`all` (`ip`,`rule`,`bw1`,`bw2`,`activ`) values (&#39;$last_ip&#39;,&#39;$max_rule&#39;,&#39;$bw&#39;,&#39;$bw&#39;,&#39;y&#39;)  &#34;,$LINK) or die(&#34;add_user.php bezlim -&gt; err1 &#34;.mysql_error($LINK));
+
+
+mysql_query(&#34;INSERT INTO &#34;.NIBS_AUTH_TABLE.&#34; (user,gid,deposit,credit,add_date,blocked,activated,framed_ip,local_addr) values (&#39;$user&#39;, $gid, $packet[deposit], $packet[credit], &#39;$packet[add_date]&#39;, $packet[blocked], $packet[activated],&#39;$last_ip&#39;,&#39;$last_local_ip&#39;)&#34;,$LINK) or die(&#34;add_user.php -&gt; err1 &#34;.mysql_error($LINK));
+$uid = mysql_insert_id($LINK);
+
+$result=mysql_query(&#34;SELECT * FROM &#34;.NIBS_AUTH_TABLE.&#34; WHERE uid=$uid&#34;,$LINK);
+$res=mysql_fetch_array($result);
+mysql_free_result($result);
+
+$result=mysql_query(&#34;SELECT * FROM &#34;.NIBS_PACKETS_TABLE.&#34; WHERE gid=&#34;.$res[gid],$LINK);
+$packet=mysql_fetch_array($result);
+mysql_free_result($result);
+
+$user = $res[user];
+
+$TOP = &#34;Пользователь `&#34;.$user.&#34;&#39; добавлен (uid=&#34;.$uid.&#34;)&#34;;
+include(&#34;top.php&#34;);
+?&gt;
+
+  &amp;lt;FONT SIZE=+2 COLOR=green&gt;Пользователь &amp;lt;FONT COLOR=blue&gt;`&lt;? echo $user; ?&gt;&#39;&amp;lt;/FONT&gt; добавлен (uid=
+
+&lt;? echo $uid; ?&gt;)&amp;lt;/FONT&gt;
+
+
+
+&lt;?
+include(&#34;edit_user_menu.php&#34;);
+?&gt;
+  
+
+&lt;HR /&gt;
+
+&lt;A HREF=&#34;packet.php?gid=&lt;? echo $res[gid]; ?&gt;&#34;&gt;Вернуться&lt;/A&gt;
+&lt;?
+include(&#34;bottom.php&#34;);
+?&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

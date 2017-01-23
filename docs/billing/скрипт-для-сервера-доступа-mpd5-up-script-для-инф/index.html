@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Скрипт для сервера доступа mpd5: up-script для информирования абонентов  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="freebsd, ipfw, mpd5, nginx, php, up-script, ">
+
+
+<meta property="og:title" content="Скрипт для сервера доступа mpd5: up-script для информирования абонентов  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0-mpd5-up-script-%D0%B4%D0%BB%D1%8F-%D0%B8%D0%BD%D1%84" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2010-11-28T11:19:09Z" />
+<meta property="og:article:modified_time" content="2010-11-28T11:19:09Z" />
+
+  
+    
+<meta property="og:article:tag" content="freebsd">
+    
+<meta property="og:article:tag" content="ipfw">
+    
+<meta property="og:article:tag" content="mpd5">
+    
+<meta property="og:article:tag" content="nginx">
+    
+<meta property="og:article:tag" content="php">
+    
+<meta property="og:article:tag" content="up-script">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Скрипт для сервера доступа mpd5: up-script для информирования абонентов" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0-mpd5-up-script-%D0%B4%D0%BB%D1%8F-%D0%B8%D0%BD%D1%84" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Скрипт для сервера доступа mpd5: up-script для информирования абонентов",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2010-11-28",
+    "description": "",
+    "wordCount":  376 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0-mpd5-up-script-%D0%B4%D0%BB%D1%8F-%D0%B8%D0%BD%D1%84" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Скрипт для сервера доступа mpd5: up-script для информирования абонентов
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2010-11-28">28 Nov, 2010</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 2 min
+  &middot; (376 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/freebsd" class="label label-primary">freebsd</a>
+  
+  <a href="http://b-comm.ru/tags/ipfw" class="label label-primary">ipfw</a>
+  
+  <a href="http://b-comm.ru/tags/mpd5" class="label label-primary">mpd5</a>
+  
+  <a href="http://b-comm.ru/tags/nginx" class="label label-primary">nginx</a>
+  
+  <a href="http://b-comm.ru/tags/php" class="label label-primary">php</a>
+  
+  <a href="http://b-comm.ru/tags/up-script" class="label label-primary">up-script</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <p>Скрипт для сервера доступа mpd5: up-script для информирования абонентов.</p>
+
+<p>Этот скрипт Мне понадобился при переводе людей с PPPtP на PPPoE. Дело в том, что обзванивать ВСЕХ не всегда лучшая идея, а вот уведомить людей можно при подключении)))</p>
+
+<p>Скрипт до безобразия простой, Мы добавляем ИП-адрес клиента в таблицу фаервола</p>
+
+<p>/usr/local/etc/mpd5/up_warn.php </p>
+
+<pre lang="php" line="1">#!/usr/loca/bin/php                          
+<?php                                                                                                                                         /*
+* Скрипт для информирования абонентов при подключении к 
+* серверу доступа
+*/                                     
+//$interface=$argv['1'];                         
+$table_ipfw_for_warn_up=7; // ЭТО таблица в фаерволе ipfw 
+$fr_ip=$argv['4'];                                                                                                                          $last_line = system('/sbin/ipfw table '.$table_ipfw_for_warn_up.' add '.$fr_ip."", $retval);
+                        
+?>                                                         
+</pre>
+
+<p>Далее у Меня OS freeBSD ! Это будет работать на любой freebsd 5, freebsd 6, freebsd 7, freebsd 8, freebsd 9, freebsd 10 =)</p>
+
+<p>Вот простой скрипт. Всё что он делает &#8212; это создаёт правило для редиректа всего трафика от подключившихся абонентов на страницу которая висит на этом же сервере. Надо обратить внимание, что ИП-адреса &#171;у Меня&#187; включают все диапазоны фейковых адресов + реальных &#8212; то есть абоненто сможет спокойно сходить на страницу статистики, игровой сервер или еще что&#8230;.</p>
+
+<p>/usr/local/etc/rc.d/ipfw.sh</p>
+
+<pre lang="bash">#!/bin/sh
+/sbin/ipfw delete 6
+/sbin/ipfw table 6 flush                 
+ #table 6 содержит ИП-адреса НАШЕГО адресного пространства, тут как минимум должен быть ВПН-сервер
+/sbin/ipfw table 6 add 10.0.0.0/8;               
+/sbin/ipfw table 6 add 192.168.0.0/16;    
+
+#перенаправленние всего трафика абонента на траницу, котороя у нас висит на сервере: 
+#server 127.0.0.1 port 9988
+
+/sbin/ipfw add 6 fwd 127.0.0.1,9988 all from table\(7\) to not table\(6\);
+                                                                        
+</pre>
+
+<p>Теперь настраиваем тот самый сервер &#8212; server 127.0.0.1 port 9988.</p>
+
+<p>Я использовал nginx &#8212; что бы не грузить сервер)))</p>
+
+<p>/usr/local/etc/nginx/nginx.conf:</p>
+
+<pre lang="bash" line="1">server {                                                                                                                                                                        
+        listen       9988;                                                                                                                                                         
+      location / {                                                                                                                                                                 
+           index index.php;                                                                                                                                                        
+                root  /usr/local/www/perevod_info;                                                                                                                                 
+                error_page  404 /index.php;                                                                                                                                        
+                error_page 403 /index.php;                                                                                                                                         
+                 if (!-e $request_filename) {                                                                                                                                      
+                        rewrite ^(.*)$ /index.php last;                                                                                                                            
+                }                                                                                                                                                                  
+       }                                                                                                                                                                           
+        location ~ \.php$ {                                                                                                                                                        
+               fastcgi_pass    127.0.0.1:9000;                                                                                                                                     
+                                                                                                                                                                                   
+               fastcgi_index   index.php;                                                                                                                                          
+         #      fastcgi_param     SCRIPT_FILENAME       /usr/local/www/forbid_inet/index.php;                                                                                      
+                fastcgi_param     SCRIPT_FILENAME       /usr/local/www/perevod_info$fastcgi_script_name;                                                                           
+             include      fastcgi_params;                                                                                                                                          
+        }                                                                                                                                                                          
+                                                                                                                                                                                   
+        error_page  404 /index.php;                                                                                                                                                
+        error_page   500 502 503 504  /index.php;                                                                                                                                  
+        location = /50x.html {                                                                                                                                                     
+            root   /usr/local/www/nginx-dist;                                                                                                                                      
+        }                                                                                                                                                                          
+}    
+</pre>
+
+<p>index.php</p>
+
+<pre lang="php"><?php include_once("index_.html"); ?>      
+</pre>
+
+<p>index_.html</p>
+
+<pre lang="html" line="1">                                                          
+                                                                                                                                        
+                                                                                                                                                                    
+                                                                                                                                                                                   
+                                                                                                                                                                             
+                                                                                                                                                                                   
+
+
+<div class="container">
+  <div class="header">
+    <a href="http://www.isp.pl.ua">home</a>                                                                                                                     
+        <!-- end .header -->
+  </div>                                                                                                                                                     
+    
+  
+  <div class="content">
+    <h1 align="center" style="color:#F00">
+      Внимание!!!
+    </h1>                                                                                                                         
+        
+    
+    <p align="center" style="color:#F00">
+      <em>Прочитайте полность, что бы это сообщение больше не появлялось!!!</em>
+    </p>                                                            
+                                                                                                                                                                                       
+        
+    
+    <div>
+      Уважаемые клиент в связи с переходом на новый биллинг, произошли изменения. 
+    </div>                                               
+                                                                                                                                  
+        
+    
+    <div>
+      <br />                                                                                                                                                                   
+          
+    </div>                                                                                                                                                                         
+        
+    
+    <div>
+      Так же со сменой серверов изменился и способ подключения, теперь доступ к Интернету предоставляется по протоколу PPPoE(Инструкция для <a href="http://b-comm.ru:9988/pppoe_winxp.html">Windows XP</a> <a href="http://b-comm.ru:9988/pppoe_win7.html">Windows 7</a>!!!).  
+    </div>                                                                        
+        
+    
+    <div>
+      <p>
+        <span class="gggggggg">!!! Старые сервера будут отключены первого января 2011 года, уважительная просьба к этому времени создать новые подключения!!! </span><!-- end .content -->
+      </p>                  
+            
+      
+      <div>
+        
+      </div>                                                                                                                                                                       
+            
+      
+      <div>
+        
+      </div>                                                                                                                                                                 
+               
+      
+      <p align="center" style="color:#F00; font-style: italic;">
+        (!!!это сообщение пропадёт только через 10 минут!!!
+      </p>                                                                                                                                                                 
+            
+      
+      <p>
+        &nbsp;
+      </p>                                                                                                                                                                
+          
+    </div>                                                                                                                                                                         
+    
+  </div>                                                                                                                                                                             
+    
+  
+  <div class="footer">
+    <p>
+      К Вам обращается Администрация сети "home"
+    </p>                                                                                                                 
+      
+    
+    <!-- end .footer -->
+  </div>                                                                                                                                                       
+    
+  
+  <!-- end .container -->
+</div>                                                                                                                                                    
+                                                                                                                                                                            
+  
+</pre>
+
+<p>И самое последнее &#8212; если Вам всё же нужно что бы пользователи работали в Интернете делайте так:</p>
+
+<p>/etc/crontab</p>
+
+<pre lang="php">*/10    *       *       *       *       root /sbin/ipfw table 7 flush  2>&1                                                                                                        
+</pre>
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D0%BB%D0%BE%D0%B3%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D0%BF" title="Скрипт для логгирования мак-адресов пользователей">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/billing/%D0%BA%D0%B0%D0%BA-%D0%B7%D0%B0%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BE%D0%BA%D0%BE%D0%BD%D1%87%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BF%D0%B5%D1%80%D0%B5%D0%B9%D1%82%D0%B8-%D0%B0" title="Как заставить окончательно перейти абонентов на другой тип подключения?">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

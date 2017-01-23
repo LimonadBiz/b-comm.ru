@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Adress.Php on </title>
+    <link>http://b-comm.ru/tags/adress.php/index.xml</link>
+    <description>Recent content in Adress.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/adress.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>adress.php Скрипт просмотра списка адрессов для ФрииНИБСа</title>
+      <link>http://b-comm.ru/billing/adress-php-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%BF%D1%80%D0%BE%D1%81%D0%BC%D0%BE%D1%82%D1%80%D0%B0-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D1%81%D0%BE%D0%B2-%D0%B4</link>
+      <pubDate>Sat, 14 Jan 2012 22:04:04 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/adress-php-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%BF%D1%80%D0%BE%D1%81%D0%BC%D0%BE%D1%82%D1%80%D0%B0-%D1%81%D0%BF%D0%B8%D1%81%D0%BA%D0%B0-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D1%81%D0%BE%D0%B2-%D0%B4</guid>
+      <description>&lt;p&gt;Скрипт просмотра списка адрессов для ФрииНИБСа&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?php
+include_once(&#34;top.php&#34;);
+include_once(&#34;engine.php&#34;);
+
+
+
+$ip=$_GET[&#39;ip&#39;];
+
+//$status=$argv[2];
+$db=new db_mysql();
+$db-&gt;init(&#34;localhost&#34;,&#34;freenibs&#34;,&#34;freenibs,&#34;freenibs&#34;);
+
+/*$q=&#34;SELECT `street`,`house` FROM `users`&#34;;
+
+INSERT INTO `adress`.`street`,`adress`.`house`
+SELECT `users`.`street`,`users`.`house` FROM users u
+ON DUPLICATE KEY UPDATE `street`=u.street
+/*
+/*INSERT INTO product_offers (`id_product`, `price`)
+SLECT `id_product`, `new_price`
+FROM temp_table t
+WHERE `id_product` IS NOT NULL
+ON DUPLICATE KEY UPDATE `old_price`=`price`, `price`=t.`new_price`
+*/
+$q=&#34;DELETE FROM `adress`&#34;;
+$db-&gt;query($q);
+
+
+$q=&#34;INSERT INTO `adress`(`street`,`house`)
+SELECT `users`.`street`,`users`.`house` FROM `users`
+ON DUPLICATE KEY UPDATE `adress`.`street`=`users`.`street`
+&#34;;
+$db-&gt;query($q);
+
+$q=&#34;SELECT `street`,`house` FROM `adress` WHERE `street` not Like &#39;&#39; AND `house` not Like &#39;&#39;&#34;;
+$db-&gt;query($q);
+
+$n=$db-&gt;num_rows();
+if($n&gt;0)
+{
+$n++;
+echo &#34;
+
+&lt;TABLE border=&#39;1&#39;&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;
+      
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      &lt;B&gt;Улица&lt;/B&gt;
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      &lt;B&gt;Номер дома&lt;/B&gt;
+    &lt;/TD&gt;
+  &lt;/TR&gt;&#34;;
+      for($i=1;$i&amp;lt;$n;$i++)
+          {
+          $row=$db-&gt;fetch_array();
+              echo &#34;
+  
+  &lt;TR&gt;
+    &lt;TD&gt;
+      &#34;.$i.&#34;
+    &lt;/td&gt;
+    
+    &lt;TD&gt;
+      &#34;.$row[&#39;street&#39;].&#34;
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      &#34;.$row[&#39;house&#39;].&#34;
+    &lt;/TD&gt;
+  &lt;/TR&gt;\n&#34;;
+  
+          }
+  echo &#34;
+&lt;/TABLE&gt;&#34;;
+
+}
+
+@$db-&gt;close_db();
+include_once(&#34;bottom.php&#34;);
+?&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

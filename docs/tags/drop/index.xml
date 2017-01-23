@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Drop on </title>
+    <link>http://b-comm.ru/tags/drop/index.xml</link>
+    <description>Recent content in Drop on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/drop/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Работа с зависшими пользователями</title>
+      <link>http://b-comm.ru/billing/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D1%88%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F%D0%BC%D0%B8</link>
+      <pubDate>Thu, 23 Jul 2009 11:09:52 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D1%88%D0%B8%D0%BC%D0%B8-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F%D0%BC%D0%B8</guid>
+      <description>&lt;p&gt;Работа с зависшими пользователями, zapped users)))&lt;/p&gt;
+
+&lt;p&gt;В наличии FreeBSD сервер, mpd5/mpd4 сервер доступа.&lt;/p&gt;
+
+&lt;p&gt;Давно нарыл скрипт, который киляет зависших пользователей при таймауте сессии в 180сек. Я пытался меньше сделать &amp;#8212; но ничего не получается, нормальные сессии падают(((&lt;/p&gt;
+
+&lt;p&gt;freez_user_kill.sh:&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;#!/bin/sh
+
+USER=&#39;freenibs&#39;
+PASSWORD=&#39;freenibs&#39;
+DATABASE=&#39;freenibs&#39;
+#USER=&#39;root&#39;
+
+TIMEOUT=180
+
+res=`/usr/local/bin/mysql -B -s -u $USER -p$PASSWORD $DATABASE -e \
+&#34;select unique_id from actions \
+where terminate_cause = &#39;Online&#39; and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;`
+
+#Можно использовать and server=&#39;127.0.0.1&#39; или любой другой ИП для СЕРВЕРА доступа)))
+
+nasport=`/usr/local/bin/mysql -B -s -u $USER -p$PASSWORD $DATABASE -e \
+&#34;select port from actions \
+where terminate_cause = &#39;Online&#39;   and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;`
+
+
+
+if [ -n &#34;$res&#34; ]; then
+echo &#34;session ids:&#34; $res
+echo &#34;nasport:&#34; $nasport
+
+res=`/usr/local/bin/mysql -B -s -u $USER -p$PASSWORD $DATABASE -e \
+&#34;update actions set terminate_cause = &#39;User-Request&#39;, \
+stop_time = date_add(start_time, interval ifnull(time_on, 0) second) \
+where terminate_cause = &#39;Online&#39;  and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;`
+fi
+
+for p in $nasport; do
+/usr/local/etc/raddb/userkill.pl 1 2 3 $p
+
+done
+
+
+&lt;/pre&gt;
+
+&lt;p&gt;Скрипт непосредственного &amp;#171;сбрасывания&amp;#187; пользователя -/usr/local/etc/raddb/userkill.pl.&lt;/p&gt;
+
+&lt;p&gt;Но с этим скриптом есть беда после использования mpd5.4 &amp;#8212; у него такой параметр как nasport в базе billng&amp;#8217;a FreeNIBS не совпадает с тем чем надо))):&lt;/p&gt;
+
+&lt;pre lang=&#34;perl&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/perl
+#
+#Это старая версия скрипта
+#Тут надо вручную указывать сервер доступа
+$hostname=&#34;127.0.0.1&#34;;
+$port=&#34;5005&#34;;
+if( $ARGV[3] eq &#39;&#39; ) { die &#39;Usage:  user nasip userip nasport&#39;; };
+
+$user=$ARGV[0];
+$nasip=$ARGV[1];
+$userip=$ARGV[2];
+$nasport=$ARGV[3];
+
+#$nasport=$nasport+1;
+
+$hostname=&#34;127.0.0.1&#34;;
+
+$port=&#34;5005&#34;;
+
+use Net::Telnet ();
+
+$t = new Net::Telnet (Timeout =&gt; 2,Port =&gt; $port,Binmode =&gt; &#39;\015\012&#39;,
+                               Prompt =&gt; &#39;/\[\]/&#39;);
+$t-&gt;open(&#34;$hostname&#34;);
+$t-&gt;login(&#34;mpd&#34;, &#34;mpd_password&#34;);
+
+$t-&gt;print(&#34;link L-&#34;.$nasport);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;close&#34;);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;exit&#34;);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;close();
+exit 0;
+&lt;/pre&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;#pkg_info |grep perl
+libtext-charwidth-perl-0.04 Documentation gettext tools
+libtext-wrapi18n-perl-0.06 Documentation gettext tools
+p5-DBI-1.60.7       The perl5 Database Interface.  Required for DBD::* modules
+p5-Net-Radius-1.56  A perl module to manipulate RADIUS packets
+p5-SNMP_Session-1.12 A perl5 module providing rudimentary access to SNMPv1 and v
+p5-Scalar-List-Utils-1.19,1 Perl subroutines that would be nice to have in the perl cor
+p5-Storable-2.18    Persistency for perl data structures
+p5-Term-ReadKey-2.30 A perl5 module for simple terminal control
+p5-Test-Harness-3.14_2 Run perl standard test scripts with statistics
+p5-Test-Simple-0.86 Basic utilities for writing tests in perl
+p5-Time-HiRes-1.9719,1 A perl5 module implementing High resolution time, sleep, an
+perl-5.8.9_1        Practical Extraction and Report Language
+
+[13:20] wel@server  /usr/home/wel #uname -a
+FreeBSD server.home 6.2-RELEASE-p12 FreeBSD 6.2-RELEASE-p12 #11: Mon Jan  5 02:37:52 EET 2009     wel@server.home:/usr/obj/usr/src/sys/SERVER  i386
+&lt;/pre&gt;
+
+&lt;p&gt;Нам надо &amp;#171;подконфигурировать&amp;#187; mpd5:&lt;/p&gt;
+
+&lt;p&gt;/usr/local/etc/mpd5/mpd.conf а именно надо следить, что бы в конце были заветные admin!!!:&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;startup:
+    set user foo bar admin
+&lt;/pre&gt;
+
+&lt;p&gt;Дальше пример сессии:&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;/home/wel &gt;telnet 127.0.0.1 5005
+Connected to 127.0.0.1.
+Escape character is &#39;^]&#39;.
+Multi-link PPP daemon for FreeBSD
+
+Username: mpd
+Password:
+
+Welcome!
+Mpd pid 5377, version 5.5 (root@nas1 03:47  1-Dec-2010)
+[] show summary
+Current daemon status summary
+Iface   Bund            Link    LCP     Device          User            From
+                        L       Initial pptp    DOWN                    UNSPEC
+                        L1      Initial pptp    DOWN                    UNSPEC
+                        L2      Initial pptp    DOWN                    UNSPEC
+        B       Down
+        B1      Down
+        B2      Down
+ng44    B-47    Up      L-47    Opened  pptp    UP          slim        10.1.20.18
+[]
+[]
+Available commands:
+ authname : Choose link by auth name     bundle   : Choose/list bundles
+ close    : Close a layer                create   : Create new item
+ destroy  : Destroy item                 exit     : Exit console
+ iface    : Choose bundle by iface       help     : Help on any command
+ link     : Choose link                  load     : Read from config file
+ log      : Set/view log options         msession : Ch. bundle by msession-id
+ open     : Open a layer                 quit     : Quit program
+ repeater : Choose/list repeaters        session  : Choose link by session-id
+ set      : Set parameters               show     : Show status
+[] authname slim
+[L-47]
+
+&lt;/pre&gt;
+
+&lt;p&gt;Как видно по имени пользователя Я перешёл на [L-47]&lt;/p&gt;
+
+&lt;p&gt;Новая версия /usr/local/etc/raddb/userkill_nas_new.pl:&lt;/p&gt;
+
+&lt;pre lang=&#34;perl&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/perl
+#
+#Это новая версия скрипта
+#Тут не надо вручную указывать сервер доступа
+$hostname=&#34;127.0.0.1&#34;;
+$port=&#34;5005&#34;;
+if( $ARGV[3] eq &#39;&#39; ) { die &#39;Usage:  user nasip userip nasport&#39;; };
+
+$user=$ARGV[0];
+$nasip=$ARGV[1];
+$userip=$ARGV[2];
+$nasport=$ARGV[3];
+
+#$nasport=$nasport+1;
+
+#$hostname=&#34;127.0.0.1&#34;;
+$hostname=$nasip;
+
+$port=&#34;5005&#34;;
+
+use Net::Telnet ();
+
+$t = new Net::Telnet (Timeout =&gt; 2,Port =&gt; $port,Binmode =&gt; &#39;\015\012&#39;,
+                               Prompt =&gt; &#39;/\[\]/&#39;);
+$t-&gt;open(&#34;$hostname&#34;);
+$t-&gt;login(&#34;mpd&#34;, &#34;mpd_password&#34;);
+
+$t-&gt;print(&#34;link L-&#34;.$nasport);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;authname &#34;.$user);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;close&#34;);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;print(&#34;exit&#34;);
+$t-&gt;print(&#34;&#34;);
+$t-&gt;close();
+exit 0;
+&lt;/pre&gt;
+
+&lt;p&gt;Новая версия скрипта для сбрасывания пользователей:&lt;/p&gt;
+
+&lt;p&gt;freez_user_kill.php&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;#!/usr/local/bin/php
+&lt;?php
+$link = mysql_connect(&#39;10.1.1.1&#39;, &#39;freenibs&#39;, &#39;freenibs&#39;);
+if (!$link) {
+        die(&#39;Could not connect: &#39; . mysql_error());
+}
+/*  */
+
+mysql_select_db(&#34;freenibs&#34;);
+
+$TIMEOUT=180;
+
+
+$q=&#34;select 
+       `unique_id`,
+       `port`,
+       `user`,
+       `client_ip`,
+       `server`
+from 
+       `actions`
+where 
+         `terminate_cause` = &#39;Online&#39; and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;;
+
+$result = mysql_query($q);
+$num_rows = mysql_num_rows($result);
+if($num_rows&gt;0){
+         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+                $unique_id=$row[&#39;unique_id&#39;];
+                $port=$row[&#39;port&#39;];
+                $user=$row[&#39;user&#39;];
+                $server=$row[&#39;server&#39;];
+                 $userip=$row[&#39;client_ip&#39;];
+                 echo &#34;session: &#34;.$unique_id.&#34; will rise :)\n&#34;;
+                $last_line = system(&#39;/usr/local/etc/raddb/userkill_nas_new.pl &#39;.$user.&#39; &#39;.$server.&#39; &#39;.$userip.&#39; &#39;.$port.&#34;&#34;, $retval);
+         }
+
+
+//чистим сессии
+//только смотрите - могут новые появиться, пока выполнялся скрипт
+//можно так)))
+$TIMEOUT=+2;
+
+$q=&#34;update actions set terminate_cause = &#39;User-Request&#39;, \
+stop_time = date_add(start_time, interval ifnull(time_on, 0) second) \
+where terminate_cause = &#39;Online&#39;  and (UNIX_TIMESTAMP() - last_change) &gt; $TIMEOUT&#34;;
+$result = mysql_query($q);
+
+}
+
+&lt;/pre&gt;
+
+&lt;p&gt;В кронтаб (crontab)&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;*/5        *    *       *       *       root    /usr/local/etc/mpd5/freez_user_kill.php  2&gt;&amp;1
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

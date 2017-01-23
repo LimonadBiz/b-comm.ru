@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Скрипт для логгирования мак-адресов пользователей  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="arp, freeNIBS, mac, mysql, ">
+
+
+<meta property="og:title" content="Скрипт для логгирования мак-адресов пользователей  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D0%BB%D0%BE%D0%B3%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D0%BF" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2009-12-15T00:23:33Z" />
+<meta property="og:article:modified_time" content="2009-12-15T00:23:33Z" />
+
+  
+    
+<meta property="og:article:tag" content="arp">
+    
+<meta property="og:article:tag" content="freeNIBS">
+    
+<meta property="og:article:tag" content="mac">
+    
+<meta property="og:article:tag" content="mysql">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Скрипт для логгирования мак-адресов пользователей" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D0%BB%D0%BE%D0%B3%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D0%BF" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Скрипт для логгирования мак-адресов пользователей",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2009-12-15",
+    "description": "",
+    "wordCount":  439 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D0%BB%D0%BE%D0%B3%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D0%BF" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Скрипт для логгирования мак-адресов пользователей
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2009-12-15">15 Dec, 2009</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 3 min
+  &middot; (439 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/arp" class="label label-primary">arp</a>
+  
+  <a href="http://b-comm.ru/tags/freenibs" class="label label-primary">freeNIBS</a>
+  
+  <a href="http://b-comm.ru/tags/mac" class="label label-primary">mac</a>
+  
+  <a href="http://b-comm.ru/tags/mysql" class="label label-primary">mysql</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <p>Данный скрипт и его копии на серверах доступа и роутерах стоят, что бы сливать инфу о мак-адресах в базу&#8230;</p>
+
+<p>Эти данные потом используется другими скриптами. Отсюда видно кто куда и зачем )))</p>
+
+<p></p>
+
+<blockquote>
+<p>cat /etc/crontab|grep arp</p>
+</blockquote>
+
+<pre lang="bash">*/10    *       *       *       *       root /arpwatch.sh  > /dev/null
+</pre>
+
+<blockquote>
+<p>cat /arpwatch.sh</p>
+</blockquote>
+
+<pre lang="bash" line="1">#!/usr/local/bin/bash
+#для моих реальников - начинаются с 91.203., но это не правильно)))
+#тут надо было использовать egrep
+#в общем не пишите так скрипты))) 
+#@www.isp.pl.ua
+############
+
+arp -a -n | tr '(' ' ' | tr ')' ' ' | awk '{print$2"K"$4"L"}' | grep 10. | grep -v "incomplet" | grep -v "ff:ff"|grep -v "91.203.">/arpwatch.table
+
+arp -a -n | tr '(' ' ' | tr ')' ' ' | awk '{print$2,$4}' | grep 10. | grep -v "incomplet" | grep -v "ff:ff"|grep -v "91.203.">/arpwatch.table
+
+arp -a -n | tr '(' ' ' | tr ')' ' ' | awk '{print$2,$4}' | grep 10. | grep -v "incomplet" | grep -v "ff:ff"|grep -v "91.203.">/arpwatch.table
+arp -a -n | tr '(' ' ' | tr ')' ' ' | awk '{print$2,$4}' | grep "172.168" | grep -v "incomplet" | grep -v "ff:ff">>/arpwatch.table
+arp -a -n | tr '(' ' ' | tr ')' ' ' | awk '{print$2,$4}' | grep "91." | grep -v "incomplet" | grep -v "ff:ff">>/arpwatch.table
+
+/arpwatch.php
+</pre>
+
+<pre lang="php" line="1">#!/usr/local/bin/php
+<?php
+include_once("/engine.php");
+$a=new db_mysql();
+$a->init("10.1.1.1","arpwatch","arpwatch","freenibs");
+$f="/arpwatch.table";
+
+$f_array=file($f);
+$n=count($f_array);
+for ($i=1; $i&lt;$n;$i++)
+{
+            $str=explode(" ",$f_array[$i]);
+$q="INSERT INTO `arpwatch` (`ip`,`arp`) VALUES ('".quote_smart(trim($str[0]))."','".quote_smart(trim($str[1])) ."') ON DUPLICATE KEY UPDATE `ip`='".quote_smart(trim($str[0]))."',`date`=NOW()";
+//          echo $q."\n";
+            $a->query($q);
+}
+
+$a->close_db();
+?>
+</pre>
+
+<pre lang="php" line="1"><?php
+function quote_smart($value)
+{
+
+    if (get_magic_quotes_gpc()) {
+        $value = stripslashes($value);
+    }
+
+    if (!is_numeric($value)) {
+        $value = mysql_real_escape_string($value);
+    }
+    return $value;
+}
+
+
+
+class db_mysql{
+    public $query;
+    public $host;
+    public $user;
+    public $passw;
+    public $db;
+    public $link;
+    public $res;
+    public $temp_q;
+    public $num;
+    public $ar;
+        public function  __construct ()
+        {
+                $this->query=NULL;
+                $this->ar=array();
+        }
+
+        function __destruct()
+        {
+                @mysql_close($this->link);
+        }
+
+        public function  init($HOST,$USER,$PASSW,$DB)
+        {
+                self::set_host($HOST);
+                self::set_user($USER);
+                self::set_passw($PASSW);
+                self::set_db($DB);
+                $this->query=NULL;
+                $this->ar=array();
+                $this->link=@mysql_connect($this->host,$this->user, $this->passw)or die(ERR1);
+                mysql_select_db($this->db,$this->link) or die(ERR2);
+                //$q="SET NAMES utf8";
+                self::query($q);
+        }
+
+        function connect(){
+                $this->query=NULL;
+                $this->ar=array();
+                $this->link=@mysql_connect($this->host,$this->user, $this->passw)or die(ERR1);
+                mysql_select_db($this->db,$this->link) or die(ERR2);
+        }
+
+        public function set_host($host){$this->host=$host;}
+        public function set_user($user){$this->user=$user;}
+        public function set_passw($passw){$this->passw=$passw;}
+        public function set_db($db){$this->db=$db;}
+
+        public function  query($q){
+                $this->query=mysql_db_query($this->db,$q,$this->link);//or die(ERR3);
+        }
+        public function num_rows(){
+                $this->num=mysql_num_rows($this->query);
+                return $this->num;
+        }
+        public function  fetch_row(){
+                $this->res=mysql_fetch_row($this->query);
+                return $this->res;
+        }
+        public function  fetch_array(){
+                $this->res=mysql_fetch_array($this->query); //or die(mysql_error());
+                return $this->res;
+        }
+
+        public function db_select()
+        {
+                mysql_select_db($this->db,$this->link) or die(ERR2);
+        }
+        public function free_result()
+        {
+                mysql_free_result($this->res);
+        }
+
+        public function close_db()
+        {
+                mysql_close($this->link);
+        }
+
+}
+
+
+?>
+
+</pre>
+
+<p>dump:</p>
+
+<pre lang="sql" line="1">-- phpMyAdmin SQL Dump
+-- version 3.1.2
+-- http://www.phpmyadmin.net
+--
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- База данных: `freenibs`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `arpwatch`
+--
+
+DROP TABLE IF EXISTS `arpwatch`;
+CREATE TABLE IF NOT EXISTS `arpwatch` (
+  `id` int(255) NOT NULL auto_increment,
+  `ip` varchar(255) NOT NULL,
+  `arp` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL default '0000-00-00 00:00:00' on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `ip` (`ip`,`arp`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4648 ;
+
+--
+-- Дамп данных таблицы `arpwatch`
+--
+
+INSERT INTO `arpwatch` (`id`, `ip`, `arp`, `date`) VALUES(4, '10.1.5.1', '00:02:b3:1e:01:e1', '2009-12-24 02:27:14');
+</pre>
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D1%8B-%D0%B1%D0%B5%D0%BA%D0%B0%D0%BF%D0%B0-%D0%B1%D0%B0%D0%B7-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-mysql" title="Скрипты бекапа баз данных mysql">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0-mpd5-up-script-%D0%B4%D0%BB%D1%8F-%D0%B8%D0%BD%D1%84" title="Скрипт для сервера доступа mpd5: up-script для информирования абонентов">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

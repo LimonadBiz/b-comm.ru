@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pfctl on </title>
+    <link>http://b-comm.ru/tags/pfctl/index.xml</link>
+    <description>Recent content in Pfctl on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/pfctl/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Скрипт /usr/local/etc/mpd5/link-up для mpd5 срабатывающий при подключении</title>
+      <link>http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-usrlocaletcmpd5link-up-%D0%B4%D0%BB%D1%8F-mpd5-%D1%81%D1%80%D0%B0%D0%B1%D0%B0%D1%82%D1%8B%D0%B2%D0%B0%D1%8E%D1%89%D0%B8%D0%B9-%D0%BF%D1%80%D0%B8-%D0%BF%D0%BE</link>
+      <pubDate>Sat, 12 Sep 2009 23:32:22 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-usrlocaletcmpd5link-up-%D0%B4%D0%BB%D1%8F-mpd5-%D1%81%D1%80%D0%B0%D0%B1%D0%B0%D1%82%D1%8B%D0%B2%D0%B0%D1%8E%D1%89%D0%B8%D0%B9-%D0%BF%D1%80%D0%B8-%D0%BF%D0%BE</guid>
+      <description>&lt;p&gt;Скрипт /usr/local/etc/mpd5/link-up для mpd5 срабатывающий при подключении.&lt;/p&gt;
+
+&lt;p&gt;При подключении:&lt;/p&gt;
+
+&lt;p&gt;Первым SELECT&amp;#8217;ом из базы Мы смотрим &amp;#8212; Натить ли пользователя? То есть если emty или 0 пользователей &amp;#8212; не натим.&lt;/p&gt;
+
+&lt;p&gt;Вторым SELECT&amp;#8217;ом из базы Мы смотрим &amp;#8212; Надо ли менять скорость пользователя, если надо &amp;#8212; меняем. У меня это сделано на ipfw pipe, но думаю перейти на ng_car:)))&lt;/p&gt;
+
+&lt;p&gt;Третим SELECT&amp;#8217;ом из базы Мы &amp;#8212; добавляем запись в базу данных, что пользователь подключился.&lt;/p&gt;
+
+&lt;p&gt;С помощью данного скрипта Я решал следующую проблему:&lt;/p&gt;
+
+&lt;p&gt;Быстродействие &amp;#8212; на php тормозило. Хотя может и руки из жо)))&lt;/p&gt;
+
+&lt;p&gt;Подключается скрипт в /usr/local/etc/mpd5/mpd.conf так вот, в секцию с вашим сервером (pptp/pppoe/etc)&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;set iface up-script /usr/local/etc/mpd5/
+&lt;/pre&gt;
+
+&lt;p&gt;Обязательно примите к сведению, что запрос&lt;/p&gt;
+
+&lt;pre lang=&#34;sql&#34; line=&#34;1&#34;&gt;SELECT * FROM `all` WHERE `ip` not LIKE &#39;91.%&#39; 
+&lt;/pre&gt;
+
+&lt;p&gt;а именно его часть: `ip` not LIKE &amp;#8217;91.%&amp;#8217; добавлен, что бы НАТ не включался для реальных IP-адресов.&lt;/p&gt;
+
+&lt;p&gt;У Вас могут быть другие адреса )))&lt;/p&gt;
+
+&lt;p&gt;main.cpp :&lt;/p&gt;
+
+&lt;pre lang=&#34;cpp&#34; line=&#34;1&#34;&gt;#include &amp;lt;QtCore&gt;
+#include &amp;lt;QCoreApplication&gt;
+#include &amp;lt;QtSql&gt;
+#include &amp;lt;iostream&gt;
+#include &amp;lt;cstdlib&gt;
+#include &amp;lt;iomanip&gt;
+#include &amp;lt;stdio.h&gt;
+#include &amp;lt;stdlib.h&gt;
+#include &amp;lt;string.h&gt;
+#include &amp;lt;time.h&gt;
+using namespace std;
+
+
+#define SQLDRIVER &#34;QMYSQL&#34;
+#define HOST &#34;10.1.1.1&#34;
+#define DBNAME &#34;bezlim&#34;
+#define USER &#34;bezlim&#34;
+#define PASSWORD &#34;bezlim&#34;
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+
+    QTextCodec *codec = QTextCodec::codecForName(&#34;CP1251&#34;);
+    QTextCodec::setCodecForTr(codec);
+    QTextCodec::setCodecForCStrings(codec);
+
+    QSqlDatabase db = QSqlDatabase::addDatabase(SQLDRIVER);
+
+    if( !db.isDriverAvailable(SQLDRIVER))
+    {
+
+    }
+
+
+    db.setHostName(HOST);
+    db.setDatabaseName(DBNAME);
+    db.setUserName(USER);
+    db.setPassword(PASSWORD);
+    //db.setPort(3306);
+    bool ok=db.open();
+    if(ok!=true){
+        std::cout&amp;lt;&amp;lt;&#34;unable connec&#39;t&#34;;
+        exit(1);
+    }
+     QString exec_this;
+     int bw1;
+
+     QString ip_argv;
+     ip_argv=argv[4];
+
+     //qDebug()&amp;lt;&amp;lt;ip_argv;
+
+     QSqlQuery query(&#34;SELECT * FROM `all` WHERE `ip` not LIKE &#39;91.%&#39; AND `activ`=&#39;y&#39; AND `ip`=&#39;&#34;+ip_argv+&#34;&#39; LIMIT 1&#34;);
+     while (query.next()) {
+         QString id = query.value(5).toString();
+
+         QString ip = query.value(0).toString();
+         QString in = query.value(3).toString();
+         QString out = query.value(4).toString();
+         QString n = query.value(1).toString();
+         bw1 =query.value(3).toInt();
+         QString bw2 =query.value(3).toString();
+//pfctl - это закомментированная часть для pf nat
+//      exec_this=&#34;/sbin/pfctl -tinat -Tadd &#34;;
+//      exec_this +=ip;
+//      qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+
+        exec_this =&#34;/sbin/ipfw table 1 add &#34;;
+        exec_this +=ip;
+
+        system(exec_this.toStdString().c_str());
+
+
+    }
+        qDebug()&amp;lt;&amp;lt;ip_argv&amp;lt;&amp;lt;endl;
+
+        qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+
+     QSqlQuery query11(&#34;SELECT * FROM `all` WHERE `activ`=&#39;y&#39; AND `ip`=&#39;&#34;+ip_argv+&#34;&#39; LIMIT 1&#34;);
+     while (query11.next()) {
+//pfctl это закомментированная часть для pf nat
+//      exec_this=&#34;/sbin/pfctl -tinat -Tadd &#34;;
+//      exec_this +=ip;
+//      qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+
+         QString id = query11.value(5).toString();
+
+         QString ip = query11.value(0).toString();
+         QString in = query11.value(3).toString();
+         QString out = query11.value(4).toString();
+         QString n = query11.value(1).toString();
+         bw1 =query11.value(3).toInt();
+         QString bw2 =query11.value(3).toString();
+
+
+      //Эта часть у Меня отвечает за выделение скорости. Я использовал ipfw pipe
+        if(bw1&gt;0)
+        {
+            qint64 num = 0;
+            QString num1;
+            query.clear();
+             QSqlQuery query(&#34;SELECT * FROM `freenibs`.`pipes` WHERE `freenibs`.`pipes`.`bw`=&#39;&#34;+bw2+&#34;&#39; LIMIT 1&#34;);
+            //qDebug()&amp;lt;&amp;lt;&#34;SELECT `freenibs`.`pipes`.`n` FROM `freenibs`.`pipes` WHERE `freenibs`.`pipes`.`bw`=&#39;&#34;+bw2+&#34;&#39; LIMIT 1&#34;&amp;lt;&amp;lt;endl;
+             while (query.next()) {
+                    num = query.value(1).toInt();
+                    num1 = query.value(1).toString();
+                }
+            query.clear();
+            if(num&gt;0)
+            {
+                    //qDebug()&amp;lt;&amp;lt;&#34;NUM&gt;0|&#34;&amp;lt;&amp;lt;num1&amp;lt;&amp;lt;&#34;|&#34;&amp;lt;&amp;lt;endl;
+                    exec_this =&#34;/sbin/ipfw pipe &#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34; config mask dst-ip 0x000000ff bw &#34;;
+                    exec_this +=bw2;
+                    exec_this +=&#34;Kbit/s&#34;;
+                    system(exec_this.toStdString().c_str());
+                    //qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+                    exec_this =&#34;/sbin/ipfw table &#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34; add &#34;;
+                    exec_this +=ip;
+                    system(exec_this.toStdString().c_str());
+                    //qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+            }
+            else
+            {
+                    QSqlQuery query1(&#34; SELECT MAX(`n`)+1  FROM `freenibs`.`pipes` &#34;);
+                    //qDebug()&amp;lt;&amp;lt;num&amp;lt;&amp;lt;endl;
+                    // qDebug()&amp;lt;&amp;lt;query1.lastError()&amp;lt;&amp;lt;endl;
+                    // query.exec();
+                     //qDebug()&amp;lt;&amp;lt;query1.lastError()&amp;lt;&amp;lt;endl;
+                     while (query1.next()) {
+                            //num = query1.value(0).toInt();
+                            num1 = query1.value(0).toString();
+                        }
+                    //qDebug()&amp;lt;&amp;lt;&#34;NUM:&#34;&amp;lt;&amp;lt;num1&amp;lt;&amp;lt;endl;
+                     //QSqlQuery
+                     query.prepare(&#34;INSERT INTO `freenibs`.`pipes`  ( `bw`,`n`) values( &#39;&#34; +bw2+ &#34;&#39;,&#39;&#34;+num1+&#34;&#39;)&#34;);
+                    // qDebug()&amp;lt;&amp;lt;query.lastError()&amp;lt;&amp;lt;endl;
+                     query.exec();
+
+                    exec_this =&#34;/sbin/ipfw delete &#34;;
+                    exec_this +=num1;
+                    system(exec_this.toStdString().c_str());
+                    //qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+
+                    exec_this =&#34;/sbin/ipfw pipe &#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34; config mask dst-ip 0x000000ff bw &#34;;
+                    exec_this +=bw2;
+                    exec_this +=&#34;Kbit/s&#34;;
+                    system(exec_this.toStdString().c_str());
+                    //qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+
+                    exec_this =&#34;/sbin/ipfw -q add &#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34; pipe &#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34; all from table\\(&#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34;\\) to not 10.0.0.0/8 out&#34;;
+                    system(exec_this.toStdString().c_str());
+                    //qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+
+
+                    exec_this =&#34;/sbin/ipfw -q add &#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34; pipe &#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34; all from not 10.0.0.0/8 to table\\(&#34;;
+                    exec_this +=num1;
+                    exec_this +=&#34;\\) in &#34;;
+                    system(exec_this.toStdString().c_str());
+                    //qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+
+
+                    exec_this =&#34;/sbin/ipfw table &#34;;
+                    exec_this +=num1;
+                    exec_this += &#34; add &#34;;
+                    exec_this +=ip;
+                    system(exec_this.toStdString().c_str());
+                    //qDebug()&amp;lt;&amp;lt;exec_this&amp;lt;&amp;lt;endl;
+            }
+        }
+
+       //здесь Мы заполняем таблицу для того, что бы видеть что пользователь подключился
+        QSqlQuery query(&#34;INSERT INTO `freenibs`.`updown` (`ip` ,`time` ,`status`) VALUES ( &#39;&#34;+ip_argv+&#34;&#39;,CURRENT_TIMESTAMP , &#39;up&#39;);&#34;);
+        query.clear();
+    }
+     db.close();
+//    return a.exec();
+}
+&lt;/pre&gt;
+
+&lt;p&gt;Makefile&lt;/p&gt;
+
+&lt;pre lang=&#34;make&#34; line=&#34;1&#34;&gt;#############################################################################
+# Makefile for building: link-up
+# Generated by qmake (2.01a) (Qt 4.4.3) on: Thu Jul 23 00:40:54 2009
+# Project:  pro.pro
+# Template: app
+# Command: /usr/local/bin/qmake-qt4 -unix -o Makefile pro.pro
+#############################################################################
+
+####### Compiler, tools and options
+
+CC            = cc
+CXX           = c++
+DEFINES       = -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
+CFLAGS        = -pipe -O2 -fno-strict-aliasing -pipe -Wall -W $(DEFINES)
+CXXFLAGS      = -pipe -O2 -fno-strict-aliasing -pipe -Wall -W $(DEFINES)
+INCPATH       = -I/usr/local/share/qt4/mkspecs/freebsd-g++ -I. -I/usr/local/include/qt4/QtCore -I/usr/local/include/qt4/QtCore -I/usr/local/include/qt4/QtGui -I/usr/local/include/qt4/QtGui -I/usr/local/include/qt4/QtSql -I/usr/local/include/qt4/QtSql -I/usr/local/include/qt4 -I. -I. -I/usr/local/include
+LINK          = c++
+LFLAGS        = -pthread -Wl,-rpath,/usr/local/lib/qt4
+LIBS          = $(SUBLIBS)  -L/usr/local/lib -L/usr/local/lib/qt4 -lQtSql -L/usr/local/lib/qt4 -L/usr/local/lib -pthread -pthread -lQtGui -pthread -lpng -lSM -lICE -pthread -pthread -lXi -lXrender -lXrandr -lfreetype -lfontconfig -lXext -lX11 -lQtCore -lz -lm -pthread -lgthread-2.0 -lglib-2.0 -liconv
+AR            = ar cqs
+RANLIB        =
+QMAKE         = /usr/local/bin/qmake-qt4
+TAR           = tar -cf
+COMPRESS      = gzip -9f
+COPY          = cp -f
+SED           = sed
+COPY_FILE     = $(COPY)
+COPY_DIR      = $(COPY) -R
+INSTALL_FILE  = $(COPY_FILE)
+INSTALL_DIR   = $(COPY_DIR)
+INSTALL_PROGRAM = $(COPY_FILE)
+DEL_FILE      = rm -f
+SYMLINK       = ln -sf
+DEL_DIR       = rmdir
+MOVE          = mv -f
+CHK_DIR_EXISTS= test -d
+MKDIR         = mkdir -p
+
+####### Output directory
+
+OBJECTS_DIR   = ./
+
+####### Files
+
+SOURCES       = main.cpp
+OBJECTS       = main.o
+DIST          = /usr/local/share/qt4/mkspecs/common/unix.conf \
+                /usr/local/share/qt4/mkspecs/qconfig.pri \
+                /usr/local/share/qt4/mkspecs/features/qt_functions.prf \
+                /usr/local/share/qt4/mkspecs/features/qt_config.prf \
+                /usr/local/share/qt4/mkspecs/features/exclusive_builds.prf \
+                /usr/local/share/qt4/mkspecs/features/default_pre.prf \
+                /usr/local/share/qt4/mkspecs/features/release.prf \
+                /usr/local/share/qt4/mkspecs/features/default_post.prf \
+                /usr/local/share/qt4/mkspecs/features/unix/thread.prf \
+                /usr/local/share/qt4/mkspecs/features/warn_on.prf \
+                /usr/local/share/qt4/mkspecs/features/qt.prf \
+                /usr/local/share/qt4/mkspecs/features/moc.prf \
+                /usr/local/share/qt4/mkspecs/features/resources.prf \
+                /usr/local/share/qt4/mkspecs/features/uic.prf \
+                /usr/local/share/qt4/mkspecs/features/yacc.prf \
+                /usr/local/share/qt4/mkspecs/features/lex.prf \
+                pro.pro
+QMAKE_TARGET  = link-up
+DESTDIR       =
+TARGET        = link-up
+
+first: all
+####### Implicit rules
+
+.SUFFIXES: .o .c .cpp .cc .cxx .C
+
+.cpp.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+.cc.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+.cxx.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+.C.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+.c.o:
+        $(CC) -c $(CFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+####### Build rules
+
+all: Makefile $(TARGET)
+
+$(TARGET):  $(OBJECTS)
+        $(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+
+Makefile: pro.pro  /usr/local/share/qt4/mkspecs/freebsd-g++/qmake.conf /usr/local/share/qt4/mkspecs/common/unix.conf \
+                /usr/local/share/qt4/mkspecs/qconfig.pri \
+                /usr/local/share/qt4/mkspecs/features/qt_functions.prf \
+                /usr/local/share/qt4/mkspecs/features/qt_config.prf \
+                /usr/local/share/qt4/mkspecs/features/exclusive_builds.prf \
+                /usr/local/share/qt4/mkspecs/features/default_pre.prf \
+                /usr/local/share/qt4/mkspecs/features/release.prf \
+                /usr/local/share/qt4/mkspecs/features/default_post.prf \
+                /usr/local/share/qt4/mkspecs/features/unix/thread.prf \
+                /usr/local/share/qt4/mkspecs/features/warn_on.prf \
+                /usr/local/share/qt4/mkspecs/features/qt.prf \
+                /usr/local/share/qt4/mkspecs/features/moc.prf \
+                /usr/local/share/qt4/mkspecs/features/resources.prf \
+                /usr/local/share/qt4/mkspecs/features/uic.prf \
+                /usr/local/share/qt4/mkspecs/features/yacc.prf \
+                /usr/local/share/qt4/mkspecs/features/lex.prf \
+                /usr/local/lib/qt4/libQtSql.prl \
+                /usr/local/lib/qt4/libQtCore.prl \
+                /usr/local/lib/qt4/libQtGui.prl
+        $(QMAKE) -unix -o Makefile pro.pro
+/usr/local/share/qt4/mkspecs/common/unix.conf:
+/usr/local/share/qt4/mkspecs/qconfig.pri:
+/usr/local/share/qt4/mkspecs/features/qt_functions.prf:
+/usr/local/share/qt4/mkspecs/features/qt_config.prf:
+/usr/local/share/qt4/mkspecs/features/exclusive_builds.prf:
+/usr/local/share/qt4/mkspecs/features/default_pre.prf:
+/usr/local/share/qt4/mkspecs/features/release.prf:
+/usr/local/share/qt4/mkspecs/features/default_post.prf:
+/usr/local/share/qt4/mkspecs/features/unix/thread.prf:
+/usr/local/share/qt4/mkspecs/features/warn_on.prf:
+/usr/local/share/qt4/mkspecs/features/qt.prf:
+/usr/local/share/qt4/mkspecs/features/moc.prf:
+/usr/local/share/qt4/mkspecs/features/resources.prf:
+/usr/local/share/qt4/mkspecs/features/uic.prf:
+/usr/local/share/qt4/mkspecs/features/yacc.prf:
+/usr/local/share/qt4/mkspecs/features/lex.prf:
+/usr/local/lib/qt4/libQtSql.prl:
+/usr/local/lib/qt4/libQtCore.prl:
+/usr/local/lib/qt4/libQtGui.prl:
+qmake:  FORCE
+        @$(QMAKE) -unix -o Makefile pro.pro
+
+dist:
+        @$(CHK_DIR_EXISTS) .tmp/link-up1.0.0 || $(MKDIR) .tmp/link-up1.0.0
+        $(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/link-up1.0.0/ &amp;#038;&amp;#038; $(COPY_FILE) --parents main.cpp .tmp/link-up1.0.0/ &amp;#038;&amp;#038; (cd `dirname .tmp/link-up1.0.0` &amp;#038;&amp;#038; $(TAR) link-up1.0.0.tar link-up1.0.0 &amp;#038;&amp;#038; $(COMPRESS) link-up1.0.0.tar) &amp;#038;&amp;#038; $(MOVE) `dirname .tmp/link-up1.0.0`/link-up1.0.0.tar.gz . &amp;#038;&amp;#038; $(DEL_FILE) -r .tmp/link-up1.0.0
+
+
+clean:compiler_clean
+        -$(DEL_FILE) $(OBJECTS)
+        -$(DEL_FILE) *~ core *.core
+
+
+####### Sub-libraries
+
+distclean: clean
+        -$(DEL_FILE) $(TARGET)
+        -$(DEL_FILE) Makefile
+
+
+mocclean: compiler_moc_header_clean compiler_moc_source_clean
+
+mocables: compiler_moc_header_make_all compiler_moc_source_make_all
+
+compiler_moc_header_make_all:
+compiler_moc_header_clean:
+compiler_rcc_make_all:
+compiler_rcc_clean:
+compiler_image_collection_make_all: qmake_image_collection.cpp
+compiler_image_collection_clean:
+        -$(DEL_FILE) qmake_image_collection.cpp
+compiler_moc_source_make_all:
+compiler_moc_source_clean:
+compiler_uic_make_all:
+compiler_uic_clean:
+compiler_yacc_decl_make_all:
+compiler_yacc_decl_clean:
+compiler_yacc_impl_make_all:
+compiler_yacc_impl_clean:
+compiler_lex_make_all:
+compiler_lex_clean:
+compiler_clean:
+
+####### Compile
+
+main.o: main.cpp
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+####### Install
+
+install:   FORCE
+
+uninstall:   FORCE
+
+FORCE:
+
+
+&lt;/pre&gt;
+
+&lt;p&gt;дамп базы:&lt;/p&gt;
+
+&lt;pre lang=&#34;cpp&#34; line=&#34;1&#34;&gt;-- phpMyAdmin SQL Dump
+-- version 3.1.2
+-- http://www.phpmyadmin.net
+--
+SET SQL_MODE=&#34;NO_AUTO_VALUE_ON_ZERO&#34;;
+
+--
+-- База данных: `bezlim`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `all`
+--
+
+DROP TABLE IF EXISTS `all`;
+CREATE TABLE IF NOT EXISTS `all` (
+  `ip` varchar(48) NOT NULL default &#39;192.168.0.1&#39;,
+  `rule` int(32) NOT NULL default &#39;500&#39;,
+  `bw1` varchar(12) NOT NULL default &#39;0&#39;,
+  `bw2` varchar(12) NOT NULL default &#39;0&#39;,
+  `activ` char(1) NOT NULL default &#39;y&#39;,
+  `id` int(32) NOT NULL auto_increment,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `ip` (`ip`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3326 ;
+
+
+
+--
+-- База данных: `freenibs`
+--
+
+-- --------------------------------------------------------
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `pipes`
+--
+
+DROP TABLE IF EXISTS `pipes`;
+CREATE TABLE IF NOT EXISTS `pipes` (
+  `id` int(255) NOT NULL auto_increment,
+  `n` int(255) NOT NULL default &#39;11&#39;,
+  `bw` int(255) default &#39;0&#39;,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `bw` (`bw`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=63 ;
+
+--
+-- Дамп данных таблицы `pipes`
+--
+
+--
+-- Структура таблицы `updown`
+--
+
+DROP TABLE IF EXISTS `updown`;
+CREATE TABLE IF NOT EXISTS `updown` (
+  `id` bigint(255) NOT NULL auto_increment,
+  `ip` varchar(100) NOT NULL default &#39;0.0.0.0&#39;,
+  `time` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `status` enum(&#39;up&#39;,&#39;down&#39;) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1758553 ;
+
+--
+-- Триггеры `updown`
+--
+DROP TRIGGER IF EXISTS `freenibs`.`inserttest`;
+DELIMITER //
+CREATE TRIGGER `freenibs`.`inserttest` BEFORE INSERT ON `freenibs`.`updown`
+ FOR EACH ROW BEGIN
+UPDATE `users` SET `users`.`up_n`=`users`.`up_n`+1 WHERE `users`.`framed_ip`=NEW.ip;
+END
+//
+DELIMITER ;
+
+
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

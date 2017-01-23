@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Qt4 on </title>
+    <link>http://b-comm.ru/tags/qt4/index.xml</link>
+    <description>Recent content in Qt4 on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/qt4/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Складирование arp записей мак-адресов с помощью скрипта arpwatch на qt4 &#43; mysql</title>
+      <link>http://b-comm.ru/billing/%D1%81%D0%BA%D0%BB%D0%B0%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-arp-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B5%D0%B9-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D1%81</link>
+      <pubDate>Thu, 23 Jul 2009 01:09:17 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D1%81%D0%BA%D0%BB%D0%B0%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-arp-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B5%D0%B9-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D1%81</guid>
+      <description>&lt;p&gt;Дано: биллинг FreeNIBS 1.X &lt;em&gt;(можно что угодно)&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Идея состояла в том, что у Нас есть активные пользователи, есть их ИП-ки, для Них Мы будем искать какие мак-адреса они имеют в текущий момент.&lt;/p&gt;
+
+&lt;p&gt;Дальше Мы эти данные помещаем в базу freeNIBS.&lt;/p&gt;
+
+&lt;p&gt;Я специально не добавил DROP IF exist&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;Еще замечу, что переход на `actions` ENGINE=InnoDB плодотворно сказался на производительности и старенького компа под базу+freeNIBS стало вполне хватать.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;sql&#34; line=&#34;1&#34;&gt;-- phpMyAdmin SQL Dump
+-- version 3.1.2
+-- http://www.phpmyadmin.net
+
+SET SQL_MODE=&#34;NO_AUTO_VALUE_ON_ZERO&#34;;
+
+--
+-- База данных: `freenibs`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `actions`
+--
+
+CREATE TABLE IF NOT EXISTS `actions` (
+  `user` varchar(64) NOT NULL default &#39;&#39;,
+  `gid` smallint(100) NOT NULL default &#39;0&#39;,
+  `id` varchar(32) NOT NULL default &#39;&#39;,
+  `unique_id` varchar(64) NOT NULL default &#39;&#39;,
+  `time_on` int(12) default NULL,
+  `start_time` datetime NOT NULL default &#39;2003-01-01 00:00:00&#39;,
+  `stop_time` datetime NOT NULL default &#39;0000-00-00 00:00:00&#39;,
+  `in_bytes` bigint(255) default NULL,
+  `out_bytes` bigint(255) default NULL,
+  `ip` varchar(15) NOT NULL default &#39;&#39;,
+  `server` varchar(15) NOT NULL default &#39;&#39;,
+  `client_ip` varchar(15) NOT NULL default &#39;&#39;,
+  `port` int(12) default NULL,
+  `call_to` varchar(64) NOT NULL default &#39;&#39;,
+  `call_from` varchar(64) NOT NULL default &#39;&#39;,
+  `connect_info` varchar(254) default NULL,
+  `protocol` varchar(32) default NULL,
+  `terminate_cause` varchar(64) NOT NULL default &#39;&#39;,
+  `comment` varchar(128) default NULL,
+  `hour_in_bytes` bigint(255) unsigned NOT NULL default &#39;0&#39;,
+  `hour_out_bytes` bigint(255) unsigned NOT NULL default &#39;0&#39;,
+  `hour_traffic_money` double(10,4) NOT NULL default &#39;0.0000&#39;,
+  `last_change` int(10) unsigned NOT NULL default &#39;0&#39;,
+  `before_billing` double(10,4) NOT NULL default &#39;0.0000&#39;,
+  `billing_minus` double(10,4) NOT NULL default &#39;0.0000&#39;,
+  PRIMARY KEY  (`unique_id`),
+  KEY `user` (`user`,`id`,`time_on`,`start_time`,`stop_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `user` varchar(64) character set latin1 collate latin1_bin NOT NULL default &#39;&#39;,
+  `password` varchar(254) character set latin1 collate latin1_bin NOT NULL default &#39;*&#39;,
+  `crypt_method` tinyint(1) unsigned NOT NULL default &#39;1&#39;,
+  `uid` smallint(5) unsigned NOT NULL auto_increment,
+  `gid` smallint(5) unsigned NOT NULL default &#39;1&#39;,
+  `deposit` double(8,2) NOT NULL default &#39;0.00&#39;,
+  `credit` double(8,2) NOT NULL default &#39;0.00&#39;,
+  `fio` varchar(128) NOT NULL default &#39;&#39;,
+  `name` varchar(128) default NULL,
+  `second_name` varchar(128) default NULL,
+  `otch` varchar(128) default NULL,
+  `phone` varchar(128) NOT NULL default &#39;&#39;,
+  `address` varchar(128) NOT NULL default &#39;&#39;,
+  `prim` varchar(254) NOT NULL default &#39;&#39;,
+  `add_date` date NOT NULL default &#39;0000-00-00&#39;,
+  `tos` tinyint(1) default NULL,
+  `do_with_tos` tinyint(1) default NULL,
+  `direction` tinyint(1) default NULL,
+  `fixed` tinyint(1) default NULL,
+  `fixed_cost` double(16,6) default NULL,
+  `activation_time` bigint(15) default NULL,
+  `total_time_limit` bigint(15) default NULL,
+  `month_time_limit` bigint(15) default NULL,
+  `week_time_limit` bigint(15) default NULL,
+  `day_time_limit` bigint(15) default NULL,
+  `total_traffic_limit` bigint(15) default NULL,
+  `month_traffic_limit` bigint(15) default NULL,
+  `week_traffic_limit` bigint(15) default NULL,
+  `day_traffic_limit` bigint(15) default NULL,
+  `total_money_limit` double(16,6) default NULL,
+  `month_money_limit` double(16,6) default NULL,
+  `week_money_limit` double(16,6) default NULL,
+  `day_money_limit` double(16,6) default NULL,
+  `login_time` varchar(254) default NULL,
+  `huntgroup_name` varchar(64) default NULL,
+  `simultaneous_use` smallint(5) default NULL,
+  `port_limit` smallint(5) default NULL,
+  `session_timeout` bigint(15) default NULL,
+  `idle_timeout` bigint(15) default NULL,
+  `allowed_prefixes` varchar(64) default NULL,
+  `no_pass` tinyint(1) default NULL,
+  `no_acct` tinyint(1) default NULL,
+  `allow_callback` tinyint(1) default NULL,
+  `other_params` varchar(254) default NULL,
+  `allowed_servers` varchar(254) default NULL,
+  `blocked` tinyint(3) unsigned NOT NULL default &#39;0&#39;,
+  `activated` tinyint(3) unsigned NOT NULL default &#39;1&#39;,
+  `expired` date NOT NULL default &#39;0000-00-00&#39;,
+  `total_time` int(10) NOT NULL default &#39;0&#39;,
+  `total_traffic` bigint(15) NOT NULL default &#39;0&#39;,
+  `total_money` double(10,4) NOT NULL default &#39;0.0000&#39;,
+  `last_connection` date NOT NULL default &#39;0000-00-00&#39;,
+  `framed_ip` varchar(16) NOT NULL default &#39;&#39;,
+  `frammed_ip2` varchar(16) NOT NULL,
+  `local_addr` varchar(16) NOT NULL,
+  `framed_mask` varchar(16) NOT NULL default &#39;255.255.255.255&#39;,
+  `callback_number` varchar(64) NOT NULL default &#39;&#39;,
+  `street` varchar(255) NOT NULL,
+  `house` varchar(64) NOT NULL,
+  `room` varchar(64) NOT NULL,
+  `bezabon` enum(&#39;no&#39;,&#39;yes&#39;) NOT NULL default &#39;no&#39;,
+  `segment` varchar(255) NOT NULL,
+  `mac_addr` varchar(17) NOT NULL,
+  `updown` set(&#39;down&#39;,&#39;up&#39;) NOT NULL default &#39;down&#39;,
+  `up_n` int(11) NOT NULL default &#39;0&#39;,
+  `fix` int(2) NOT NULL default &#39;0&#39;,
+  `vlan_for_fix` varchar(25) NOT NULL default &#39;vlan4&#39;,
+  PRIMARY KEY  (`uid`),
+  KEY `user` (`user`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1043 ;
+
+&lt;/pre&gt;
+
+&lt;p&gt;Вот он main.cpp:&lt;/p&gt;
+
+&lt;pre lang=&#34;cpp&#34; line=&#34;1&#34;&gt;#include &amp;lt;QtCore&gt;
+#include &amp;lt;QCoreApplication&gt;
+#include &amp;lt;QtSql&gt;
+#include &amp;lt;QFile&gt;
+#include &amp;lt;iostream&gt;
+#include &amp;lt;cstdlib&gt;
+#include &amp;lt;iomanip&gt;
+#include &amp;lt;stdio.h&gt;
+#include &amp;lt;stdlib.h&gt;
+#include &amp;lt;string.h&gt;
+#include &amp;lt;time.h&gt;
+using namespace std;
+
+
+#define SQLDRIVER &#34;QMYSQL&#34;
+#define HOST &#34;10.1.1.1&#34;
+#define DBNAME &#34;freenibs&#34;
+#define USER &#34;arpwatch&#34;
+#define PASSWORD &#34;arpwatch&#34;
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+    QTextCodec *codec = QTextCodec::codecForName(&#34;CP1251&#34;);
+    QTextCodec::setCodecForTr(codec);
+    QTextCodec::setCodecForCStrings(codec);
+    QSqlDatabase db = QSqlDatabase::addDatabase(SQLDRIVER);
+    if( !db.isDriverAvailable(SQLDRIVER))
+    {
+        exit(1);
+    }
+
+    db.setHostName(HOST);
+    db.setDatabaseName(DBNAME);
+    db.setUserName(USER);
+    db.setPassword(PASSWORD);
+    //db.setPort(3306);
+    QFile file(&#34;/arpwatch.table&#34;);
+    if (! file.exists() ){
+        std::cout&amp;lt;&amp;lt;&#34; /arpwatch.table 1&#34;;
+        db.close();
+        exit(1);
+    }
+    if( !file.open(QIODevice::ReadOnly)){
+        std::cout&amp;lt;&amp;lt;&#34; /arpwatch.table 2&#34;;
+        db.close();
+        exit(1);
+    }
+    bool ok=db.open();
+    if(ok!=true){
+        std::cout&amp;lt;&amp;lt;&#34;unable connec&#39;t&#34;;
+        exit(1);
+    }
+
+     QString ip_argv,mac,user;
+     ip_argv=argv[1];
+     mac=argv[2];
+
+     //qDebug()&amp;lt;&amp;lt;ip_argv;
+     int z=0;
+     while (!file.atEnd()) {
+         QString line = file.readLine();
+         z=0;
+         mac=&#34;&#34;;
+         ip_argv=&#34;&#34;;
+         user=&#34;&#34;;
+
+
+        for(int i=0;i&amp;lt;line.size();++i){
+            if(z==1)
+                z=2;
+
+            if(line.at(i)==&#39;K&#39;)
+                z=1;
+            if(line.at(i)==&#39;L&#39;)
+                z=3;
+
+            if(z==0)
+                ip_argv.append(line.at(i));
+
+
+            if(z==2)
+                mac.append(line.at(i));
+        }
+
+     QSqlQuery query(&#34;SELECT `user` FROM `actions` WHERE `call_from` = &#39;&#34;+ip_argv+&#34;&#39; AND `start_time` &gt; FROM_UNIXTIME( UNIX_TIMESTAMP( NOW( ) ) -604800 ) GROUP BY `user` LIMIT 1&#34;);
+     while (query.next()) {
+        user = query.value(0).toString();
+        //qDebug()&amp;lt;&amp;lt;ip_argv&amp;lt;&amp;lt;&#34; ---&gt; &#34;&amp;lt;&amp;lt;user;
+        //qDebug()&amp;lt;&amp;lt;ip_argv&amp;lt;&amp;lt;&#34; ---&gt; &#34;&amp;lt;&amp;lt;user&amp;lt;&amp;lt;&#34;---&gt;&#34;&amp;lt;&amp;lt;mac&amp;lt;&amp;lt;endl;
+        //qDebug()&amp;lt;&amp;lt;&#34;SELECT `user` FROM `actions` WHERE `call_from` = &#39;&#34;+ip_argv+&#34;&#39; AND `start_time` &gt; FROM_UNIXTIME( UNIX_TIMESTAMP( NOW( ) ) -604800 ) GROUP BY `user`&#34;;
+        query.clear();
+        query.prepare(&#34;UPDATE `freenibs`.`users` SET `freenibs`.`users`.`mac_addr` = &#39;&#34;+mac+&#34;&#39; WHERE `freenibs`.`users`.`user` =&#39;&#34;+user+&#34;&#39; LIMIT 1&#34;);
+                //QSqlQuery query1(&#34;UPDATE `freenibs`.`users` SET `freenibs`.`users`.`mac_addr` = &#39;&#34;+mac+&#34;&#39; WHERE `freenibs`.`users`.`user` =&#39;&#34;+user+&#34;&#39; LIMIT 1&#34;);
+        query.exec();
+                //query1.clear();
+        }
+
+
+
+        }
+        file.close();
+
+        //dhcpd
+
+        file1.close();
+        file2.close();
+        db.close();
+}
+
+&lt;/pre&gt;
+
+&lt;p&gt;Makefile: (FreeBSD)&lt;/p&gt;
+
+&lt;p&gt;Сборка просто make:)))&lt;/p&gt;
+
+&lt;pre lang=&#34;make&#34; line=&#34;1&#34;&gt;#############################################################################
+# Makefile for building: arp_watch
+# Generated by qmake (2.01a) (Qt 4.4.3) on: Thu Jul 23 00:39:55 2009
+# Project:  pro.pro
+# Template: app
+# Command: /usr/local/bin/qmake-qt4 -unix -o Makefile pro.pro
+#############################################################################
+
+####### Compiler, tools and options
+
+CC            = cc
+CXX           = c++
+DEFINES       = -DQT_NO_DEBUG -DQT_SQL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
+CFLAGS        = -pipe -O2 -fno-strict-aliasing -pipe -Wall -W $(DEFINES)
+CXXFLAGS      = -pipe -O2 -fno-strict-aliasing -pipe -Wall -W $(DEFINES)
+INCPATH       = -I/usr/local/share/qt4/mkspecs/freebsd-g++ -I. -I/usr/local/include/qt4/QtCore -I/usr/local/include/qt4/QtCore -I/usr/local/include/qt4/QtGui -I/usr/local/include/qt4/QtGui -I/usr/local/include/qt4/QtSql -I/usr/local/include/qt4/QtSql -I/usr/local/include/qt4 -I. -I. -I/usr/local/include
+LINK          = c++
+LFLAGS        = -pthread -Wl,-rpath,/usr/local/lib/qt4
+LIBS          = $(SUBLIBS)  -L/usr/local/lib -L/usr/local/lib/qt4 -lQtSql -L/usr/local/lib/qt4 -L/usr/local/lib -pthread -pthread -lQtGui -pthread -lpng -lSM -lICE -pthread -pthread -lXi -lXrender -lXrandr -lfreetype -lfontconfig -lXext -lX11 -lQtCore -lz -lm -pthread -lgthread-2.0 -lglib-2.0 -liconv
+AR            = ar cqs
+RANLIB        =
+QMAKE         = /usr/local/bin/qmake-qt4
+TAR           = tar -cf
+COMPRESS      = gzip -9f
+COPY          = cp -f
+SED           = sed
+COPY_FILE     = $(COPY)
+COPY_DIR      = $(COPY) -R
+INSTALL_FILE  = $(COPY_FILE)
+INSTALL_DIR   = $(COPY_DIR)
+INSTALL_PROGRAM = $(COPY_FILE)
+DEL_FILE      = rm -f
+SYMLINK       = ln -sf
+DEL_DIR       = rmdir
+MOVE          = mv -f
+CHK_DIR_EXISTS= test -d
+MKDIR         = mkdir -p
+
+####### Output directory
+
+OBJECTS_DIR   = ./
+
+####### Files
+
+SOURCES       = main.cpp
+OBJECTS       = main.o
+DIST          = /usr/local/share/qt4/mkspecs/common/unix.conf \
+                /usr/local/share/qt4/mkspecs/qconfig.pri \
+                /usr/local/share/qt4/mkspecs/features/qt_functions.prf \
+                /usr/local/share/qt4/mkspecs/features/qt_config.prf \
+                /usr/local/share/qt4/mkspecs/features/exclusive_builds.prf \
+                /usr/local/share/qt4/mkspecs/features/default_pre.prf \
+                /usr/local/share/qt4/mkspecs/features/release.prf \
+                /usr/local/share/qt4/mkspecs/features/default_post.prf \
+                /usr/local/share/qt4/mkspecs/features/unix/thread.prf \
+                /usr/local/share/qt4/mkspecs/features/warn_on.prf \
+                /usr/local/share/qt4/mkspecs/features/qt.prf \
+                /usr/local/share/qt4/mkspecs/features/moc.prf \
+                /usr/local/share/qt4/mkspecs/features/resources.prf \
+                /usr/local/share/qt4/mkspecs/features/uic.prf \
+                /usr/local/share/qt4/mkspecs/features/yacc.prf \
+                /usr/local/share/qt4/mkspecs/features/lex.prf \
+                pro.pro
+QMAKE_TARGET  = arp_watch
+DESTDIR       =
+TARGET        = arp_watch
+
+first: all
+####### Implicit rules
+
+.SUFFIXES: .o .c .cpp .cc .cxx .C
+
+.cpp.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+.cc.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+.cxx.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+.C.o:
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+.c.o:
+        $(CC) -c $(CFLAGS) $(INCPATH) -o &#34;$@&#34; &#34;$&amp;lt;&#34;
+
+####### Build rules
+
+all: Makefile $(TARGET)
+
+$(TARGET):  $(OBJECTS)
+        $(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+
+Makefile: pro.pro  /usr/local/share/qt4/mkspecs/freebsd-g++/qmake.conf /usr/local/share/qt4/mkspecs/common/unix.conf \
+                /usr/local/share/qt4/mkspecs/qconfig.pri \
+                /usr/local/share/qt4/mkspecs/features/qt_functions.prf \
+                /usr/local/share/qt4/mkspecs/features/qt_config.prf \
+                /usr/local/share/qt4/mkspecs/features/exclusive_builds.prf \
+                /usr/local/share/qt4/mkspecs/features/default_pre.prf \
+                /usr/local/share/qt4/mkspecs/features/release.prf \
+                /usr/local/share/qt4/mkspecs/features/default_post.prf \
+                /usr/local/share/qt4/mkspecs/features/unix/thread.prf \
+                /usr/local/share/qt4/mkspecs/features/warn_on.prf \
+                /usr/local/share/qt4/mkspecs/features/qt.prf \
+                /usr/local/share/qt4/mkspecs/features/moc.prf \
+                /usr/local/share/qt4/mkspecs/features/resources.prf \
+                /usr/local/share/qt4/mkspecs/features/uic.prf \
+                /usr/local/share/qt4/mkspecs/features/yacc.prf \
+                /usr/local/share/qt4/mkspecs/features/lex.prf \
+                /usr/local/lib/qt4/libQtSql.prl \
+                /usr/local/lib/qt4/libQtCore.prl \
+                /usr/local/lib/qt4/libQtGui.prl
+        $(QMAKE) -unix -o Makefile pro.pro
+/usr/local/share/qt4/mkspecs/common/unix.conf:
+/usr/local/share/qt4/mkspecs/qconfig.pri:
+/usr/local/share/qt4/mkspecs/features/qt_functions.prf:
+/usr/local/share/qt4/mkspecs/features/qt_config.prf:
+/usr/local/share/qt4/mkspecs/features/exclusive_builds.prf:
+/usr/local/share/qt4/mkspecs/features/default_pre.prf:
+/usr/local/share/qt4/mkspecs/features/release.prf:
+/usr/local/share/qt4/mkspecs/features/default_post.prf:
+/usr/local/share/qt4/mkspecs/features/unix/thread.prf:
+/usr/local/share/qt4/mkspecs/features/warn_on.prf:
+/usr/local/share/qt4/mkspecs/features/qt.prf:
+/usr/local/share/qt4/mkspecs/features/moc.prf:
+/usr/local/share/qt4/mkspecs/features/resources.prf:
+/usr/local/share/qt4/mkspecs/features/uic.prf:
+/usr/local/share/qt4/mkspecs/features/yacc.prf:
+/usr/local/share/qt4/mkspecs/features/lex.prf:
+/usr/local/lib/qt4/libQtSql.prl:
+/usr/local/lib/qt4/libQtCore.prl:
+/usr/local/lib/qt4/libQtGui.prl:
+qmake:  FORCE
+        @$(QMAKE) -unix -o Makefile pro.pro
+
+dist:
+        @$(CHK_DIR_EXISTS) .tmp/arp_watch1.0.0 || $(MKDIR) .tmp/arp_watch1.0.0
+        $(COPY_FILE) --parents $(SOURCES) $(DIST) .tmp/arp_watch1.0.0/ &amp;#038;&amp;#038; $(COPY_FILE) --parents main.cpp .tmp/arp_watch1.0.0/ &amp;#038;&amp;#038; (cd `dirname .tmp/arp_watch1.0.0` &amp;#038;&amp;#038; $(TAR) arp_watch1.0.0.tar arp_watch1.0.0 &amp;#038;&amp;#038; $(COMPRESS) arp_watch1.0.0.tar) &amp;#038;&amp;#038; $(MOVE) `dirname .tmp/arp_watch1.0.0`/arp_watch1.0.0.tar.gz . &amp;#038;&amp;#038; $(DEL_FILE) -r .tmp/arp_watch1.0.0
+
+
+clean:compiler_clean
+        -$(DEL_FILE) $(OBJECTS)
+        -$(DEL_FILE) *~ core *.core
+
+
+####### Sub-libraries
+
+distclean: clean
+        -$(DEL_FILE) $(TARGET)
+        -$(DEL_FILE) Makefile
+
+
+mocclean: compiler_moc_header_clean compiler_moc_source_clean
+
+mocables: compiler_moc_header_make_all compiler_moc_source_make_all
+
+compiler_moc_header_make_all:
+compiler_moc_header_clean:
+compiler_rcc_make_all:
+compiler_rcc_clean:
+compiler_image_collection_make_all: qmake_image_collection.cpp
+compiler_image_collection_clean:
+        -$(DEL_FILE) qmake_image_collection.cpp
+compiler_moc_source_make_all:
+compiler_moc_source_clean:
+compiler_uic_make_all:
+compiler_uic_clean:
+compiler_yacc_decl_make_all:
+compiler_yacc_decl_clean:
+compiler_yacc_impl_make_all:
+compiler_yacc_impl_clean:
+compiler_lex_make_all:
+compiler_lex_clean:
+compiler_clean:
+
+####### Compile
+
+main.o: main.cpp
+        $(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+####### Install
+
+install:   FORCE
+
+uninstall:   FORCE
+
+FORCE:
+
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

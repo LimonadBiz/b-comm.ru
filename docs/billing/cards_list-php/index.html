@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>cards_list.php  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="cards_list.php, ">
+
+
+<meta property="og:title" content="cards_list.php  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/billing/cards_list-php" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2012-01-14T23:29:25Z" />
+<meta property="og:article:modified_time" content="2012-01-14T23:29:25Z" />
+
+  
+    
+<meta property="og:article:tag" content="cards_list.php">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="cards_list.php" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/billing/cards_list-php" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "cards_list.php",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2012-01-14",
+    "description": "",
+    "wordCount":  326 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/billing/cards_list-php" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>cards_list.php
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2012-01-14">14 Jan, 2012</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 2 min
+  &middot; (326 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/cards_list.php" class="label label-primary">cards_list.php</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <p>скрипт нужный для работы с карточками</p>
+
+<pre lang="php"><?
+include_once("defines.php");
+if(!USE_CARDS) exit();
+
+include_once("utils.php");
+
+    $result = mysql_query ("SELECT * FROM ".CARDS_TABLE." WHERE series='".$series."' AND status='a'",$LINK_CARDS) or die("cards_list.php -> err2 ".mysql_error($LINK_CARDS));
+    $actived = mysql_num_rows ($result);
+    mysql_free_result($result);
+
+    $result = mysql_query ("SELECT * FROM ".CARDS_TABLE." WHERE series='".$series."' AND status='l'",$LINK_CARDS) or die("cards_list.php -> err2 ".mysql_error($LINK_CARDS));
+    $locked = mysql_num_rows ($result);
+    mysql_free_result($result);
+
+    $result = mysql_query ("SELECT * FROM ".CARDS_TABLE." WHERE series='".$series."' AND status='u'",$LINK_CARDS) or die("cards_list.php -> err2 ".mysql_error($LINK_CARDS));
+    $used = mysql_num_rows ($result);
+    mysql_free_result($result);
+
+    $result = mysql_query ("SELECT unix_timestamp(added) as unix_added, unix_timestamp(expired) as unix_expired FROM ".CARDS_TABLE." WHERE series='".$series."' GROUP BY series",$LINK_CARDS) or die("cards_list.php -> err2 ".mysql_error($LINK_CARDS));
+    if (mysql_num_rows ($result) > 0)
+      $row = mysql_fetch_object($result);
+    mysql_free_result($result);
+
+  echo "&lt;FONT FACE=arial COLOR=green>
+
+<B>Серия `&lt;FONT COLOR=red>$series&lt;/FONT>' &lt;FONT COLOR=black>[".date("Y/m/d", $row->unix_expired)."]&lt;/FONT> (всего: &lt;FONT COLOR=blue>$total&lt;/FONT>, рабочих: &lt;FONT COLOR=blue>$actived&lt;/FONT>, блокированных: &lt;FONT COLOR=blue>$locked&lt;/FONT>, использованных: &lt;FONT COLOR=blue>$used&lt;/FONT>)</B>&lt;/FONT><BR />";
+  if ($row->unix_expired &lt;= time()) echo "&lt;FONT SIZE=+1 FACE=arial COLOR=red><B>Внимание!!! Серия устарела!</B>&lt;/FONT><BR />";
+  echo "&lt;FONT SIZE=+1 FACE=arial><B>";
+  if ($total == $locked + $used) echo "&lt;A HREF=save_series.php?series=$series&#038;action=unlock>Разблокировать серию&lt;/A>";
+  else echo "&lt;A HREF=save_series.php?series=$series&#038;action=lock>Блокировать серию&lt;/A>";
+  echo " | &lt;A onclick=\"return confirm('Вы действительно хотите УДАЛИТЬ серию $series?')\" HREF=real_del_series.php?series=$series>Удалить серию&lt;/A>";
+  echo "</B>&lt;/FONT><BR />";
+?>
+  
+
+<HR />
+&lt;TABLE BORDER=0 CELLSPACING=2 CELLPADDING=4 BGCOLOR=black>
+   &lt;TR ALIGN=center BGCOLOR="#99dd99">
+   
+
+<TD>
+  <B>Номер<BR />карточки</B>
+</TD>
+
+    
+
+<TD>
+  <B>Номинал</B>
+</TD>
+    
+
+<TD>
+  <B>Состояние</B>
+</TD>
+    
+
+<TD>
+  <B>Действия</B>
+</TD>
+    
+
+<?php
+    // рср лш АСДЕЛ ОНОНКМЪРЭ 🙂
+    ?>
+    
+
+<TD>
+  <B>IP</B>
+</TD>
+    
+
+<TD>
+  <B>login</B>
+</TD>
+
+        
+
+<TD>
+  <B>Номер <BR />(код пополнения)</B>
+</TD>
+        
+
+<TD>
+  дата поподнения
+</TD>
+   &lt;/TR>
+
+
+<?
+
+//    $result = mysql_query ("SELECT sn, nominal, status FROM ".CARDS_TABLE." WHERE series='".$series."'",$LINK_CARDS) or die("cards_list.php -> err2 ".mysql_error($LINK_CARDS));
+    $result = mysql_query ("SELECT sn, nominal, status, used_at, used_by, n, login FROM ".CARDS_TABLE." WHERE series='".$series."'",$LINK_CARDS) or die("cards_list.php -> err2 ".mysql_error($LINK_CARDS));
+    for ($i = 0; $i &lt; mysql_num_rows ($result); $i++) {
+      $row = mysql_fetch_object ($result);
+          //poriadkovij nomer carti/////////
+
+
+          ///
+          printf ("   &lt;TR ALIGN=center BGCOLOR=\"#%s\">\n", ($row->status == 'a') ? "eeeeee" : (($row->status == 'u') ? "dddd99" : "ffcccc"));
+
+
+      printf ("    
+
+<TD>
+  %s-%s-%s-%s-%s
+</TD>\n", $series, substr($row->sn,0,4), substr($row->sn,4,4), substr($row->sn,8,4), substr($row->sn,12,2));
+      printf ("    
+
+<TD>
+  %8.2f
+</TD>\n", $row->nominal);
+      printf ("    
+
+<TD>
+  %s
+</TD>\n", ($row->status == 'a') ? "&lt;A HREF=save_card.php?series=$series&#038;sn=$row->sn&action=lock>рабочая&lt;/A>" : (($row->status == 'u') ? "использованна" : "&lt;A HREF=save_card.php?series=$series&#038;sn=$row->sn&action=unlock>блокированна&lt;/a>"));
+      printf ("    
+
+<TD>
+  &lt;A onclick=\"return confirm('Вы действительно хотите УДАЛИТЬ карточку : %s-%s-%s-%s-%s?')\" HREF=real_del_card.php?series=$series&#038;sn=$row->sn>Удалить&lt;/A>
+</TD>\n", $series, substr($row->sn,0,4), substr($row->sn,4,4), substr($row->sn,8,4), substr($row->sn,12,2));
+
+    //my 🙂
+//login from
+          printf ("    
+
+<TD>
+  %s
+</TD>\n", $row->login);
+    //IP from
+          printf ("    
+
+<TD>
+  %s
+</TD>\n", $row->used_by);
+
+
+          printf ("  
+
+<TD>
+  %s-%s
+</TD>\n", substr($row->n,0,4),substr($row->n,4,13));
+
+//            printf ("    
+
+<TD>
+  %s-%s-%s-%s-%s
+</TD>\n",$row->nominal);
+              //, substr($row->n,0,4), substr($row->n,4,4), substr($row->n,8,4), substr($row->n,12,2));
+            printf ("    
+
+<TD>
+  %s
+</TD>\n", $row->used_at);
+      echo "   &lt;/TR>\n";
+    }
+    mysql_free_result ($result);
+?>
+&lt;/TABLE>
+
+</pre>
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="http://b-comm.ru/billing/cards-php" title="cards.php">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/billing/cards_series_list-php" title="cards_series_list.php">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

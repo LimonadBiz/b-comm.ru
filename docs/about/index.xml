@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Abouts on </title>
+    <link>http://b-comm.ru/about/index.xml</link>
+    <description>Recent content in Abouts on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 23 Dec 2010 22:03:23 +0000</lastBuildDate>
+    <atom:link href="http://b-comm.ru/about/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Детали</title>
+      <link>http://b-comm.ru/about/</link>
+      <pubDate>Thu, 23 Dec 2010 22:03:23 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/about/</guid>
+      <description>&lt;p&gt;Это пример страницы в WordPress. Можно написать здесь информацию о себе или о сайте, чтобы пользователи знали, кто вы и откуда. Можно создать столько страниц или подстраниц, сколько необходимо, и управлять их содержимым прямо в WordPress.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

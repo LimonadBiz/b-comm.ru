@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>add_cards.php  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="freeNIBS, ">
+
+
+<meta property="og:title" content="add_cards.php  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/billing/add_cards-php" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2006-01-14T21:54:33Z" />
+<meta property="og:article:modified_time" content="2006-01-14T21:54:33Z" />
+
+  
+    
+<meta property="og:article:tag" content="freeNIBS">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="add_cards.php" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/billing/add_cards-php" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "add_cards.php",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2006-01-14",
+    "description": "",
+    "wordCount":  84 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/billing/add_cards-php" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>add_cards.php
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2006-01-14">14 Jan, 2006</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 1 min
+  &middot; (84 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/freenibs" class="label label-primary">freeNIBS</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <p>add_cards.php</p>
+
+<pre lang="php"><?
+include_once("defines.php");
+if(!USE_CARDS) exit();
+
+include_once("mysql.php");
+$series = sprintf("%04d", $series);
+
+$flag = "false";
+while ($flag == "false") {
+    for ($i = 1; $i <= $count; $i++ ) {
+        $arr[$i] = mt_rand(1000000,9999999);
+        $arr[$i] .= mt_rand(1000000,9999999);
+
+        $arr1[$i] = mt_rand(1000000,9999999);
+       // $arr1[$i] .= mt_rand(1000000,9999999);
+    }
+    $flag = "";
+    for ($i = 1; $i <= $count; $i++) {
+        for ($j = 1; $j <= $count; $j++) {
+            if ($arr[$i] == $arr[$j] &#038;&#038; $i != $j) {
+                $flag = "false"; 
+            }
+        }
+    }
+}
+
+$result = mysql_query("SELECT series FROM ".CARDS_TABLE." WHERE series='".$series."'",$LINK_CARDS) or die("Error while insert cards `".mysql_error($LINK_CARDS)."'");
+if (mysql_num_rows($result) > 0 ) {
+    echo "
+
+<CENTER>
+  éÚ×ÅÎÉÔÅ. îÏ ÄÁÎÎÁÑ ÓÅÒÉÑ ÕÖÅ ÓÕÝÅÓÔ×ÕÅÔ.
+</CENTER>";
+}else{
+    for ($i = 1; $i &lt;= $count; $i++ ) {
+//  mysql_query("INSERT INTO ".CARDS_TABLE." SET series='".$series."', nominal='".$nominal."', expired='".$year."-".$month."-".$day."', sn='".$arr[$i]."', status='a'", $LINK_CARDS) or die("Error while insert cards serial-number `".mysql_error($LINK_CARDS)."'");
+
+    mysql_query("INSERT INTO ".CARDS_TABLE." SET series='".$series."', nominal='".$nominal."', n='".$series.$arr1[$i]."',expired='".$year."-".$month."-".$day."', sn='".$arr[$i]."', status='a'", $LINK_CARDS) or die("Error while insert cards serial-number `".mysql_error($LINK_CARDS)."'");
+
+    }
+    echo "
+
+<CENTER>
+  $count ËÁÒÔÏÞÅË ÓÅÒÉÉ $series ÎÏÍÉÎÁÌÏÍ $nominal ÓÏÚÄÁÎÙ.
+</CENTER>";
+//echo "w";
+//,n='".$arr1[$i]."'
+    
+}
+$TOP = "ëÁÒÔÏÞËÉ";
+include("top.php");
+?>
+  
+
+<CENTER>
+  <?
+include("new_cards_menu.php");
+include("cards_series_list.php");
+?>
+    
+</CENTER>
+
+
+<?
+include("bottom.php");
+?>
+
+</pre>
+
+<p>&#8212;&#8212;&#8212;</p>
+
+<p><a href="http://filmokat.ru/?p=21036">2012 цвет черемухи смотреть</a></p>
+
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/billing/%D1%81%D0%BA%D0%BB%D0%B0%D0%B4%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-arp-%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B5%D0%B9-%D0%BC%D0%B0%D0%BA-%D0%B0%D0%B4%D1%80%D0%B5%D1%81%D0%BE%D0%B2-%D1%81" title="Складирование arp записей мак-адресов с помощью скрипта arpwatch на qt4 &#43; mysql">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

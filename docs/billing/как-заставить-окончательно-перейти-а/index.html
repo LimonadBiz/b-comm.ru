@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Как заставить окончательно перейти абонентов на другой тип подключения?  &middot; </title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="freebsd, freeNIBS, freeradius, ipfw, php, ">
+
+
+<meta property="og:title" content="Как заставить окончательно перейти абонентов на другой тип подключения?  &middot;  ">
+<meta property="og:site_name" content=""/>
+<meta property="og:url" content="http://b-comm.ru/billing/%D0%BA%D0%B0%D0%BA-%D0%B7%D0%B0%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BE%D0%BA%D0%BE%D0%BD%D1%87%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BF%D0%B5%D1%80%D0%B5%D0%B9%D1%82%D0%B8-%D0%B0" />
+<meta property="og:locale" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2010-12-31T09:50:02Z" />
+<meta property="og:article:modified_time" content="2010-12-31T09:50:02Z" />
+
+  
+    
+<meta property="og:article:tag" content="freebsd">
+    
+<meta property="og:article:tag" content="freeNIBS">
+    
+<meta property="og:article:tag" content="freeradius">
+    
+<meta property="og:article:tag" content="ipfw">
+    
+<meta property="og:article:tag" content="php">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@" />
+<meta name="twitter:creator" content="@" />
+<meta name="twitter:title" content="Как заставить окончательно перейти абонентов на другой тип подключения?" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="http://b-comm.ru/billing/%D0%BA%D0%B0%D0%BA-%D0%B7%D0%B0%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BE%D0%BA%D0%BE%D0%BD%D1%87%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BF%D0%B5%D1%80%D0%B5%D0%B9%D1%82%D0%B8-%D0%B0" />
+<meta name="twitter:domain" content="http://b-comm.ru">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Как заставить окончательно перейти абонентов на другой тип подключения?",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+?rel=author"
+    },
+    "datePublished": "2010-12-31",
+    "description": "",
+    "wordCount":  97 
+  }
+</script>
+
+
+
+<link rel="canonical" href="http://b-comm.ru/billing/%D0%BA%D0%B0%D0%BA-%D0%B7%D0%B0%D1%81%D1%82%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%BE%D0%BA%D0%BE%D0%BD%D1%87%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BF%D0%B5%D1%80%D0%B5%D0%B9%D1%82%D0%B8-%D0%B0" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://b-comm.ru/touch-icon-144-precomposed.png">
+<link rel="icon" href="http://b-comm.ru/favicon.png">
+<meta name="generator" content="Hugo 0.18.1" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="http://b-comm.ru/css/bootswatch/default/bootstrap.min.css">
+
+
+<link rel="stylesheet" href="http://b-comm.ru/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://b-comm.ru/css/style.css">
+
+
+  <link rel="stylesheet" href="http://b-comm.ru/css/highlight/default.css">
+
+
+</head>
+<body data-ng-app="myapp" data-ng-controller="MyController" data-ng-mouseleave="MouseLeave($event)">
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+          
+          <a class="navbar-brand-img" href="http://b-comm.ru/">
+            <img alt="" src="">
+            
+          </a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+          </ul>
+        </div>
+        
+      </div>
+    </nav>
+  </header>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Как заставить окончательно перейти абонентов на другой тип подключения?
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2010-12-31">31 Dec, 2010</time>
+</small>
+
+
+  <small>
+    &middot; by wel
+  
+  &middot; Read in about 1 min
+  &middot; (97 words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="http://b-comm.ru/tags/freebsd" class="label label-primary">freebsd</a>
+  
+  <a href="http://b-comm.ru/tags/freenibs" class="label label-primary">freeNIBS</a>
+  
+  <a href="http://b-comm.ru/tags/freeradius" class="label label-primary">freeradius</a>
+  
+  <a href="http://b-comm.ru/tags/ipfw" class="label label-primary">ipfw</a>
+  
+  <a href="http://b-comm.ru/tags/php" class="label label-primary">php</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+      <div class="content">
+  <p>Я уже писал <a href="http://b-comm.ru/?p=69">про Скрипт для сервера доступа mpd5: up-script для информирования абонентов</a>.</p>
+
+<p>Но это не сработает на 100% и тем более сразу.</p>
+
+<p>**Почему?</p>
+
+<p>** Да потому, что люди включают компьютер подключают Интернет и через х-минут начинают пользоваться. <strong>Они просто не увидят сообщение</strong>.</p>
+
+<p><strong>Что делать?</strong></p>
+
+<p>Показывать данное сообщение каждые х-минут!</p>
+
+<pre lang="bash">*/10    *   *   *   *   root /perevesti_vseh.php  2>&1</pre>
+
+<p>/perevesti_vseh.php</p>
+
+<p></p>
+
+<pre lang="php" line="1">#!/usr/local/bin/php                                                                                                                                                               
+<?php
+//наша таблица в фаерволе из прошлого поста)))
+//http://b-comm.ru/?p=69 - тут
+$table_ipfw_for_warn_up=7;
+$link = mysql_connect('10.1.1.1', 'freenibs', 'freenibs');
+               
+if (!$link) {                                                                                                                                                                      
+            die('Could not connect: ' . mysql_error());                                                                                                                            
+}                                                                                                                                               mysql_select_db("freenibs");
+$q="SELECT `ip`                                                                                                                                                                    
+FROM `actions`                                                                                                                                                                     
+WHERE `terminate_cause` = 'Online'";                                                                                                                                               
+                                                                                                                                                                                   
+$result = mysql_query($q);                                                                                                                                                         
+$num_rows = mysql_num_rows($result);                                                                                                                                               
+if($num_rows>0){                                                                                                                                                                   
+                                                                                                                                                                                   
+                                                                                                                                                                                   
+                                                                                                                                                                                   
+         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {                                                                                                                  
+                 $userip=$row['ip'];                                                                                                                                               
+                 //echo "session: ".$unique_id." will rise :)\n";                                                                                                                  
+                $last_line = system('/sbin/ipfw table '.$table_ipfw_for_warn_up.' add '.$userip."", $retval);                                                                                                                                                                                                                                                         
+         }                                                                                                                                                                         
+                                                                                                                                                                                   
+}                                                                                                                                                                                  
+sleep(60);                                                                                                                                                                         
+                                                                                                                                                                                   
+                                                                                                                                                                                   
+ $last_line = system('/sbin/ipfw table 7 flush', $retval);                                                                                                                         
+                                                                                                                                                                                   
+?>                                                         
+</pre>
+
+<p>Вот так вот просто)))</p>
+</div>
+
+
+      <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="http://b-comm.ru/billing/%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0-mpd5-up-script-%D0%B4%D0%BB%D1%8F-%D0%B8%D0%BD%D1%84" title="Скрипт для сервера доступа mpd5: up-script для информирования абонентов">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="http://b-comm.ru/4isp/%D0%BE-%D1%82%D0%BE%D0%BC-%D0%BA%D0%B0%D0%BA-%D0%BF%D1%80%D0%BE%D0%B2%D0%B0%D0%B9%D0%B4%D0%B5%D1%80%D1%83-%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%BD%D0%B5%D1%82%D0%B0-%D1%80%D0%B0%D1%81%D0%BF%D1%80%D0%BE" title="О том как провайдеру Интернета распространять программы  с помощью Nullsoft Scriptable Install System (NSIS)">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+  
+
+</div>
+
+</footer>
+
+    </div>
+    
+  </div>
+</div>
+      
+<footer class="footer hidden-print">
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="javascript:" id="return-to-top">back to top</a>
+</div>
+<div class="pull-right">
+
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+              
+    
+<div class="container footline">
+    <small>
+</small>
+</div>
+
+
+    
+
+
+        </div>
+    </div>
+  </div>
+</footer>
+
+    
+
+<script src="http://b-comm.ru/js/jquery.min.js"></script>
+<script src="http://b-comm.ru/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+<script src="http://b-comm.ru/js/popover/angular-storage.min.js"></script>
+
+
+
+<script src="http://b-comm.ru/js/highlight.pack.js"></script>
+<script src="http://b-comm.ru/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+var ENABLE_POPOVER = ""; 
+var EXPIRE_COOKIE = ""; 
+var SHOW_MODAL_TIMEOUT = ""; 
+var MOUSE_LEAVE = ""; 
+var MODAL_SIZE = ""; 
+var POST_URL = ""; 
+var SIGNUP_HEADER = "";
+var HEADER_IMAGE = "";
+var IMG_DESCRIPTION = "";
+var SIGNUP_TEXT = "";
+var INPUT_PLACEHOLDER = "";
+var SUBMIT_BUTTON = "";
+var SUCCESS_MESSAGE = "";
+var ERROR_MESSAGE = "";
+var OPTIN = "";
+var COOKIE_NAME = "";
+</script>
+<script src="http://b-comm.ru/js/popover/angular-modal-service.min.js"></script>
+<script src="http://b-comm.ru/js/angular-ismobile.min.js"></script>
+<script src="http://b-comm.ru/js/popover/popover.min.js"></script>
+
+  </body>
+</html>
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cards.Php on </title>
+    <link>http://b-comm.ru/tags/cards.php/index.xml</link>
+    <description>Recent content in Cards.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/cards.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>cards.php</title>
+      <link>http://b-comm.ru/billing/cards-php</link>
+      <pubDate>Sat, 14 Jan 2012 23:28:04 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/cards-php</guid>
+      <description>&lt;pre lang=&#34;php&#34;&gt;&lt;?php
+$series=$_GET[&#39;series&#39;];
+include_once(&#34;defines.php&#34;);
+if(!USE_CARDS) exit();
+
+include_once(&#34;mysql.php&#34;);
+
+$result = mysql_query (&#34;SELECT * FROM &#34;.CARDS_TABLE.&#34; WHERE series=&#39;&#34;.$series.&#34;&#39;&#34;,$LINK_CARDS) or die(&#34;cards_list.php -&gt; err1 &#34;.mysql_error($LINK_CARDS));
+$total = mysql_num_rows ($result);
+mysql_free_result($result);
+
+if ($total == 0) header(&#34;Location: series.php&#34;);
+
+$TOP = &#34;Каротчки&#34;;
+include(&#34;top.php&#34;);
+?&gt;
+  
+
+&lt;CENTER&gt;
+  &lt;?
+include(&#34;cards_list.php&#34;);
+?&gt;
+    
+&lt;/CENTER&gt;
+
+
+&lt;?
+include(&#34;bottom.php&#34;);
+?&gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://ivanovosite.ru/textile&#34;&gt;Текстиль Иваново&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

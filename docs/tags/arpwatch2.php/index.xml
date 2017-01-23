@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Arpwatch2.Php on </title>
+    <link>http://b-comm.ru/tags/arpwatch2.php/index.xml</link>
+    <description>Recent content in Arpwatch2.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/arpwatch2.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>arpwatch2.php</title>
+      <link>http://b-comm.ru/billing/arpwatch2-php</link>
+      <pubDate>Sat, 14 Jan 2012 22:09:38 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/arpwatch2-php</guid>
+      <description>&lt;p&gt;arpwatch2.php — скрипт, который отображает кто и с какого (ип или мак-адресса) подключался к серверу&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?php
+include_once(&#34;top.php&#34;);
+include_once(&#34;engine.php&#34;);
+$prev_month_date_start = mktime (0,0,0,date(&#34;m&#34;)-1,1,date(&#34;Y&#34;));
+
+
+$ip=$_GET[&#39;ip&#39;];
+
+//$status=$argv[2];
+$db=new db_mysql();
+$db-&gt;init(&#34;10.200.1.1&#34;,&#34;updown&#34;,&#34;updown&#34;,&#34;freenibs&#34;);
+
+$db1=new db_mysql();
+$db1-&gt;init(&#34;10.200.1.1&#34;,&#34;updown&#34;,&#34;updown&#34;,&#34;mac&#34;);
+
+$q=&#34;SELECT `ip`,`arp` FROM `arpwatch`&#34;;
+
+//$q1=&#34;SELECT `freenibs`.`arpwatch`.`ip` , `freenibs`.`arpwatch`.`arp`,`mac`.`host`.`host` FROM `freenibs`.`arpwatch` INNER JOIN `mac`.`host` ON `freenibs`.`arpwatch`.`ip` = `mac`.`host`.`ipv4` AND `mac`.`host`.`en`=&#39;e&#39;&#34;;
+
+
+$db-&gt;query($q);
+
+$n=$db-&gt;num_rows();
+if($n&gt;0)
+{
+echo &#34;
+
+&lt;TABLE border=&#39;1&#39;&gt;
+  &lt;TR&gt;
+    &lt;TD&gt;
+      &lt;B&gt;ip&lt;/B&gt;
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      &lt;B&gt;mac-adress&lt;/B&gt;
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      mac for this ip in DHCP
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      user who login from ip
+    &lt;/TD&gt;
+  &lt;/TR&gt;&#34;;
+      for($i=0;$i&amp;lt;$n;$i++)
+          {
+          $row=$db-&gt;fetch_array();
+  
+              $q=&#34;SELECT `mac`.`host`.`mac` FROM `mac`.`host` WHERE `mac`.`host`.`ipv4`=&#39;&#34;.$row[&#39;ip&#39;].&#34;&#39;&#34;;
+  //          echo $q;
+              $db1-&gt;set_db(&#34;mac&#34;);
+              $db1-&gt;query($q);
+              $n1=$db1-&gt;num_rows();
+              unset($row1);
+              if($n1&gt;0)
+              {
+  
+                      $row1=$db1-&gt;fetch_array();
+              }
+              $iplocal=$row[&#39;ip&#39;];
+                $q=&#34;SELECT `freenibs`.`users`.`user`,`freenibs`.`users`.`uid` FROM `freenibs`.`users` INNER JOIN `freenibs`.`actions` ON `freenibs`.`users`.`framed_ip`=`freenibs`.`actions`.`ip` AND `freenibs`.`actions`.`call_from`=&#39;&#34;.$iplocal.&#34;&#39; AND `freenibs`.`actions`.`stop_time`&gt; FROM_UNIXTIME(&#34;.$prev_month_date_start.&#34;)  group by `freenibs`.`users`.`user`&#34;;
+  //            $q=&#34;SELECT `freenibs`.`users`.`user` FROM `freenibs`.`users` INNER JOIN `freenibs`.`actions` ON `freenibs`.`users`.`framed_ip`=`freenibs`.`actions`.`ip` AND `freenibs`.`actions`.`call_from`=&#39;&#34;.$iplocal.&#34;&#39;  group by `freenibs`.`users`.`user` LIMIT 10&#34;;
+  //        echo $q;
+              $db1-&gt;set_db(&#34;freenibs&#34;);
+  
+              $db1-&gt;query($q);
+              $n1=0;
+              $n1=$db1-&gt;num_rows();
+              unset($user);
+              if($n1&gt;0)
+                  {
+                      for($i1=0;$i1&amp;lt;$n1;$i1++)
+                      {
+                              $row2=$db1-&gt;fetch_array();
+                              $user .=&#34;  &amp;lt;a href=\&#34;edit_user.php?uid=&#34;.$row2[&#39;uid&#39;].&#34;\&#34;&gt;&#34;.$row2[&#39;user&#39;].&#34;&amp;lt;/a&gt;\n&#34;;
+                      }
+                  }
+  
+  
+  
+              echo &#34;
+  
+  &lt;TR&gt;
+    &lt;TD&gt;
+      &#34;.$row[&#39;ip&#39;].&#34;
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      &#34;.$row[&#39;arp&#39;].&#34;
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      &#34;.$row1[&#39;mac&#39;].&#34;
+    &lt;/TD&gt;
+    
+    &lt;TD&gt;
+      $user
+    &lt;/TD&gt;
+  &lt;/TR&gt;&#34;;
+  
+          }
+  echo &#34;
+&lt;/TABLE&gt;&#34;;
+
+}
+
+@$db-&gt;close_db();
+include_once(&#34;bottom.php&#34;);
+?&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

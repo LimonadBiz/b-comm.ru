@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Count.Php on </title>
+    <link>http://b-comm.ru/tags/count.php/index.xml</link>
+    <description>Recent content in Count.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/count.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>count.php — отображение пользователей в Онлайне для FreeNIBS</title>
+      <link>http://b-comm.ru/billing/count-php-%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9-%D0%B2-%D0%BE%D0%BD%D0%BB%D0%B0</link>
+      <pubDate>Sat, 14 Jan 2012 23:33:12 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/count-php-%D0%BE%D1%82%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9-%D0%B2-%D0%BE%D0%BD%D0%BB%D0%B0</guid>
+      <description>&lt;p&gt;count.php — отображение пользователей в Онлайне для FreeNIBS&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?php
+function ret_speed_($speed){
+   $pref=&#39;&#39;;
+
+    if($speed&gt;1024){
+        $t=round(($speed/1024),2);
+        if($t&gt;1024){
+            $speed=$t;
+            $t=round(($speed/1024),2);
+            if($t&gt;1024){
+                $speed=$t;
+                $t=round(($speed/1024),2);
+                 if($t&gt;1024){
+                     $speed=$t;
+
+                 }else{
+                      $speed=$t;$pref=&#39;G&#39;;
+                 }
+
+
+
+            }else{
+                $speed=$t;$pref=&#39;M&#39;;
+            }
+
+        }else{
+            $speed=$t;
+            $pref=&#39;K&#39;;
+        }
+
+   }
+        return $speed.$pref.&#34;bit/s&#34;;
+
+}
+
+$TOP = &#34; Speed of users&#34;;
+$META = &#34;&lt;META HTTP-EQUIV=\&#34;Refresh\&#34; CONTENT=\&#34;60\&#34;&gt;\n&lt;META HTTP-EQUIV=\&#34;Cache-Control\&#34; CONTENT=\&#34;no-cache\&#34;&gt;\n&lt;META HTTP-EQUIV=\&#34;Pragma\&#34; CONTENT=\&#34;no-cache\&#34;&gt;&#34;;
+
+include(&#34;top.php&#34;);
+?&gt;
+
+
+&lt;CENTER&gt;
+  &lt;?php
+
+/* коннект к БД - меняем на свое */
+$link = mysql_connect(&#39;10.200.205.224&#39;, &#39;freenibs&#39;, &#39;freenibs&#39;);
+if (!$link) {
+    die(&#39;Could not connect: &#39; . mysql_error());
+}
+
+mysql_select_db(&#34;freenibs&#34;);
+$q=&#34;SELECT *,`in_speed`,ip AS `ip4` FROM `speed_counter` WHERE `interface`!=&#39;&#39; &#34;;
+
+$q=&#34;SELECT
+    `speed_counter`.`gid`,
+    `packets`.`packet`,
+    `speed_counter`.`user`,
+    `speed_counter`.`in_speed`,
+    `speed_counter`.`all_last`,
+    `speed_counter`.`in_last`,
+    `speed_counter`.`out_last`,
+    `speed_counter`.`all_speed`,
+    `speed_counter`.`out_speed`,
+    `speed_counter`.`in_load`,
+    `speed_counter`.`out_load`,
+    `speed_counter`.`interface`,
+    `speed_counter`.`speed_car_in`,
+    `speed_counter`.`speed_car_out`,
+
+     `speed_counter`.`ip`  AS `ip4`
+FROM `speed_counter`
+LEFT JOIN `users` ON `users`.`framed_ip` = `speed_counter`.`ip`
+LEFT JOIN `packets` ON `users`.`gid` = `packets`.`gid`
+WHERE
+    `interface` != &#39;&#39;
+&#34;;
+/*
+ * $q=&#34;SELECT
+INET_NTOA(ip) AS `ip4`,`all_last`,`in_last`,`out_last`,`time_last`,`all_speed`,`in_speed`,`out_speed`,`in_load`,
+`out_load`,`interface`,`speed_car_in`,`speed_car_out`,`gid`,`user`,`uid`
+ FROM `speed_counter`
+WHERE
+    `interface` != &#39;&#39;
+  &#34;;
+*/
+
+switch($_GET[&#39;type&#39;]){
+case &#34;all_speed&#34;:
+        $q.=&#34; ORDER by `all_speed` DESC&#34;;
+break;
+case &#34;node&#34;:
+         $q.=&#34; ORDER by `interface`  DESC&#34;;
+         break;
+case &#34;packet&#34;:
+        $q.=&#34; ORDER by `packets`.`gid` DESC&#34;;
+        if($_GET[&#39;gid&#39;]&gt;0)
+  
+              $q=&#34;SELECT
+                  `packets`.`gid`,
+                  `packets`.`packet`,
+                  `users`.`user`,
+                  `speed_counter`.`in_speed`,
+                  `speed_counter`.`all_last`,
+                  `speed_counter`.`in_last`,
+                  `speed_counter`.`out_last`,
+                  `speed_counter`.`all_speed`,
+                  `speed_counter`.`out_speed`,
+                  `speed_counter`.`in_load`,
+                  `speed_counter`.`out_load`,
+                  `speed_counter`.`interface`,
+                  `speed_counter`.`speed_car_in`,
+                  `speed_counter`.`speed_car_out`,
+  
+                    `speed_counter`.`ip`  AS `ip4`
+  
+                FROM `speed_counter`
+                    LEFT JOIN `users` ON `users`.`framed_ip` = `speed_counter`.`ip`
+                    INNER JOIN `packets` ON (`users`.`gid` = `packets`.`gid` AND `packets`.`gid`=&#39;&#34;.$_GET[&#39;gid&#39;].&#34;&#39;)
+                    WHERE `interface` != &#39;&#39;
+                   ORDER by `all_speed` DESC                                &#34;;
+  
+  
+          break;
+  case &#34;in_speed&#34;:
+         $q.=&#34; ORDER by `in_speed`  DESC&#34;;
+   break;
+  case &#34;out_speed&#34;:
+            $q.=&#34; ORDER by `out_speed`  DESC&#34;;
+             break;
+   case &#34;in_load&#34;:
+           $q.=&#34; ORDER by `in_load`  DESC&#34;;
+            break;
+    case &#34;all_last&#34;:
+           $q.=&#34; ORDER by `all_last`  DESC&#34;;
+             break;
+  
+   case &#34;out_load&#34;:
+           $q.=&#34; ORDER by `out_load`  DESC&#34;;
+         break;
+    case &#34;ip&#34;:
+           $q.=&#34; ORDER by `ip`  DESC&#34;;
+            break;
+  
+   default:
+  
+      $q.=&#34; ORDER by `all_speed` DESC&#34;;
+  break;
+  
+  }
+   // echo $q;
+  
+  //$q=&#34;SELECT *,`in_speed`,INET_NTOA(ip) AS `ip4` FROM `speed_counter` ORDER by `in_speed` DESC&#34;;
+  
+  $result = mysql_query($q);
+  $n=mysql_num_rows($result);
+  echo &#34;Online:&#34;.$n;
+  echo &#34;&lt;table border=1&gt;&#34;;
+  echo &#34;
+  
+  &lt;tr&gt;
+    &lt;td&gt;
+      &lt;a href=&#39;?type=packet&#39;&gt;Пакет&lt;/a&gt;
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      &lt;a href=&#39;?type=login&#39;&gt;login&lt;/a&gt;
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      &lt;a href=&#39;?type=all_speed&#39;&gt;Общая скорость&lt;/a&gt;&lt;br /&gt;Вход+Исход
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      &lt;a href=&#39;?type=ip&#39;&gt;ip&lt;/a&gt;
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      &lt;a href=&#39;?type=node&#39;&gt;Интерфейс&lt;/a&gt;
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      Стоит скорость: Вход / Исход
+    &lt;/td&gt;
+    
+        
+    
+    &lt;td&gt;
+      Траффик: &lt;br /&gt;  &lt;a href=&#39;?type=all_last&#39;&gt;Весь&lt;/a&gt; / &lt;a href=&#39;?type=in_last&#39;&gt;Вход&lt;/a&gt; / &lt;a href=&#39;?type=out_last&#39;&gt;Исход&lt;/a&gt; 
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      &lt;a href=&#39;?type=in_speed&#39;&gt;Входящая скорость&lt;/a&gt;&lt;br /&gt;
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      &lt;a href=&#39;?type=out_speed&#39;&gt;Исходящая скорость&lt;/a&gt;&lt;br /&gt;(Kb/s)
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      &lt;a href=&#39;?type=in_load&#39;&gt;Входящая&lt;/a&gt;&lt;br /&gt; скорость &lt;br /&gt;за сессию&lt;br /&gt; (Kb/s)
+    &lt;/td&gt;
+        
+    
+    &lt;td&gt;
+      &lt;a href=&#39;?type=out_load&#39;&gt;Исходящая&lt;/a&gt;&lt;br /&gt; скорость &lt;br /&gt;за сессию&lt;br /&gt; (Kb/s)
+    &lt;/td&gt;
+  &lt;/tr&gt;&#34;;
+  $out_speed_sum=0;$out_load_sum=0;
+  $in_speed_sum=0;
+  $str=&#39;&#39;;$str1=&#39;&#39;;
+  while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+  $out_speed=ceil($row[out_speed]/(1024));
+   $in_speed=ceil($row[in_speed]/(1024));
+  
+  $in=ceil($row[out_last]/(1024*1024));
+  $out=ceil($row[in_last]/(1024*1024));
+  
+  $in_load=ceil($row[in_load]/(1024));
+  $all_speed=ceil($row[all_speed]/(1024));
+  $out_load=ceil($row[out_load]/(1024));
+  $all=ceil($row[all_last]/(1024*1024));
+  
+  if(($row[ip4]!=&#39;10.200.205.2&#39;) ){
+  $out_speed_sum=$out_speed_sum+$out_speed;
+  $out_load_sum+=$out_load;
+  $in_sum+=$in;
+   $all_speed_sum+=$all_speed;
+  $in_speed_sum=$in_speed_sum+$in_speed;
+  $in_load_sum+=$in_load;
+  $out_sum+=$out;
+  $all_sum+=$all;
+  
+  $str.= &#34;
+  
+  &lt;tr&gt;
+    &lt;td&gt;
+      &#34;.$row[&#39;gid&#39;].&#34;&lt;a href=&#39;?type=packet&amp;#038;gid=&#34;.$row[&#39;gid&#39;].&#34;&#39;&gt;&#34;.$row[packet].&#34;&lt;a&gt;&lt;/td&gt;
+          
+      
+      &lt;td&gt;
+        &lt;a target=\&#34;_blank\&#34; href=\&#34;https://home/abills/admin/index.cgi?index=7&amp;#038;search=1&amp;#038;type=11&amp;#038;LOGIN_EXPR=&#34;.$row[&#39;user&#39;].&#34;\&#34;&gt;&#34;.$row[&#39;user&#39;].&#34;&lt;/a&gt;
+      &lt;/td&gt;
+          
+      
+      &lt;td&gt;
+        &#34;.($all_speed).&#34;Kbit/s
+      &lt;/td&gt;
+          
+      
+      &lt;td&gt;
+        &#34;.$row[&#39;ip4&#39;].&#34;
+      &lt;/td&gt;
+           
+      
+      &lt;td&gt;
+        &#34;.$row[&#39;interface&#39;].&#34;
+      &lt;/td&gt;&#34;;
+      
+          //$str.= &#34;
+      
+      &lt;td&gt;
+        &#34;.(ceil($row[&#39;speed_car_in&#39;]/(1024*1024))).&#34;Mbits / &#34;.ceil(($row[&#39;speed_car_out&#39;]/(1024*1024))).&#34;Mbits 
+      &lt;/td&gt;&#34;;
+          //ret_speed_(
+          $str.= &#34;
+      
+      &lt;td&gt;
+        &#34;.(ret_speed_($row[&#39;speed_car_in&#39;])).&#34; / &#34;.(ret_speed_($row[&#39;speed_car_out&#39;])).&#34;  
+      &lt;/td&gt;&#34;;
+      
+          $str.= &#34;
+      
+      &lt;td&gt;
+        all: &#34;.($all).&#34;Mb/ in:&#34;.$in.&#34;Mb /out:&#34;.$out.&#34;Mb
+      &lt;/td&gt;
+          
+      
+      &lt;td&gt;
+        &#34;.$in_speed.&#34;Kb/s
+      &lt;/td&gt;
+          
+      
+      &lt;td&gt;
+        &#34;.$out_speed.&#34;Kb/s
+      &lt;/td&gt;
+          
+      
+      &lt;td&gt;
+        &#34;.$in_load.&#34;
+      &lt;/td&gt;
+          
+      
+      &lt;td&gt;
+        &#34;.$out_load.&#34;
+      &lt;/td&gt;
+        &lt;/tr&gt;&#34;;
+      
+      }
+      
+      if(($row[ip4]==&#39;10.200.205.2&#39;) ){
+      
+      $str1= &#34;
+      
+      &lt;tr&gt;
+        &lt;td&gt;
+          &lt;a href=&#39;?type=packet&amp;#038;gid=&#34;.$row[&#39;gid&#39;].&#34;&#39;&gt;&#34;.$row[packet].&#34;&lt;a&gt;&lt;/td&gt;
+              
+          
+          &lt;td&gt;
+            &#34;.$row[&#39;user&#39;].&#34;
+          &lt;/td&gt;
+              
+          
+          &lt;td&gt;
+            &#34;.($all_speed).&#34;Kb/s
+          &lt;/td&gt;
+              
+          
+          &lt;td&gt;
+            &#34;.$row[&#39;ip4&#39;].&#34;
+          &lt;/td&gt;
+               
+          
+          &lt;td&gt;
+            &#34;.$row[&#39;interface&#39;].&#34;
+          &lt;/td&gt;
+               
+          
+          &lt;td&gt;
+            &#34;.($row[&#39;speed_car_in&#39;]/1024).&#34;Kbits / &#34;.($row[&#39;speed_car_out&#39;]/1024).&#34;Kbits 
+          &lt;/td&gt;
+              
+          
+          &lt;td&gt;
+            all: &#34;.($all).&#34;Mb/ in:&#34;.$in.&#34;Mb /out:&#34;.$out.&#34;Mb
+          &lt;/td&gt;
+              
+          
+          &lt;td&gt;
+            &#34;.$in_speed.&#34;Kb/s
+          &lt;/td&gt;
+              
+          
+          &lt;td&gt;
+            &#34;.$out_speed.&#34;Kb/s
+          &lt;/td&gt;
+              
+          
+          &lt;td&gt;
+            &#34;.$in_load.&#34;
+          &lt;/td&gt;
+              
+          
+          &lt;td&gt;
+            &#34;.$out_load.&#34;
+          &lt;/td&gt;
+            &lt;/tr&gt;&#34;;
+          }
+          }
+          echo $str1;
+          echo $str;
+          echo &#34;
+          
+          &lt;tr&gt;
+            &lt;td&gt;
+              Итог:
+            &lt;/td&gt;
+                    
+            
+            &lt;td&gt;
+              
+            &lt;/td&gt;
+                    
+            
+            &lt;td&gt;
+              &#34;.($all_speed_sum).&#34;Kb/s
+            &lt;/td&gt;
+                    
+            
+            &lt;td&gt;
+              ip
+            &lt;/td&gt;
+                    
+            
+            &lt;td&gt;
+              interface
+            &lt;/td&gt;
+                    
+            
+            &lt;td&gt;
+              all: &#34;.($all_sum).&#34;Mb/ in:&#34;.$in_sum.&#34;Mb /out:&#34;.$out_sum.&#34;Mb
+            &lt;/td&gt;
+                    
+            
+            &lt;td&gt;
+              
+            &lt;/td&gt;
+                     
+            
+            &lt;td&gt;
+              &#34;.$in_speed_sum.&#34;Kb/s
+            &lt;/td&gt;
+                     
+            
+            &lt;td&gt;
+              &#34;.$out_speed_sum.&#34;Kb/s
+            &lt;/td&gt;
+                     
+            
+            &lt;td&gt;
+              &#34;.$in_load_sum.&#34;
+            &lt;/td&gt;
+            
+            &lt;td&gt;
+              &#34;.$out_load_sum.&#34;
+            &lt;/td&gt;
+                      
+          &lt;/tr&gt;&#34;;
+          
+          echo &#34;&lt;/table&gt;&#34;;
+          mysql_close($link);
+          ?&gt;
+          
+          
+          
+          &lt;?
+
+?&gt;
+          &lt;/CENTER&gt;
+          
+          
+          &lt;?
+include(&#34;bottom.php&#34;);
+?&gt;
+          
+          &lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

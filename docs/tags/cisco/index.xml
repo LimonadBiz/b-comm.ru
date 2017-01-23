@@ -1,0 +1,2231 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cisco on </title>
+    <link>http://b-comm.ru/tags/cisco/index.xml</link>
+    <description>Recent content in Cisco on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/cisco/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Бекап конфигурации Cisco</title>
+      <link>http://b-comm.ru/4isp/%D0%B1%D0%B5%D0%BA%D0%B0%D0%BF-%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D0%B8-cisco</link>
+      <pubDate>Tue, 22 Nov 2011 23:41:03 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/4isp/%D0%B1%D0%B5%D0%BA%D0%B0%D0%BF-%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B3%D1%83%D1%80%D0%B0%D1%86%D0%B8%D0%B8-cisco</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://b-comm.ru/wp-content/uploads/2011/11/cisco_catalyst_switch_3560_новый-размер.jpg&#34;&gt;&lt;img src=&#34;http://b-comm.ru/wp-content/uploads/2011/11/cisco_catalyst_switch_3560_новый-размер.jpg&#34; alt=&#34;&#34; title=&#34;cisco catalyst switch 3560&#34; width=&#34;300&#34; height=&#34;222&#34; class=&#34;alignleft size-full wp-image-188&#34; /&gt;&lt;/a&gt;Что бы осуществлять backup с помощью script&amp;#8217;а нужно настроить Циско Catalyst на выполнение удаленных команд с помощью rsh. В консоле нужно выполнить следующие команды:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;configure terminal
+no ip rcmd domain-lookup
+ip rcmd rsh-enable
+ip rcmd remote-host user 172.16.1.1 root enable&lt;/pre&gt;
+
+&lt;p&gt;ip rcmd domain-lookup — запрещаем проверку dns-имени для хоста с которого Мы будем подключатся.&lt;/p&gt;
+
+&lt;p&gt;ip rcmd rsh-enable – включаем сервис rsh.&lt;/p&gt;
+
+&lt;p&gt;ip rcmd remote-host user 172.16.1.1 root enable – пользователю с логином user, который должен существовать, устанавливает соединение с ип 172.16.1.1. Он будет из-под root и выполнять команды в режиме enable.&lt;/p&gt;
+
+&lt;p&gt;Проверка настроек с хоста 172.16.1.1 залогиневшись под rootом:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;rsh -l user 172.16.1.2 show running-config&lt;/pre&gt;
+
+&lt;p&gt;Если Вам удалось увидеть configuration, то Вы можете переходить к скрипту бекапа.&lt;/p&gt;
+
+&lt;p&gt;Для удобства разобьем операцию бекапа на два файла: один будет cisco_catalyst.txt — лист свитчей с именами, а второй скрипт на Perl&amp;#8217;е— backup.pl.&lt;/p&gt;
+
+&lt;p&gt;cisco_catalyst.txt:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;172.16.1.2 cisco_switch1
+172.16.1.3 cisco_switch2
+172.16.1.4 cisco_switch3
+172.16.1.5 cisco_switch4&lt;/pre&gt;
+
+&lt;p&gt;backup.pl:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;#!/usr/bin/perl -w
+
+$SW_LIST=&#39;cisco_catalyst.txt&#39;; #Список свитчей тут
+$USER=&#39;hilik&#39;; #Логин, который используется для бекапа
+
+$date=`/bin/date +%d%m%Y`;\
+#Сюда кладём бекап
+$BACKUP_DIR=&#39;/home/scripts/backup/&#39;;
+ 
+open(IN,&#34;&amp;lt;$SW_LIST&#34; ) or die &#34;Can&#39;t open list with switches: cisco_catalyst.txt&#34;;
+while(&amp;lt;IN&gt;)
+{
+ 
+    ($host, $name)=split(&#34; &#34;,$_);
+    if($host and $name)
+    {
+      chomp($name);
+      $file=&#34;$name.$date&#34;;
+      #print $file;
+      chomp($host);
+      `/usr/bin/rsh -l $USER $host &#39;sh running-config&#39; &gt;$BACKUP_DIR/$file`;
+      #print $k
+      #print &#34;Host $host, Name $name\n&#34;;
+    }
+}
+close(IN);
+&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>Мои скрипты мониторинга свичей по snmp</title>
+      <link>http://b-comm.ru/billing/%D0%BC%D0%BE%D0%B8-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-%D1%81%D0%B2%D0%B8%D1%87%D0%B5%D0%B9-%D0%BF%D0%BE-snmp</link>
+      <pubDate>Sat, 19 Feb 2011 21:01:34 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/%D0%BC%D0%BE%D0%B8-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D1%8B-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-%D1%81%D0%B2%D0%B8%D1%87%D0%B5%D0%B9-%D0%BF%D0%BE-snmp</guid>
+      <description>&lt;h2 id=&#34;мои-скрипты-мониторинга-свичей-по-snmp&#34;&gt;Мои скрипты мониторинга свичей по snmp&lt;/h2&gt;
+
+&lt;p&gt;Я синхронизирую данные с базай FreeNIBS 1.x где беру данные;) Это можно пофиксить в принципе.&lt;/p&gt;
+
+&lt;p&gt;Так выглядит результат:&lt;/p&gt;
+
+&lt;div id=&#34;attachment_170&#34; style=&#34;width: 1034px&#34; class=&#34;wp-caption alignleft&#34;&gt;
+  &lt;a href=&#34;http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028.jpg&#34;&gt;&lt;img src=&#34;http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028-1024x159.jpg&#34; alt=&#34;SNMP Dlink 3028&#34; title=&#34;SNMP Dlink 3028&#34; width=&#34;1024&#34; height=&#34;159&#34; class=&#34;size-large wp-image-170&#34; srcset=&#34;http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028-1024x159.jpg 1024w, http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028-300x46.jpg 300w, http://b-comm.ru/wp-content/uploads/2011/02/SNMP-Dlink-3028.jpg 1270w&#34; sizes=&#34;(max-width: 1024px) 100vw, 1024px&#34; /&gt;&lt;/a&gt;
+  
+  &lt;p class=&#34;wp-caption-text&#34;&gt;
+    SNMP Dlink 3028
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;В общем скрипт раз в х минут по крону скрипт сканирует свичи. Так же идёт синхронизация с базой в которой содержатся данные о пользователях их дипозитах и макадрессах.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;crontab:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;*/30 *  * * *   root   rm /var/www/skmsw/pid/*
+*/5 *  * * *   root    /usr/bin/php -q /var/www/skmsw/cron.php  &gt;/dev/null 2&gt;1&amp;
+&lt;/pre&gt;
+
+&lt;pre lang=&#34;sql&#34; line=&#34;1&#34;&gt;-- phpMyAdmin SQL Dump
+-- version 3.3.9.2
+
+-- Время создания: Фев 21 2011 г., 00:24
+-- Версия сервера: 5.5.9
+-- Версия PHP: 5.3.5
+
+SET SQL_MODE=&#34;NO_AUTO_VALUE_ON_ZERO&#34;;
+
+--
+-- База данных: `skmsw`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `freenibs`
+--
+
+DROP TABLE IF EXISTS `freenibs`;
+CREATE TABLE IF NOT EXISTS `freenibs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mac` varchar(100) NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `uid` int(11) NOT NULL,
+  `deposit` double(16,3) NOT NULL,
+  `en` tinyint(4) NOT NULL DEFAULT &#39;0&#39;,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `mac` (`mac`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10869793 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mac`
+--
+
+DROP TABLE IF EXISTS `mac`;
+CREATE TABLE IF NOT EXISTS `mac` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `port` int(11) NOT NULL,
+  `mac` varchar(255) NOT NULL,
+  `sw_id` int(11) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `port` (`port`,`mac`,`sw_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5293 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `packets`
+--
+
+DROP TABLE IF EXISTS `packets`;
+CREATE TABLE IF NOT EXISTS `packets` (
+  `gid` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `credit` float(16,4) NOT NULL,
+  `activated` smallint(6) NOT NULL DEFAULT &#39;1&#39;,
+  `month_traffic_limit` float(25,6) NOT NULL,
+  `framed_ip` varchar(255) NOT NULL,
+  `     framed_mask` varchar(40) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `stat`
+--
+
+DROP TABLE IF EXISTS `stat`;
+CREATE TABLE IF NOT EXISTS `stat` (
+  `mac_n` bigint(255) NOT NULL,
+  `login_n` bigint(255) NOT NULL,
+  `sw_n` bigint(255) NOT NULL,
+  `all_traf` float(30,3) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `sw`
+--
+
+DROP TABLE IF EXISTS `sw`;
+CREATE TABLE IF NOT EXISTS `sw` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT &#39;sw&#39;,
+  `type_res` varchar(25) NOT NULL DEFAULT &#39;switch&#39;,
+  `ip` bigint(255) NOT NULL,
+  `parent_sw_id` int(11) NOT NULL,
+  `snmppass` varchar(100) NOT NULL DEFAULT &#39;public&#39;,
+  `snmpversion` varchar(5) NOT NULL DEFAULT &#39;1&#39;,
+  `snmpuser` varchar(100) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `ports` int(11) NOT NULL,
+  `addr` varchar(255) NOT NULL,
+  `disallow_ports` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=256 ;
+&lt;/pre&gt;
+
+&lt;p&gt;Примеры данных:&lt;/p&gt;
+
+&lt;pre lang=&#34;sql&#34; line=&#34;1&#34;&gt;INSERT INTO `freenibs` VALUES(373, &#39;00:e0:4c:75:00:48&#39;, &#39;olya18&#39;, 415, 7.690, 0);
+INSERT INTO `freenibs` VALUES(7855579, &#39;40:61:86:2c:89:d8&#39;, &#39;192.168.1.100&#39;, 0, -2048.000, 0);
+INSERT INTO `sw` VALUES(1, &#39;sw&#39;, &#39;switch&#39;, 2886730242, 0, &#39;public&#39;, &#39;1&#39;, &#39;&#39;, &#39;dlink&#39;, &#39; D-Link DES-3028 Fast Ethernet Switch&#39;, 24, &#39;&#39;, &#39;25,26,27,28&#39;);
+
+&lt;/pre&gt;
+
+&lt;p&gt;index.php:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;&lt;?php
+ include_once(&#34;engine.php&#34;);
+ $db=new db_mysql(HOST,USER,DB_PASS,DB,DEBUG_DB);
+ if(DEBUG_DB==&#34;true&#34;) echo &#39;$db obj is ok&#39;.&#34;&lt;br&gt;\n&#34;;
+ //$db-&gt;SET_NAMES(&#34;cp1251&#34;);
+ //$db-&gt;SET_COLLATE(&#34;latin1_swedish_ci&#34;);
+ $db-&gt;SET_COLLATE(&#34;cp1251_general_ci&#34;);
+ 
+ $db_nibs=new db_mysql(HOST_NIBS,USER_NIBS,DB_NIBS_PASS,DB_NIBS,DEBUG_DB);
+  if(DEBUG_DB==&#34;true&#34;) echo &#39;$db_nibs obj is ok&#39;.&#34;
+
+&lt;br /&gt;\n&#34;;
+ //$db_nibs-&gt;SET_NAMES(&#34;cp1251&#34;);
+ //$db-&gt;SET_COLLATE(&#34;latin1_swedish_ci&#34;);
+ $db_nibs-&gt;SET_COLLATE(&#34;cp1251_general_ci&#34;);
+ 
+ $page=new page(&amp;$db,&amp;$db_nibs);
+ if(DEBUG_DB==&#34;true&#34;) echo &#39;$page obj is ok&#39;.&#34;&lt;br /&gt;\n&#34;;
+ switch($_GET[&#39;page&#39;]){
+    case &#34;sw&#34;:
+        break;
+    default:
+        $page-&gt;top();
+        $page-&gt;show_all_sw();
+        $page-&gt;bottom();
+        break;
+ }
+ 
+?&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;engine.php:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;&lt;?php
+@include_once(&#34;define.php&#34;);
+include_once(&#34;PHPTelnet.php&#34;);
+include_once(&#34;telnet.class.php&#34;);
+if(DEBUG_DB==true){
+    include_once(&#34;db.php&#34;);
+    include_once(&#34;page.php&#34;);   
+}
+else{
+    @include_once(&#34;db.php&#34;);
+    @include_once(&#34;page.php&#34;);  
+}
+
+function quote_smart($value)
+{
+    // если magic_quotes_gpc включена - используем stripslashes
+    if (get_magic_quotes_gpc()) {
+        $value = stripslashes($value);
+    }
+    // Если переменная - число, то экранировать её не нужно
+    // если нет - то окружем её кавычками, и экранируем
+    if (!is_numeric($value)) {
+        $value = mysql_real_escape_string($value);
+    }
+    return $value;
+}
+function crypt_password($clear,$cryptscheme, $salt = &#39;&#39;)
+    {
+        
+
+        if ($cryptscheme == &#39;sha&#39;)
+        {
+            $hash = sha1($clear);
+            $cryptedpass = &#39;{SHA}&#39; . base64_encode(pack(&#39;H*&#39;, $hash));
+        }
+        else
+        {
+            if ($salt != &#39;&#39;)
+            {
+                if ($cryptscheme == &#39;des&#39;)
+                {
+                    $salt = substr($salt, 0, 2);
+                }
+                else
+                if ($cryptscheme == &#39;md5&#39;)
+                {
+                    $salt = substr($salt, 0, 12);
+                }
+                else
+                {
+                    $salt = &#39;&#39;;
+                }
+            }
+            $cryptedpass = crypt($clear, $salt);
+        }
+
+        return $cryptedpass;
+    }
+    function dec_hex($int){
+        $res=dechex($int);
+        if (strlen($res)==1) $res=&#39;0&#39;.$res;
+        $res=strtoupper($res);
+        return $res;
+    }
+    function snmptable($host, $community, $oid) {
+    // TODO: get original state and restore at bottom
+    snmp_set_oid_numeric_print(TRUE);
+    snmp_set_quick_print(TRUE);
+    snmp_set_enum_print(TRUE);
+
+    $retval = array();
+    $raw = snmprealwalk($host, $community, $oid);
+    if (count($raw) == 0) return ($retval); // no data
+   
+    $prefix_length = 0;
+    $largest = 0;
+    foreach ($raw as $key =&gt; $value) {
+        if ($prefix_length == 0) {
+            // don&#39;t just use $oid&#39;s length since it may be non-numeric
+            $prefix_elements = count(explode(&#39;.&#39;,$oid));
+            $tmp = &#39;.&#39; . strtok($key, &#39;.&#39;);
+            while ($prefix_elements &gt; 1) {
+                $tmp .= &#39;.&#39; . strtok(&#39;.&#39;);
+                $prefix_elements--;
+            }
+            $tmp .= &#39;.&#39;;
+            $prefix_length = strlen($tmp);
+        }
+        $key = substr($key, $prefix_length);
+        $index = explode(&#39;.&#39;, $key, 2);
+        isset($retval[$index[1]]) or $retval[$index[1]] = array();
+        if ($largest &amp;lt; $index[0]) $largest = $index[0];
+        $retval[$index[1]][$index[0]] = $value;
+    }
+
+    if (count($retval) == 0) return ($retval); // no data
+
+    // fill in holes and blanks the agent may &#34;give&#34; you
+    foreach($retval as $k =&gt; $x) {
+        for ($i = 1; $i &amp;lt;= $largest; $i++) {
+        if (! isset($retval[$k][$i])) {
+                $retval[$k][$i] = &#39;&#39;;
+            }
+        }
+        ksort($retval[$k]);
+    }
+    return($retval);
+}
+
+?&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;define.php:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;&lt;?php
+    define(&#34;DEBUG_DB&#34;,&#34;false&#34;);
+    
+    define(&#34;ADMIN_MAIL&#34;,&#34;valeranew@ukr.net&#34;);
+    define(&#34;DB&#34;,&#34;skmsw&#34;);
+    define(&#34;USER&#34;,&#34;skmsw&#34;);
+    define(&#34;HOST&#34;,&#34;localhost&#34;);
+    define(&#34;DB_PASS&#34;,&#34;password&#34;);
+    
+    define(&#34;DB_NIBS&#34;,&#34;freenibs&#34;);
+    define(&#34;USER_NIBS&#34;,&#34;freenibs&#34;);
+    define(&#34;HOST_NIBS&#34;,&#34;localhost&#34;);
+    define(&#34;DB_NIBS_PASS&#34;,&#34;password&#34;);
+  
+    define(&#34;COMUNITY_READ&#34;,&#34;public&#34;);
+    define(&#34;COMUNITY_READ2&#34;,&#34;public_snmp&#34;);
+    define(&#34;COMUNITY_DEF_DLINK_READ&#34;,&#34;public&#34;);
+    /* OID  нормально работает, но приколы вывода:
+     * smc: SMC Networks SMC8624T 1
+     * dlink : D-Link DES-3026 Fast Ethernet Switch  (D-Link DES-3016 Fast Ethernet Switch)
+     * dell :  Ethernet Stackable Switching System  
+          PowerConnect 3348 
+                    юзать=&gt;&#34;OID_DELL_sysDescr&#34; 
+     * extreem : Summit200-48 - Version 7.3e.2 (Build 4) by Release_Master 02/24/05 19:20:09 
+     * */
+   define(&#34;OID_sysDescr&#34;,&#34;.1.3.6.1.2.1.1.1&#34;); 
+   define(&#34;OID_DELL_sysDescr&#34;,&#34;.1.3.6.1.2.1.1.5.0&#34;);
+   define(&#34;OID_DELL_enterprises&#34;,&#34;.1.3.6.1.4.1.674&#34;);
+
+    
+  define(&#34;OID_standart_ports&#34;,&#34;.1.3.6.1.2.1.2.1.0&#34;);
+  define(&#34;OID_dell_ports&#34;,&#34;.1.3.6.1.2.1.2.2.1.7&#34;); /* Включают и вланы IF-MIB::ifAdminStatus.46 = INTEGER: up(1) */
+  define(&#34;OID_dell_ports_descr&#34;,&#34;.1.3.6.1.2.1.2.2.1.2&#34;);    
+  define(&#34;OID_dell_ports_speed&#34;,&#34;.1.3.6.1.2.1.2.2.1.5&#34;);
+
+  
+  define(&#34;OID_mac_on_ports&#34;,&#34;.1.3.6.1.2.1.17.7.1.2.2.1.2&#34;);
+  define(&#34;OID_cisco_mac_on_ports&#34;,&#34;.1.3.6.1.2.1.17.4.3.1.1&#34;);
+  define(&#34;OID_ports_updown&#34;,&#34;.1.3.6.1.2.1.2.2.1.8&#34;);
+  
+  
+  
+  define(&#34;PAGE_MES_1&#34;,&#34;Данные не доступны&#34;);
+  define(&#34;PAGE_MES_2&#34;,&#34;Данные o свиче&#34;);
+  define(&#34;PAGE_MES_3&#34;,&#34;Тип&#34;);
+  define(&#34;PAGE_MES_4&#34;,&#34;Версия&#34;);
+  define(&#34;PAGE_MES_5&#34;,&#34;Количество портов&#34;);
+?&gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;PHPTelnet.php:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;&lt;?php
+/*
+PHPTelnet 1.1.1
+by Antone Roundy
+adapted from code found on the PHP website
+public domain
+*/
+
+class PHPTelnet {
+    var $show_connect_error=1;
+
+    var $use_usleep=0;  // change to 1 for faster execution
+        // don&#39;t change to 1 on Windows servers unless you have PHP 5
+    var $sleeptime=125000;
+    var $loginsleeptime=1000000;
+
+    var $fp=NULL;
+    var $loginprompt;
+
+    var $conn1;
+    var $conn2;
+    
+    /*
+    0 = success
+    1 = couldn&#39;t open network connection
+    2 = unknown host
+    3 = login failed
+    4 = PHP version too low
+    */
+    function Connect($server,$user,$pass) {
+        $rv=0;
+        $vers=explode(&#39;.&#39;,PHP_VERSION);
+        $needvers=array(4,3,0);
+        $j=count($vers);
+        $k=count($needvers);
+        if ($k&lt;$j) $j=$k;
+        for ($i=0;$i&lt;$j;$i++) {
+            if (($vers[$i]+0)&gt;$needvers[$i]) break;
+            if (($vers[$i]+0)&amp;lt;$needvers[$i]) {
+                $this-&gt;ConnectError(4);
+                return 4;
+            }
+        }
+        
+        $this-&gt;Disconnect();
+        
+        if (strlen($server)) {
+            if (preg_match(&#39;/[^0-9.]/&#39;,$server)) {
+                $ip=gethostbyname($server);
+                if ($ip==$server) {
+                    $ip=&#39;&#39;;
+                    $rv=2;
+                }
+            } else $ip=$server;
+        } else $ip=&#39;127.0.0.1&#39;;
+        
+        if (strlen($ip)) {
+            if ($this-&gt;fp=fsockopen($ip,23)) {
+                fputs($this-&gt;fp,$this-&gt;conn1);
+                $this-&gt;Sleep();
+                
+                fputs($this-&gt;fp,$this-&gt;conn2);
+                $this-&gt;Sleep();
+                $this-&gt;GetResponse($r);
+                $r=explode(&#34;\n&#34;,$r);
+                $this-&gt;loginprompt=$r[count($r)-1];
+
+                fputs($this-&gt;fp,&#34;$user\r&#34;);
+                $this-&gt;Sleep();
+
+                fputs($this-&gt;fp,&#34;$pass\r&#34;);
+                if ($this-&gt;use_usleep) usleep($this-&gt;loginsleeptime);
+                else sleep(1);
+                $this-&gt;GetResponse($r);
+                $r=explode(&#34;\n&#34;,$r);
+                if (($r[count($r)-1]==&#39;&#39;)||($this-&gt;loginprompt==$r[count($r)-1])) {
+                    $rv=3;
+                    $this-&gt;Disconnect();
+                }
+            } else $rv=1;
+        }
+        
+        if ($rv) $this-&gt;ConnectError($rv);
+        return $rv;
+    }
+    
+    function Disconnect($exit=1) {
+        if ($this-&gt;fp) {
+            if ($exit) $this-&gt;DoCommand(&#39;exit&#39;,$junk);
+            fclose($this-&gt;fp);
+            $this-&gt;fp=NULL;
+        }
+    }
+
+    function DoCommand($c,&amp;$r) {
+        if ($this-&gt;fp) {
+            fputs($this-&gt;fp,&#34;$c\r&#34;);
+            $this-&gt;Sleep();
+            $this-&gt;GetResponse($r);
+            $r=preg_replace(&#34;/^.*?\n(.*)\n[^\n]*$/&#34;,&#34;$1&#34;,$r);
+        }
+        return $this-&gt;fp?1:0;
+    }
+    
+    function GetResponse(&amp;$r) {
+        $r=&#39;&#39;;
+        do { 
+            $r.=fread($this-&gt;fp,1000);
+            $s=socket_get_status($this-&gt;fp);
+        } while ($s[&#39;unread_bytes&#39;]);
+    }
+    
+    function Sleep() {
+        if ($this-&gt;use_usleep) usleep($this-&gt;sleeptime);
+        else sleep(1);
+    }
+    
+    function PHPTelnet() {
+        $this-&gt;conn1=chr(0xFF).chr(0xFB).chr(0x1F).chr(0xFF).chr(0xFB).
+            chr(0x20).chr(0xFF).chr(0xFB).chr(0x18).chr(0xFF).chr(0xFB).
+            chr(0x27).chr(0xFF).chr(0xFD).chr(0x01).chr(0xFF).chr(0xFB).
+            chr(0x03).chr(0xFF).chr(0xFD).chr(0x03).chr(0xFF).chr(0xFC).
+            chr(0x23).chr(0xFF).chr(0xFC).chr(0x24).chr(0xFF).chr(0xFA).
+            chr(0x1F).chr(0x00).chr(0x50).chr(0x00).chr(0x18).chr(0xFF).
+            chr(0xF0).chr(0xFF).chr(0xFA).chr(0x20).chr(0x00).chr(0x33).
+            chr(0x38).chr(0x34).chr(0x30).chr(0x30).chr(0x2C).chr(0x33).
+            chr(0x38).chr(0x34).chr(0x30).chr(0x30).chr(0xFF).chr(0xF0).
+            chr(0xFF).chr(0xFA).chr(0x27).chr(0x00).chr(0xFF).chr(0xF0).
+            chr(0xFF).chr(0xFA).chr(0x18).chr(0x00).chr(0x58).chr(0x54).
+            chr(0x45).chr(0x52).chr(0x4D).chr(0xFF).chr(0xF0);
+        $this-&gt;conn2=chr(0xFF).chr(0xFC).chr(0x01).chr(0xFF).chr(0xFC).
+            chr(0x22).chr(0xFF).chr(0xFE).chr(0x05).chr(0xFF).chr(0xFC).chr(0x21);
+    }
+    
+    function ConnectError($num) {
+        if ($this-&gt;show_connect_error) switch ($num) {
+        case 1: echo &#39;
+
+&lt;br /&gt;[PHP Telnet] &lt;a href=&#34;http://www.geckotribe.com/php-telnet/errors/fsockopen.php&#34;&gt;Connect failed: Unable to open network connection&lt;/a&gt;&lt;br /&gt;&#39;; break;
+        case 2: echo &#39;&lt;br /&gt;[PHP Telnet] &lt;a href=&#34;http://www.geckotribe.com/php-telnet/errors/unknown-host.php&#34;&gt;Connect failed: Unknown host&lt;/a&gt;&lt;br /&gt;&#39;; break;
+        case 3: echo &#39;&lt;br /&gt;[PHP Telnet] &lt;a href=&#34;http://www.geckotribe.com/php-telnet/errors/login.php&#34;&gt;Connect failed: Login failed&lt;/a&gt;&lt;br /&gt;&#39;; break;
+        case 4: echo &#39;&lt;br /&gt;[PHP Telnet] &lt;a href=&#34;http://www.geckotribe.com/php-telnet/errors/php-version.php&#34;&gt;Connect failed: Your server\&#39;s PHP version is too low for PHP Telnet&lt;/a&gt;&lt;br /&gt;&#39;; break;
+        }
+    }
+}
+
+return;
+?&gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;telnet.class.php:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;&lt;?php
+/*
+$Id: telnet.class.php,v 1.2 2004/03/22 10:01:35 mb Exp $
+
+Originally written by Marc Ennaji (in french),
+modified by Matthias Blaser &lt;mb@adfinis.ch&gt;
+
+- translated most function- and variable names from french to english
+- added get_buffer-method to get results of the last command
+  sent to server
+- added hack to get socket_strerror working on old systems
+
+You can find the original class which this translation is based on
+on this url: http://px.sklar.com/code.html?id=634
+
+The original class includes a small documentation about using it
+in your own applications, but be aware, all functions are in french there, this
+one is partly translated.
+*/
+
+// hack to get socket_strerror working on old systems
+if(!function_exists(&#34;socket_strerror&#34;)){
+    function socket_strerror($sh){
+        if(function_exists(&#34;strerror&#34;)){
+            return strerror($sh);
+        } else {
+            return false;
+        }
+    }
+}
+
+// telnet class
+define (&#34;TELNET_ERROR&#34;, 0);
+define (&#34;TELNET_OK&#34;, 1);
+define (&#34;TELNET_ASK_CONFIRMATION&#34;, 2);
+define (&#34;LIBELLE_CONFIRMATION&#34;, &#34;[confirm]&#34;);
+
+class telnet {
+
+    var $socket  = NULL;
+    var $host = &#34;&#34;;
+    var $port = &#34;23&#34;;
+    var $error = &#34;&#34;;
+    var $codeError = &#34;&#34;;
+    var $prompt = &#34;\$ &#34;;
+    var $log = NULL;  // file handle
+    var $repertoireLog= &#34;&#34;;
+    var $nomFichierLog = &#34;&#34;;
+    var $test;
+
+    var $buffer = &#34;&#34;;
+
+    //------------------------------------------------------------------------
+    function connect(){
+        $this-&gt;socket = fsockopen($this-&gt;host,$this-&gt;port);
+
+        if (!$this-&gt;socket){
+            $this-&gt;error = &#34;unable to open a telnet connection: &#34; . socket_strerror($this-&gt;socket) . &#34;\n&#34;;
+            return TELNET_ERROR;
+        }
+
+        socket_set_timeout($this-&gt;socket,1,0);
+        return TELNET_OK;
+    }
+
+    //------------------------------------------------------------------------
+    function read_to($chaine){
+        $NULL = chr(0);
+        $IAC = chr(255);
+        $buf = &#39;&#39;;
+
+        if (!$this-&gt;socket){
+            $this-&gt;error = &#34;telnet socket is not open&#34;;
+            return TELNET_ERROR;
+        }
+
+        while (1){
+            $c = $this-&gt;getc();
+
+            if ($c === false){
+             // plus de caracteres a lire sur la socket
+                if ($this-&gt;contientErreur($buf)){
+                    return TELNET_ERROR;
+                }
+
+                $this-&gt;error = &#34; Couldn&#39;t find the requested : &#39;&#34; . $chaine . &#34;&#39;, it was not in the data returned from server : &#39;&#34; . $buf . &#34;&#39;&#34; ;
+                $this-&gt;logger($this-&gt;error);
+                return TELNET_ERROR;
+            }
+
+            if ($c == $NULL || $c == &#34;\021&#34;){
+                continue;
+            }
+
+            if ($c == $IAC){
+                // Interpreted As Command
+                $c = $this-&gt;getc();
+
+                if ($c != $IAC){
+                    // car le &#39;vrai&#39; caractere 255 est doublé pour le differencier du IAC
+                    if (! $this-&gt;negocierOptionTelnet($c)){
+                        return TELNET_ERROR;
+                    } else {
+                        continue;
+                    }
+                }
+
+            }
+
+            $buf .= $c;
+
+            // append current char to global buffer
+            $this-&gt;buffer .= $c;
+
+            // indiquer à l&#39;utilisateur de la classe qu&#39;il a une demande de confirmation
+            if (substr($buf,strlen($buf)-strlen(LIBELLE_CONFIRMATION)) == LIBELLE_CONFIRMATION){
+                $this-&gt;logger($this-&gt;getDernieresLignes($buf));
+                return TELNET_ASK_CONFIRMATION;
+            }
+
+            if ((substr($buf,strlen($buf)-strlen($chaine))) == $chaine){
+                // on a trouve la chaine attendue
+
+                $this-&gt;logger($this-&gt;getDernieresLignes($buf));
+
+                if ($this-&gt;contientErreur($buf)){
+                    return TELNET_ERROR;
+                } else {
+                    return TELNET_OK;
+                }
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------
+    function getc(){
+        return fgetc($this-&gt;socket);
+    }
+
+    //------------------------------------------------------------------------
+    function get_buffer(){
+        $buf = $this-&gt;buffer;
+
+        // cut last line (is always prompt)
+        $buf = explode(&#34;\n&#34;, $buf);
+        unset($buf[count($buf)-1]);
+        $buf = join(&#34;\n&#34;,$buf);
+        return trim($buf);
+    }
+
+    //------------------------------------------------------------------------
+    function negocierOptionTelnet($commande){
+        // on negocie des options minimales
+
+        $IAC = chr(255);
+        $DONT = chr(254);
+        $DO = chr(253);
+        $WONT = chr(252);
+        $WILL = chr(251);
+
+        if (($commande == $DO) || ($commande == $DONT)){
+            $opt = $this-&gt;getc();
+            //echo &#34;wont &#34;.ord($opt).&#34;\n&#34;;
+            fwrite($this-&gt;socket,$IAC.$WONT.$opt);
+        } else if (($commande == $WILL) || ($commande == $WONT)) {
+            $opt = fgetc($this-&gt;socket);
+            //echo &#34;dont &#34;.ord($opt).&#34;\n&#34;;
+            fwrite($this-&gt;socket,$IAC.$DONT.$opt);
+        } else {
+            $this-&gt;error = &#34;Error : unknown command &#34;.ord($commande).&#34;\n&#34;;
+            return false;
+        }
+
+        return true;
+    }
+
+    //------------------------------------------------------------------------
+    function write($buffer, $valeurLoggee = &#34;&#34;, $ajouterfinLigne = true){
+
+        // clear buffer from last command
+        $this-&gt;buffer = &#34;&#34;;
+
+        if (! $this-&gt;socket){
+            $this-&gt;error = &#34;telnet socket is not open&#34;;
+            return TELNET_ERROR;
+        }
+
+        if ($ajouterfinLigne){
+            $buffer .= &#34;\n&#34;;
+        }
+
+        if (fwrite($this-&gt;socket,$buffer) &amp;lt; 0){
+            $this-&gt;error = &#34;error writing to socket&#34;;
+            return TELNET_ERROR;
+        }
+
+        if ($valeurLoggee != &#34;&#34;){
+            // cacher les valeurs confidentielles dans la log (mots de passe...)
+            $buffer = $valeurLoggee . &#34;\n&#34;;
+        }
+
+        if (! $ajouterfinLigne){
+            // dans la log (mais pas sur la socket), rajouter tout de meme le caractere de fin de ligne
+            $buffer .= &#34;\n&#34;;
+        }
+
+        $this-&gt;logger(&#34;&gt; &#34; .$buffer);
+
+        return TELNET_OK;
+    }
+
+    //------------------------------------------------------------------------
+    function disconnect(){
+        if ($this-&gt;socket){
+            if (! fclose($this-&gt;socket)){
+                $this-&gt;error = &#34;error while closing telnet socket&#34;;
+                return TELNET_ERROR;
+            }
+
+            $this-&gt;socket = NULL;
+        }
+
+        $this-&gt;setLog(false,&#34;&#34;);
+        return TELNET_OK;
+    }
+
+    //------------------------------------------------------------------------
+    function contientErreur($buf){
+        $messagesErreurs[] = &#34;nvalid&#34;;       // Invalid input, ...
+        $messagesErreurs[] = &#34;o specified&#34;;  // No specified atm, ...
+        $messagesErreurs[] = &#34;nknown&#34;;       // Unknown profile, ...
+        $messagesErreurs[] = &#34;o such file or directory&#34;; // sauvegarde dans un repertoire inexistant
+        $messagesErreurs[] = &#34;llegal&#34;;       // illegal file name, ...
+
+        foreach ($messagesErreurs as $erreur){
+            if (strpos ($buf, $erreur) === false)
+                continue;
+
+                // une erreur est détectée
+                $this-&gt;error =  &#34;Un message d&#39;erreur a été détecté dans la réponse de l&#39;hôte distant : &#34; .
+                    &#34;
+
+&lt;BR /&gt;&lt;BR /&gt;&#34; . $this-&gt;getDernieresLignes($buf,&#34;&lt;BR /&gt;&#34;) . &#34;&lt;BR /&gt;&#34;;
+
+                return true;
+            }
+
+        return false;
+    }
+
+    //------------------------------------------------------------------------
+    function wait_prompt(){
+        return $this-&gt;read_to($this-&gt;prompt);
+    }
+
+    //------------------------------------------------------------------------
+    function set_prompt($s){
+        $this-&gt;prompt = $s;
+        return TELNET_OK;
+    }
+
+    //------------------------------------------------------------------------
+    function set_host($s){
+        $this-&gt;host = $s;
+    }
+
+    //------------------------------------------------------------------------
+    function set_port($s){
+        $this-&gt;port = $s;
+    }
+
+    //------------------------------------------------------------------------
+    function get_last_error(){
+        return $this-&gt;error;
+    }
+
+    //------------------------------------------------------------------------
+    function setLog($activerLog, $traitement){
+
+        if ($this-&gt;log &amp;&amp; $activerLog){
+            return TELNET_OK;
+        }
+
+        if ($activerLog){
+            $this-&gt;repertoireLog =  &#34;/log/&#34; . date(&#34;m&#34;);
+
+            // repertoire mensuel inexistant ?
+            if (! file_exists($this-&gt;repertoireLog)){
+                if (mkdir($this-&gt;repertoireLog, 0700) === false){
+                    $this-&gt;error = &#34;Impossible de créer le repertoire de log &#34; .  $this-&gt;repertoireLog;
+                    return TELNET_ERROR;
+                }
+            }
+
+            global $HTTP_SERVER_VARS;
+
+            $this-&gt;nomFichierLog =  date(&#34;d&#34;) . &#34;_&#34; .
+                date(&#34;H:i:s&#34;) . &#34;_&#34; .
+
+            $traitement . &#34;_&#34; .
+                $HTTP_SERVER_VARS[&#34;PHP_AUTH_USER&#34;]
+                . &#34;.log&#34;;
+
+            $this-&gt;log = fopen($this-&gt;repertoireLog . &#34;/&#34; . $this-&gt;nomFichierLog,&#34;a&#34;);
+
+            if (empty($this-&gt;log)){
+                $this-&gt;error = &#34;Impossible de créer le fichier de log &#34; . $this-&gt;nomFichierLog;
+                return TELNET_ERROR;
+            }
+
+            $this-&gt;logger(&#34;----------------------------------------------\r\n&#34;);
+            $this-&gt;logger(&#34;Début de la log de l&#39;utilisateur &#34; . $HTTP_SERVER_VARS[&#34;PHP_AUTH_USER&#34;] .
+                &#34;, adresse IP &#34; . $HTTP_SERVER_VARS[&#34;REMOTE_ADDR&#34;] . &#34;\r\n&#34;);
+
+            $this-&gt;logger(&#34;Connexion telnet sur &#34; . $this-&gt;host . &#34;, port &#34; . $this-&gt;port . &#34;\r\n&#34;);
+            $this-&gt;logger(&#34;Date : &#34; . date(&#34;d-m-Y&#34;).  &#34;  à &#34; . date(&#34;H:i:s&#34;) . &#34;\r\n&#34;);
+            $this-&gt;logger(&#34;Type de traitement effectué : &#34; . $traitement . &#34;\r\n&#34;);
+            $this-&gt;logger(&#34;----------------------------------------------\r\n&#34;);
+            return TELNET_OK;
+
+        } else {
+            if ($this-&gt;log){
+                $this-&gt;logger(&#34;----------------------------------------------\r\n&#34;);
+                $this-&gt;logger(&#34;Fin de la log\r\n&#34;);
+
+                fflush($this-&gt;log);
+
+                if (! fclose($this-&gt;log)){
+                    $this-&gt;error = &#34;erreur a la fermeture du fichier de log&#34;;
+                    return TELNET_ERROR;
+                }
+
+                $this-&gt;log = NULL;
+            }
+
+            return TELNET_OK;
+        }
+    }
+
+    //------------------------------------------------------------------------
+    function logger($s){
+        if ($this-&gt;log){
+            fwrite($this-&gt;log, $s);
+        }
+    }
+
+    //------------------------------------------------------------------------
+    function getDernieresLignes($s, $separateur=&#34;\n&#34;){
+        // une reponse telnet contient (en principe) en premiere ligne l&#39;echo de la commande utilisateur.
+        // cette methode renvoie tout sauf la premiere ligne, afin de ne pas polluer les logs telnet
+
+        $lignes = split(&#34;\n&#34;,$s);
+        $resultat = &#34;&#34;;
+        $premiereLigne = true;
+
+        while(list($key, $data) = each($lignes)){
+            if ($premiereLigne){
+                $premiereLigne = false;
+            } else {
+                if ($data != &#34;&#34;){
+                    $resultat .= $data . $separateur;
+                }
+            }
+        }
+
+        $resultat == substr($resultat,strlen($resultat)-1); // enlever le dernier caractere de fin de ligne
+
+        return $resultat;
+    }
+
+    //------------------------------------------------------------------------
+}   //    Fin de la classe
+?&gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;db.php:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;&lt;?php
+
+class db_mysql{
+    protected $query;
+    protected $res;
+    public $num;
+    protected $link;
+    protected $debug;
+    protected $collation;
+    protected $collate;
+    protected $host;
+    protected $user;
+    protected $passw;
+    protected $db;
+    protected $set_force_featch;
+        
+    public function  __construct ($HOST,$USER,$PASSW,$DB)
+        {
+                $this-&gt;query=NULL;
+                self::set_debug(false);
+                self::set_force_featch(true);
+                self::init($HOST,$USER,$PASSW,$DB,false);
+        }
+
+        function __destruct()
+        {
+                    @mysql_close($this-&gt;link); //       @self::close_db();      
+        }
+        
+        public function set_debug($d)   {
+                    if(is_bool($d)){
+                        $this-&gt;debug=$d;
+                    }
+                    else{
+                        $this-&gt;debug=false;
+                    }
+        }
+                
+        public function set_force_featch($d){
+                if(is_bool($d)) {
+                        $this-&gt;set_force_featch=$d; 
+                }
+                else    {
+                        $this-&gt;set_force_featch=true;
+                }
+        }
+                        
+        public function SET_NAMES($names=&#34;utf8&#34;){
+            $this-&gt;collation=&#34;SET NAMES &#34;.$names;
+            self::query($this-&gt;collation);
+        }
+
+        public function SET_COLLATE($names=&#34;utf8_general_ci&#34;){
+            $this-&gt;collate=&#34;SET COLLATE &#34;.$names;
+            self::query($this-&gt;collation);
+        }
+        public function  init($HOST,$USER,$PASSW,$DB,$init_collation_setup=false){
+                if(!is_bool($init_collation_setup)) {
+                        $init_collation_setup=false;    
+                }
+                self::set_host($HOST);
+                self::set_user($USER);
+                self::set_passw($PASSW);
+                self::set_db($DB);
+                $this-&gt;query=NULL;
+                if($this-&gt;debug==false){
+                        $this-&gt;link=@mysql_connect($this-&gt;host,$this-&gt;user, $this-&gt;passw)or die(ERR1);
+                        @mysql_select_db($this-&gt;db,$this-&gt;link) or die(ERR2);
+                }
+                else
+                {
+                    $this-&gt;link=@mysql_connect($this-&gt;host,$this-&gt;user, $this-&gt;passw)or die(mysql_error());
+                    mysql_select_db($this-&gt;db,$this-&gt;link) or die(mysql_error());
+                }
+                
+                if($init_collation_setup==true){
+                        self::query($this-&gt;collation);
+                }
+        }
+
+        function connect(){
+                $this-&gt;query=NULL;
+                //$this-&gt;ar=array();
+                                
+                if($this-&gt;debug==false){
+                        $this-&gt;link=@mysql_connect($this-&gt;host,$this-&gt;user, $this-&gt;passw)or die(ERR1);
+                        @mysql_select_db($this-&gt;db,$this-&gt;link) or die(ERR2);
+                }
+                else
+                {
+                    $this-&gt;link=mysql_connect($this-&gt;host,$this-&gt;user, $this-&gt;passw)or die(mysql_error());
+                    mysql_select_db($this-&gt;db,$this-&gt;link) or die(mysql_error());
+                }
+
+        }
+
+        public function set_host($host){    $this-&gt;host=$host;  }
+        public function set_user($user){    $this-&gt;user=$user;  }
+        public function set_passw($passw){  $this-&gt;passw=$passw;    }
+        public function set_db($db){    $this-&gt;db=$db;  }
+        public function  query($q){
+            if($this-&gt;set_force_featch==true)
+            {
+                $this-&gt;query=@mysql_db_query($this-&gt;db,$q,$this-&gt;link);
+            }
+            else
+            {
+                    if($this-&gt;debug==false){
+                                $this-&gt;query=@mysql_db_query($this-&gt;db,$q,$this-&gt;link) or die(ERR3);    
+                    }
+                    else
+                    {
+                            $this-&gt;query=mysql_db_query($this-&gt;db,$q,$this-&gt;link) or die(mysql_error());
+                    }
+            }
+                
+        }
+        
+        public function num_rows(){
+                   $this-&gt;num=mysql_num_rows($this-&gt;query);
+                    return $this-&gt;num;
+        }
+        public function  fetch_row(){
+                if($this-&gt;set_force_featch==true)
+                    {
+                        $this-&gt;res=@mysql_fetch_row($this-&gt;query);
+                    }
+                    else
+                    {
+                            if($this-&gt;debug==false){
+                                        $this-&gt;res=@mysql_fetch_row($this-&gt;query) or die(ERR4); 
+                            }
+                            else
+                            {
+                                    $this-&gt;res=mysql_fetch_row($this-&gt;query) or die(mysql_error());
+                            }
+                    }
+                return $this-&gt;res;
+        }
+        public function  fetch_array(){
+            
+            
+                   if($this-&gt;set_force_featch==true)
+                    {
+                        $this-&gt;res=mysql_fetch_array($this-&gt;query);
+                    }
+                    else
+                    {
+                            if($this-&gt;debug==false){
+                                    $this-&gt;res=@mysql_fetch_array($this-&gt;query) or die(ERR5);   
+                            }
+                            else
+                            {
+                                    $this-&gt;res=mysql_fetch_array($this-&gt;query) or die(mysql_error());
+                            }
+                    }
+                return $this-&gt;res;
+        }
+
+        public function db_select()
+        {
+                            if($this-&gt;debug==false){
+                                    @mysql_select_db($this-&gt;db,$this-&gt;link) or die(ERR2);   
+                            }
+                            else
+                            {
+                                    mysql_select_db($this-&gt;db,$this-&gt;link) or die(mysql_error());
+                            }
+        }
+    public function free_result()
+    {
+        mysql_free_result($this-&gt;res);
+    }
+    public function mysql_error(){
+        return mysql_error($this-&gt;link);
+    }
+
+    public function close_db()
+    {
+        if($this-&gt;debug==false){
+                    @mysql_close($this-&gt;link)or die(ERR6);  
+        }
+        else
+        {
+                    mysql_close($this-&gt;link)or die(mysql_error());
+        }
+    }
+
+}
+?&gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;page.php:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;&lt;?php 
+class page{
+    protected $db;
+    protected $db_nibs;
+    protected $telnet;
+    protected $result_telnet_connect;
+    protected $sw_type;
+    public function __construct (&amp;#038;$db,&amp;#038;$db_nibs){
+            $this-&gt;db=&amp;$db;
+            $this-&gt;db_nibs=&amp;$db_nibs;
+    }
+    public function top(){ 
+            @include_once(&#34;pages/top.php&#34;); 
+    }
+    public function bottom(){ 
+            @include_once(&#34;pages/bottom.php&#34;); 
+    }
+
+    public function telnet_disconnect(){ $this-&gt;telnet-&gt;Disconnect(); }
+    public function telnet($ip,$login,$pass){
+        $this-&gt;telnet=new PHPTelnet();
+        $this-&gt;telnet-&gt;show_connect_error=0;
+
+        // if the first argument to Connect is blank,
+        // PHPTelnet will connect to the local host via 127.0.0.1
+        $this-&gt;result_telnet_connect = $this-&gt;telnet-&gt;Connect($ip,$login,$pass);
+        
+        switch ($this-&gt;result_telnet_connect) {
+        case 0:
+        //$this-&gt;telnet-&gt;DoCommand(&#39;enter command here&#39;, $result);
+        // NOTE: $result may contain newlines
+        //echo $result;
+        //$this-&gt;telnet-&gt;DoCommand(&#39;another command&#39;, $result);
+        //echo $result;
+        // say Disconnect(0); to break the connection without explicitly logging out
+        
+            return true;
+        break;
+        case 1:
+        echo &#39;[PHP Telnet] Connect failed: Unable to open network connection&#39;;
+        break;
+        case 2:
+        echo &#39;[PHP Telnet] Connect failed: Unknown host&#39;;
+        break;
+        case 3:
+        echo &#39;[PHP Telnet] Connect failed: Login failed&#39;;
+        break;
+        case 4:
+        echo &#39;[PHP Telnet] Connect failed: Your PHP version does not support PHP Telnet&#39;;
+        break;
+        }
+        return false;
+    }
+    public function initial_config_sw($ip){
+    }
+    public function initial_extreme_config_sw($ip){
+        //delete vlan Mac
+        
+    }
+
+    public function save_current_sw_config(){
+    }
+    public function save_extreme_current_sw_config(){
+        $this-&gt;telnet-&gt;DoCommand(&#34;save&#34;, $this-&gt;result_telnet_connect);
+        $this-&gt;telnet-&gt;DoCommand(&#34;yes&#34;, $this-&gt;result_telnet_connect);
+        $this-&gt;telnet-&gt;DoCommand(&#34;
+&#34;, $this-&gt;result_telnet_connect);
+    }
+    /* $ports_tagged=1,2,3,4,5.... */
+    public function create_vlan($vlanid,$ports_tagged,$ports_untagged,$debug=false){
+        switch($this-&gt;sw_type){
+            case &#34;dlink&#34;:
+            break;
+            case &#34;dell&#34;:
+            break;
+            case &#34;extreme&#34;:
+                self::create_extreem_vlan($vlanid,$ports_tagged,$ports_untagged,$debug);
+            break;
+        }
+        
+    }
+    public function create_extreem_vlan($vlanid,$ports_tagged,$ports_untagged,$debug=false){
+    if($debug==true){
+        echo &#34;create vlan vlan$vlanid\n&#34;;
+        echo &#34;configure vlan vlan$vlanid tag $vlanid\n&#34;;
+        echo &#34;configure vlan vlan$vlanid add ports  $ports_tagged tagged\n&#34;;
+        echo &#34;configure vlan vlan$vlanid add ports  $ports_untagged untagged\n&#34;;
+    }
+    $this-&gt;telnet-&gt;DoCommand(&#34;create vlan vlan$vlanid&#34;, $this-&gt;result_telnet_connect);
+            //create vlan vlan$vlanid
+    $this-&gt;telnet-&gt;DoCommand(&#34;configure vlan vlan$vlanid tag $vlanid&#34;, $this-&gt;result_telnet_connect);
+
+    $this-&gt;telnet-&gt;DoCommand(&#34;configure vlan vlan$vlanid add ports  $ports_tagged tagged&#34;, $this-&gt;result_telnet_connect);
+    
+            //configure vlan vlan$vlanid add ports  $ports_tagged tagged
+    $this-&gt;telnet-&gt;DoCommand(&#34;configure vlan vlan$vlanid add ports  $ports_untagged untagged&#34;, $this-&gt;result_telnet_connect);
+    
+            //configure vlan vlan$vlanid add ports  $ports_untagged untagged
+    }
+
+    public function create_dell_vlan($vlanid,$ports_tagged,$ports_untagged,$debug=false){
+    if($debug==true){
+        echo &#34;configure\n&#34;;
+        echo &#34;vlan database\n&#34;;
+        echo &#34;vlan $vlanid\n&#34;;
+        echo &#34;exit\n&#34;;
+    
+
+    }
+
+    /*$this-&gt;telnet-&gt;DoCommand(&#34;configure&#34;, $this-&gt;result_telnet_connect);
+    $this-&gt;telnet-&gt;DoCommand(&#34;vlan database&#34;, $this-&gt;result_telnet_connect);
+    $this-&gt;telnet-&gt;DoCommand(&#34;vlan $vlanid&#34;, $this-&gt;result_telnet_connect);
+    $this-&gt;telnet-&gt;DoCommand(&#34;exit&#34;, $this-&gt;result_telnet_connect);
+    */
+     $script = new telnet; 
+    
+    $ar_of_ports_tagged=explode(&#34;,&#34;,$ports_tagged);
+    $c=0;
+        foreach($ar_of_ports_tagged as $port){
+            if(is_numeric($port)&amp;&amp;($port&gt;0)){
+                
+                if($c==0)
+                    $port_line=&#34;1/e&#34;.$port.&#34;,&#34;;
+                else
+                    $port_line=&#34;,1/e&#34;.$port.&#34;&#34;;
+                $c++;
+            }
+        }
+        //exist any ports
+        if($c&gt;0){
+            
+            //$this-&gt;telnet-&gt;DoCommand(&#34;interface range ethernet $port_line&#34;, $this-&gt;result_telnet_connect);
+            $this-&gt;telnet-&gt;DoCommand(&#34;switchport access vlan $vlanid&#34;, $this-&gt;result_telnet_connect);
+        }
+    }
+
+
+    public function delete_vlan($vlanid){
+    }
+    public function delete_extreme_vlan($vlanid,$debug=false){
+        if($debug==true){
+            echo &#34;delete vlan vlan$vlanid\n&#34;;
+        }
+        $this-&gt;telnet-&gt;DoCommand(&#34;delete vlan vlan$vlanid&#34;, $this-&gt;result_telnet_connect);
+        
+    }   
+
+    public function remove_port_from_vlan($vlanid,$port_remove){
+    }
+    public function remove_extreme_port_from_vlan($vlanid,$port_remove){
+        //configure vlan vlan$vlanid delete ports  $port_remove
+    }
+    
+    public function add_port_to_vlan($vlanid,$port,$type){
+        switch($type){
+            case &#34;T&#34;:
+            break;
+            case &#34;U&#34;:
+            break;
+        }
+    }
+
+    public function scan_sw_by_ip($ip){
+                $type=unknown;
+                $version=no_version;
+                $ports=48;
+                $SNMP_COMUNITY_READ=COMUNITY_READ;  
+                echo &#34;snmpwalk(&#34;.$ip.&#34;,&#34;.$SNMP_COMUNITY_READ.&#34;,&#34;.OID_sysDescr.&#34;,&#34;.&#34;)&#34;;
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                
+                if(strlen($result[0])&lt;2){
+                    $SNMP_COMUNITY_READ=COMUNITY_DEF_DLINK_READ;
+                //session.version = SNMP_VERSION_2c;
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                }
+                if(strlen($result[0])&lt;2){
+                    $SNMP_COMUNITY_READ=COMUNITY_READ2;
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                }
+                if(strlen($result[0])&lt;2){
+                    $type=PAGE_MES_1;
+                    $version=no_version;
+                    $ports=48;
+                    return array(&#34;version&#34;=&gt;$version,&#34;type&#34;=&gt;$type,&#34;ports&#34;=&gt;$ports,&#34;ip&#34;=&gt;$ip);
+                }
+                else{
+                    $result=$result[0];
+                    //echo print_r($result);
+                    /* OID  ????????? ????????, ?? ??????? ??????:
+                    * dlink : D-Link DES-3026 Fast Ethernet Switch
+                    * dell :  Ethernet Stackable Switching System  
+                        PowerConnect 3348 
+                                    ?????=&gt;&#34;OID_DELL_sysDescr&#34; 
+                    * extreem : Summit200-48 - Version 7.3e.2 (Build 4) by Release_Master 02/24/05 19:20:09 
+                    * SMC: SMC Networks SMC8624T 1
+                    * */
+                    $dlink_oid_pattern=&#34;/\bD-Link\b/i&#34;;
+                    $dlink_oid_pattern2=&#34;/\bDLink\b/i&#34;;
+                    $dlink_oid_pattern3=&#34;/\bDES\b/i&#34;;
+                    $extreem_oid_pattern=&#34;/\bSummit/i&#34;;
+                    $smc_oid_pattern=&#34;/\bSMC/i&#34;;
+                    $dell_oid_pattern=&#34;/\bStackable\b/i&#34;;
+                    $dell__oid_pattern=&#34;/\bEthernet\b/i&#34;;
+                    $dell2_oid_pattern=&#34;/\bPowerConnect\b/i&#34;;
+                    $dell_ports_24_patern=&#34;/\d\d24/&#34;;
+                    $dell_ports_48_patern=&#34;/\d\d48/&#34;;
+                    $cisco_oid_pattern=&#34;/\bcisco\b/i&#34;;
+                    $cisco2_oid_pattern=&#34;/\bCISCO \b/i&#34;;
+                    $netgear_FSM_pattern=&#34;/\bFSM/i&#34;;
+                    
+                if( ( preg_match($dlink_oid_pattern,$result))|| (preg_match($dlink_oid_pattern2,$result)) || (preg_match($dlink_oid_pattern3,$result))){
+                    $type=dlink;
+                    $version=$result;
+                    $result=@snmpwalk($ip,$SNMP_COMUNITY_READ,OID_standart_ports);
+                    $ports=48;
+                        if(preg_match(&#34;/3026/&#34;,$version)){
+                                    $ports=24;
+                        }elseif(preg_match(&#34;/3028/&#34;,$version)){
+                                    $ports=24;
+                        }elseif(preg_match(&#34;/3528/&#34;,$version)){
+                                    $ports=24;
+                        }elseif(preg_match(&#34;/3526/&#34;,$version)){
+                                    $ports=24;
+                        }elseif(preg_match(&#34;/3026/&#34;,$version)){
+                                    $ports=24;
+                        }elseif(preg_match(&#34;/3016/&#34;,$version)){
+                                    $ports=16;
+                        }elseif(preg_match(&#34;/3010/&#34;,$version)){
+                                    $ports=10;
+                        }
+                         
+                }
+                elseif(preg_match($extreem_oid_pattern,$result)){
+                    $type=&#34;extreem&#34;;
+                    $version=$result;
+                    $result=@snmpwalk($ip,$SNMP_COMUNITY_READ,OID_standart_ports);
+                    $ports=48;
+                    
+                }elseif(preg_match($netgear_FSM_pattern,$result)){
+                    $type=&#34;netgear&#34;;
+                    $version=str_replace(&#34;Stackable Switch&#34;,&#34;&#34;,$result);
+                    $ports=48;                  
+                    if(preg_match(&#34;/FSM7328S/&#34;,$version)){
+                                    $ports=24;
+                        }elseif(preg_match(&#34;/FSM7352S/&#34;,$version)){
+                                    $ports=48;
+                        }
+                    
+                }
+                elseif((preg_match($cisco_oid_pattern,$result))|| (preg_match($cisco2_oid_pattern,$result)) ){
+                    $type=&#34;cisco&#34;;
+                    $version=$result;
+                    //$result=@snmpwalk($ip,$SNMP_COMUNITY_READ,OID_standart_ports);
+                    $ports=48;
+                        if(preg_match(&#34;/C3500/&#34;,$version)){
+                            $ports=48;
+                            $version=&#34;Cisco C3500XL&#34;;
+                        }else if(preg_match(&#34;/WS-C2948/&#34;,$version)){
+                                                         $ports=48;
+                                                         $version=&#34;Cisco WS-C2948&#34;;
+                                                 }
+                }
+                elseif(preg_match($smc_oid_pattern,$result)){
+                    $type=&#34;SMC&#34;;
+                    $version=$result;
+                    $ports=48;
+                        if(preg_match(&#34;/8624/&#34;,$version)){
+                                    $ports=24;
+                        }
+                    
+                }
+                elseif((preg_match($dell_oid_pattern,$result))||(preg_match($dell__oid_pattern,$result))){
+                    $result=@snmpwalk($ip,$SNMP_COMUNITY_READ,OID_DELL_enterprises);
+                        $type=&#34;dell_un&#34;;
+                        $version=$result;
+                        $ports=48;
+                        foreach($result as $key){
+                        if(preg_match($dell2_oid_pattern,$key)){
+                            $version=&#34;Dell &#34;.str_replace(&#34;\&#34;&#34;,&#34;&#34;,$key);
+                            $type=&#34;dell&#34;;
+                            if(preg_match($dell_ports_48_patern,$key)){
+                                $ports=48;
+                            }elseif(preg_match($dell_ports_24_patern,$key)){
+                                $ports=24;
+                            }
+                            $arr=array();
+                            break;
+                        }
+                    }
+
+                }
+                echo &#34;type $type \&#34;ports\&#34;=&gt;$ports,\&#34;ip\&#34;=&gt;$ip)\n&#34;;
+                return array(&#34;version&#34;=&gt;str_replace(&#34;STRING:&#34;,&#34;&#34;,$version),&#34;type&#34;=&gt;$type,&#34;ports&#34;=&gt;$ports,&#34;ip&#34;=&gt;$ip);
+            }
+            
+    }
+    public function arpwatch_macs(){
+        $q=&#34;DELETE FROM  `freenibs`  WHERE `user` LIKE &#39;10.%&#39;&#34;;
+        $this-&gt;db-&gt;query($q);
+        $q=&#34;DELETE FROM 
+                `arpwatch`
+                WHERE `date` &lt; FROM_UNIXTIME( UNIX_TIMESTAMP( NOW( ) ) -604000 )&#34;;
+        $this-&gt;db_nibs-&gt;query($q);
+        $q=&#34;SELECT *
+            FROM `arpwatch` ORDER BY `date&#34;;
+        $this-&gt;db_nibs-&gt;query($q);
+        $n=$this-&gt;db_nibs-&gt;num_rows();
+        if($n&gt;0){
+            for($i=0;$i&lt;$n;$i++){
+                $row=$this-&gt;db_nibs-&gt;fetch_array();
+                $ip=$row[&#39;ip&#39;];
+                $mac=$row[&#39;arp&#39;];
+                $q=&#34;INSERT INTO `freenibs` (
+                        `mac` ,
+                        `user` ,
+                        `deposit`
+                        )
+                        VALUES (
+                        &#39;&#34;.quote_smart(strtolower($mac)).&#34;&#39;,&#39;&#34;.quote_smart($ip).&#34;&#39;, &#39;-2048&#39;
+                        )
+                         ON DUPLICATE KEY UPDATE
+                        `user`=&#39;&#34;.quote_smart($ip).&#34;&#39;
+                    ;&#34;;
+                $this-&gt;db-&gt;query($q);
+            }
+                
+       }
+    }
+    public function clear_(){   
+    $q=&#34;DELETE FROM `mac` WHERE `date` &lt; FROM_UNIXTIME( UNIX_TIMESTAMP( NOW( ) ) -86400 )
+        AND `mac` NOT
+        IN (
+        
+        SELECT `mac`
+        FROM `freenibs`
+        )&#34;;
+    $this-&gt;db-&gt;query($q);
+        $q=&#34;DELETE FROM `mac` WHERE `date` &lt; FROM_UNIXTIME( UNIX_TIMESTAMP( NOW( ) ) -259200 )
+        AND `mac` 
+        IN (
+        
+        SELECT `mac`
+        FROM `freenibs`
+        )&#34;;
+    $this-&gt;db-&gt;query($q);
+    }
+    public function cron (){
+        self::clear_();
+        self::arpwatch_macs();
+        self::users_macs();
+        $field_to_select=&#34;INET_NTOA(`ip`) AS `nas_ip`,`id`,`type`,`name`,`model` AS `version`,`ports`&#34;;
+        $q=&#34;SELECT 
+                &#34;.$field_to_select.&#34;
+            FROM `sw`
+                  ORDER BY `id`&#34;;
+        //echo $q;
+        $this-&gt;db-&gt;query($q);
+        $n=$this-&gt;db-&gt;num_rows();
+        $query=array();
+        if($n&gt;0){
+            echo &#39;#!/bin/sh&#39;.&#34;\n&#34;;
+            $zzz=0;
+            for($i=0;$i&lt;$n;$i++){
+            $zzz++; 
+                $row=$this-&gt;db-&gt;fetch_array();
+                echo &#34;/usr/bin/php -q /var/www/skmsw/cron_one_ip.php &#34;.$row[&#39;nas_ip&#39;].&#34; &gt;&gt;/dev/null &amp;\n&#34;;
+                passthru(&#34;/usr/bin/php -q /var/www/skmsw/cron_one_ip.php &#34;.$row[&#39;nas_ip&#39;].&#34; &gt;&gt;/dev/null &amp;&#34;);
+            if(zzz&gt;4){ sleep(5); $zzz=0; }
+            }
+        }
+        $dis=self::clear_disallow();
+    }
+    public function cron_one_ip($ip){
+        echo &#34;clear_disallow_ip($ip)\n&#34;;
+        $dis=self::clear_disallow_ip($ip);
+        echo &#34; done clear_disallow_ip($ip)\n&#34;;
+        echo &#34;scan_by_ip_switch($dis,$ip);\n&#34;;
+        self::scan_by_ip_switch($dis,$ip);
+        echo &#34; done scan&#34;;
+        //$dis=self::clear_disallow();
+    }
+    public function clear_disallow_ip($ip){
+        if(strlen($ip)&gt;0)
+        $q=&#34;SELECT 
+                INET_NTOA(`ip`) AS `nas_ip`,`id`,`disallow_ports` AS `ports`
+            FROM `sw`
+            WHERE `ip`=INET_ATON(&#39;&#34;.$ip.&#34;&#39;)&#34;;
+        else
+        $q=&#34;SELECT 
+                INET_NTOA(`ip`) AS `nas_ip`,`id`,`disallow_ports` AS `ports`
+            FROM `sw`&#34;;
+        $this-&gt;db-&gt;query($q);
+        $n=$this-&gt;db-&gt;num_rows();
+        //echo $q.&#34;\n&#34;;
+        if($n&gt;0){
+            for($i=0;$i&lt;$n;$i++){
+                 $row=$this-&gt;db-&gt;fetch_array();
+                     if(strlen($row[&#39;ports&#39;])&gt;0)
+                         $disallow[]=array(&#34;ip&#34;=&gt;$row[&#39;nas_ip&#39;],&#34;ports&#34;=&gt;$row[&#39;ports&#39;],&#34;id&#34;=&gt;$row[&#39;id&#39;]);
+                         $dis[$row[&#39;nas_ip&#39;]]=array(&#34;ip&#34;=&gt;$row[&#39;nas_ip&#39;],&#34;ports&#34;=&gt;$row[&#39;ports&#39;],&#34;id&#34;=&gt;$row[&#39;id&#39;]);
+                         
+            }
+        }
+        foreach($disallow as $disallow_array){
+            $ip=$disallow_array[&#39;ip&#39;];
+            $id=$disallow_array[&#39;id&#39;];
+            $p=explode(&#34;,&#34;,$disallow_array[&#39;ports&#39;]);
+            foreach($p as $port_val){
+                $q=&#34;DELETE FROM `mac` WHERE `sw_id` = &#39;&#34;.quote_smart($id).&#34;&#39; AND `port`=&#39;&#34;.quote_smart($port_val).&#34;&#39;&#34;;
+                //echo $q.&#34;\n&#34;;
+                $this-&gt;db-&gt;query($q);
+            }
+        }
+        return $dis;
+    }
+    public function clear_disallow(){
+        $q=&#34;SELECT 
+                INET_NTOA(`ip`) AS `nas_ip`,`id`,`disallow_ports` AS `ports`
+            FROM `sw`&#34;;
+        $this-&gt;db-&gt;query($q);
+        $n=$this-&gt;db-&gt;num_rows();
+        //echo $n.&#34;\n&#34;;
+        if($n&gt;0){
+            for($i=0;$i&lt;$n;$i++){
+                 $row=$this-&gt;db-&gt;fetch_array();
+                     if(strlen($row[&#39;ports&#39;])&gt;0)
+                         $disallow[]=array(&#34;ip&#34;=&gt;$row[&#39;nas_ip&#39;],&#34;ports&#34;=&gt;$row[&#39;ports&#39;],&#34;id&#34;=&gt;$row[&#39;id&#39;]);
+                         $dis[$row[&#39;nas_ip&#39;]]=array(&#34;ip&#34;=&gt;$row[&#39;nas_ip&#39;],&#34;ports&#34;=&gt;$row[&#39;ports&#39;],&#34;id&#34;=&gt;$row[&#39;id&#39;]);
+                         
+            }
+        }
+        foreach($disallow as $disallow_array){
+            $ip=$disallow_array[&#39;ip&#39;];
+            $id=$disallow_array[&#39;id&#39;];
+            $p=explode(&#34;,&#34;,$disallow_array[&#39;ports&#39;]);
+            foreach($p as $port_val){
+                $q=&#34;DELETE FROM `mac` WHERE `sw_id` = &#39;&#34;.quote_smart($id).&#34;&#39; AND `port`=&#39;&#34;.quote_smart($port_val).&#34;&#39;&#34;;
+                //echo $q.&#34;\n&#34;;
+                $this-&gt;db-&gt;query($q);
+            }
+        }
+        return $dis;
+    }
+    public function users_macs(){   
+        $q=&#34;SELECT `actions`.`call_from`,`actions`.`user`,`users`.`uid`,`users`.`deposit`,`users`.`credit`
+            FROM `actions`, `users`
+            WHERE 
+                `actions`.`call_from` LIKE &#39;%:%&#39;
+            AND 
+                `users`.`user`=`actions`.`user`
+                AND
+                    `start_time`&gt;FROM_UNIXTIME(UNIX_TIMESTAMP(NOW() )-90000)
+            GROUP BY `actions`.`call_from`&#34;;
+        $this-&gt;db_nibs-&gt;query($q);
+        $n=$this-&gt;db_nibs-&gt;num_rows();
+        if($n&gt;0){
+            for($i=0;$i&lt;$n;$i++){
+             $row=$this-&gt;db_nibs-&gt;fetch_array();
+            $m=explode(&#34;/&#34;,$row[&#39;call_from&#39;]); //10.200.30.16 / 00:1d:92:f7:46:60 / vlan51
+            $mac=strtolower(trim($m[1]));
+            $user=$row[&#39;user&#39;];
+            $uid=$row[&#39;uid&#39;];
+            $deposit=$row[&#39;deposit&#39;]+$row[&#39;credit&#39;];
+            $q=&#34;INSERT INTO  `freenibs` (
+                    `mac` ,
+                    `user`,
+                    `uid`,
+                    `deposit`
+                    )
+                    VALUES (
+                    &#39;&#34;.quote_smart($mac).&#34;&#39;, &#39;&#34;.quote_smart($user).&#34;&#39;,&#39;&#34;.quote_smart($uid).&#34;&#39;,&#39;&#34;.quote_smart($deposit).&#34;&#39;
+                    )
+                    ON DUPLICATE KEY UPDATE
+                    `mac`=&#39;&#34;.quote_smart($mac).&#34;&#39;, `user`=&#39;&#34;.quote_smart($user).&#34;&#39;,`uid`=&#39;&#34;.quote_smart($uid).&#34;&#39;,`deposit`=&#39;&#34;.quote_smart($deposit).&#34;&#39;;&#34;;
+                $this-&gt;db-&gt;query($q);
+            }
+        }
+        $q=&#34;SELECT `blocked`,`mac_addr`,`user`,`uid`,`deposit`,`credit` FROM `users` WHERE `mac_addr` LIKE &#39;%:%&#39;&#34;;
+        $this-&gt;db_nibs-&gt;query($q);
+        $n=$this-&gt;db_nibs-&gt;num_rows();
+    if($n&gt;0){
+        for($i=0;$i&lt;$n;$i++){
+             $row=$this-&gt;db_nibs-&gt;fetch_array();
+            $mac=strtolower($row[&#39;mac_addr&#39;]);
+            $user=$row[&#39;user&#39;];
+            $uid=$row[&#39;uid&#39;];
+            $deposit=$row[&#39;deposit&#39;]+$row[&#39;credit&#39;];
+            //echo $user.&#34; &#34;.$mac.&#34;\n&#34;;
+            $blocked=$row[&#39;blocked&#39;];
+
+            $q=&#34;INSERT INTO `freenibs` (
+                    `mac` ,
+                    `user`,
+                    `uid`,
+                    `deposit`
+                    )
+                    VALUES (
+                    &#39;&#34;.quote_smart($mac).&#34;&#39;, &#39;&#34;.quote_smart($user).&#34;&#39;,&#39;&#34;.quote_smart($uid).&#34;&#39;,&#39;&#34;.quote_smart($deposit).&#34;&#39;
+                    )
+                    ON DUPLICATE KEY UPDATE
+                    `en`=&#39;&#34;.quote_smart($blocked).&#34;&#39;,`mac`=&#39;&#34;.quote_smart($mac).&#34;&#39;, `user`=&#39;&#34;.quote_smart($user).&#34;&#39;,`uid`=&#39;&#34;.quote_smart($uid).&#34;&#39;,`deposit`=&#39;&#34;.quote_smart($deposit).&#34;&#39;;&#34;;
+                    $this-&gt;db-&gt;query($q);
+        }
+      }
+    }
+    public function user_to_port_sw(){
+
+        
+    }
+    
+    public function scan_macs_from_ip($ip,$nas_id,$dis,$type,$model){
+                $disallow=$dis[$ip];
+                $p=explode(&#34;,&#34;,$disallow[&#39;ports&#39;]);
+                $SNMP_COMUNITY_READ=COMUNITY_READ;
+                if($ip==&#39;127.0.0.1&#39;){
+                    //трюк для ЦИСКИ, так как ей надо указывать комьюнити в виде community@vlan
+                     $SNMP_COMUNITY_READ=&#34;public@25&#34;;
+                }
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                if(strlen($result[0])&lt;2){
+                    $SNMP_COMUNITY_READ=COMUNITY_DEF_DLINK_READ;
+                    $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                }
+                if(strlen($result[0])&lt;2){
+                    $SNMP_COMUNITY_READ=COMUNITY_READ2;
+                $result=snmpwalk($ip,$SNMP_COMUNITY_READ,OID_sysDescr);
+                }
+                echo &#34;SNMP_COMUNITY_READ $SNMP_COMUNITY_READ\n&#34;;
+                if(strlen($result[0])&lt;2){
+                    return array();
+                }
+                else{
+                    if($type==&#34;cisco&#34;)
+                        $res=snmprealwalk($ip,$SNMP_COMUNITY_READ,OID_cisco_mac_on_ports);
+                    else{
+                        //$res=snmp2_real_walk($ip,$SNMP_COMUNITY_READ,OID_mac_on_ports);
+                        $res=snmprealwalk($ip,$SNMP_COMUNITY_READ,OID_mac_on_ports);
+                        //print_r($res);
+                    }
+
+                    /*  old cisco
+                     $res=snmprealwalk($ip,&#34;public@54&#34;,&#34;.1.3.6.1.2.1.17.4.3.1.2&#34;);
+                                         foreach ($res as $ind=&gt;$port){
+                                             $arr=explode(&#39;.&#39;,$ind);
+                                                $c=count($arr);
+                                                 $port=explode(&#39;:&#39;,$port);
+                                                 $port_temp=$port;
+                                                 $port=(int)$port[1];
+                                         if($ip==&#39;172.16.2.26&#39;){
+                                                $port=$cisco_rp[$port];
+                                          }
+
+                                          $mc=dec_hex($arr[$c-6]).&#39;:&#39;.dec_hex($arr[$c-5]).&#39;:&#39;.dec_hex($arr[$c-4]).&#39;:&#39;.dec_hex($arr[$c-3]).&#39;:&#39;.dec_hex($arr[$c-2]).&#39;:&#39;.dec_hex($arr[$c-1]);
+                                                 $mac=strtolower($mc);
+                                             $main[$mac]=$port;
+                                             echo $mac.&#34; - $port - $port_t[0]--.1.3.6.1.2.1.17.1.4.1.2.&#34;.$port.&#34;\n&#34;;
+                                         }
+                    */
+
+                    foreach ($main as $mac=&gt;$port){
+                        if(!(in_array($port,$p))){
+                        $query=&#34;
+                         INSERT INTO `mac` (
+                            
+                            `mac` ,
+                            `sw_id`,
+                            `port`,
+                            `date`
+                            )
+                            VALUES (
+                            &#39;&#34;.quote_smart($mac).&#34;&#39; , &#39;&#34;.quote_smart($nas_id).&#34;&#39;, &#39;&#34;.quote_smart($port).&#34;&#39;,NOW()
+                            )
+                            ON DUPLICATE KEY UPDATE
+                            `mac`=&#39;&#34;.quote_smart($mac).&#34;&#39; , 
+                            `sw_id`=&#39;&#34;.quote_smart($nas_id).&#34;&#39;, 
+                            `port`=&#39;&#34;.quote_smart($port).&#34;&#39;,
+                            `date`=NOW();&#34;;
+                            
+                        $this-&gt;db-&gt;query($query);
+                    }
+                    }
+                                        
+                }
+    }
+    
+    public function scan_all_switches($dis){
+        $field_to_select=&#34;INET_NTOA(`ip`) AS `nas_ip`,`id`,`type`,`name`,`model` AS `version`,`ports`&#34;;
+        $q=&#34;SELECT 
+                &#34;.$field_to_select.&#34;
+            FROM `sw`
+                  ORDER BY `id`&#34;;
+        $this-&gt;db-&gt;query($q);
+        $n=@$this-&gt;db-&gt;num_rows();
+        $query=array();
+        if($n&gt;0){
+            for($i=0;$i&lt;$n;$i++){
+                $row=$this-&gt;db-&gt;fetch_array();
+                $sw=self::scan_sw_by_ip($row[&#39;nas_ip&#39;],$dis);
+                $switches[]=array(
+                        &#34;ip&#34;=&gt;$row[&#39;nas_ip&#39;],
+                        &#34;id&#34;=&gt;$row[&#39;id&#39;],
+                        &#34;type&#34;=&gt;$row[&#39;type&#39;],
+                        &#34;model&#34;=&gt;$row[&#39;model&#39;],
+                        &#34;disallow_ports&#34;=&gt;$row[&#39;disallow_ports&#39;]
+                        );
+                
+                echo &#34;process &#34;.$row[&#39;nas_ip&#39;].&#34;\n&#34;;
+                if($sw[&#39;type&#39;]!=&#34;unknown&#34;){
+                $q1=&#34;UPDATE
+                    `sw`    SET
+                            `type`=&#39;&#34;.quote_smart($sw[&#39;type&#39;]).&#34;&#39;,  
+                            `model`=&#39;&#34;.quote_smart($sw[&#39;version&#39;]).&#34;&#39;, 
+                            `ports`=&#39;&#34;.quote_smart($sw[&#39;ports&#39;]).&#34;&#39;
+                    WHERE
+                        `id`=&#39;&#34;.quote_smart($row[&#39;id&#39;]).&#34;&#39;&#34;;
+                $query[]=array(&#34;d&#34;=&gt;$q,&#34;u&#34;=&gt;$q1);
+                }
+            }
+            foreach($query as $qw){
+                $this-&gt;db-&gt;query($qw[&#39;u&#39;]);
+            }
+            foreach($switches as $switch){
+                echo &#34;process mas on &#34;.$switch[&#39;ip&#39;].&#34; id:&#34;.$switch[&#39;id&#39;].&#34;\n&#34;;
+                self::scan_macs_from_ip($switch[&#39;ip&#39;],$switch[&#39;id&#39;],$dis,$switch[&#39;type&#39;],$switch[&#39;model&#39;]);
+            }
+        }
+        if(DEBUG_DB==&#34;true&#34;)
+                    echo $this-&gt;db-&gt;mysql_error();  
+    }
+    public function scan_by_ip_switch($dis,$ip){
+        $field_to_select=&#34;INET_NTOA(`ip`) AS `nas_ip`,`id`,`type`,`name`,`model` AS `version`,`ports`&#34;;
+        $q=&#34;SELECT 
+                &#34;.$field_to_select.&#34;
+            FROM `sw`
+            WHERE
+                `ip`=INET_ATON(&#39;&#34;.$ip.&#34;&#39;)
+                  ORDER BY `id`&#34;;
+        $this-&gt;db-&gt;query($q);
+        $n=$this-&gt;db-&gt;num_rows();
+        $query=array();
+        if($n&gt;0){
+            
+            for($i=0;$i&lt;$n;$i++){
+                $row=$this-&gt;db-&gt;fetch_array();
+                $sw=self::scan_sw_by_ip($row[&#39;nas_ip&#39;],$dis);
+                $switches[]=array(
+                        &#34;ip&#34;=&gt;$row[&#39;nas_ip&#39;],
+                        &#34;id&#34;=&gt;$row[&#39;id&#39;],
+                        &#34;type&#34;=&gt;$row[&#39;type&#39;],
+                        &#34;model&#34;=&gt;$row[&#39;model&#39;],
+                        &#34;disallow_ports&#34;=&gt;$row[&#39;disallow_ports&#39;]
+                        );
+                
+                echo &#34;process &#34;.$row[&#39;nas_ip&#39;].&#34;\n&#34;;
+                $q=&#34;D ELETE FROM `sw` WHERE `id`=&#39;&#34;.quote_smart($row[&#39;id&#39;]).&#34;&#39;;&#34;;
+                $q1=&#34;UPDATE
+                    `sw`    SET
+                            `type`=&#39;&#34;.quote_smart($sw[&#39;type&#39;]).&#34;&#39;,  
+                            `model`=&#39;&#34;.quote_smart($sw[&#39;version&#39;]).&#34;&#39;, 
+                            `ports`=&#39;&#34;.quote_smart($sw[&#39;ports&#39;]).&#34;&#39;
+                    WHERE
+                        `id`=&#39;&#34;.quote_smart($row[&#39;id&#39;]).&#34;&#39;&#34;;
+                $query[]=array(&#34;d&#34;=&gt;$q,&#34;u&#34;=&gt;$q1);               
+            }
+            foreach($query as $qw){
+                //echo $qw[&#39;u&#39;].&#34;\n&#34;;
+                $this-&gt;db-&gt;query($qw[&#39;u&#39;]);
+            }
+            foreach($switches as $switch){
+                echo &#34;process on switch: &#34;.$switch[&#39;ip&#39;].&#34; id:&#34;.$switch[&#39;id&#39;].&#34;\n&#34;;
+                self::scan_macs_from_ip($switch[&#39;ip&#39;],$switch[&#39;id&#39;],$dis,$switch[&#39;type&#39;],$switch[&#39;model&#39;]);
+            }
+        }
+        if(DEBUG_DB==&#34;true&#34;)
+                    echo $this-&gt;db-&gt;mysql_error();  
+    }
+    
+    public function show_all_sw(){
+    $field_to_select=&#34;
+            `freenibs`.`mac`,`freenibs`.`user`,`freenibs`.`uid`,`freenibs`.`deposit`,
+            `mac`.`port`,`mac`.`sw_id`,
+            `sw`.`name`,`sw`.`id`, INET_NTOA(`sw`.`ip`) AS `nas_ip`,`sw`.`type`,`sw`.`model` AS `version`,`sw`.`ports`,`sw`.`addr`
+             &#34;;                 
+    switch($_GET[&#39;sort&#39;]){
+    case &#34;ul&#34;:
+        $q=&#34;SELECT 
+                &#34;.$field_to_select.&#34;
+            FROM `freenibs`,`mac`,`sw`
+            WHERE
+                    `mac`.`mac`=`freenibs`.`mac`
+                AND
+                    `sw`.`id`=`mac`.`sw_id` 
+                  ORDER BY `sw`.`id`    &#34;;
+    break;
+    case &#34;id&#34;:
+        if(strlen($_GET[&#39;id&#39;])&gt;1){
+            $add_=&#34; 
+                    `id`=&#39;&#34;.quote_smart($_GET[&#39;id&#39;]).&#34;&#39;&#34;;
+        }
+        $q=&#34;SELECT  
+                &#34;.$field_to_select.&#34;
+            FROM 
+                    `freenibs`,`mac`,`sw`
+            WHERE
+                &#34;.$add_.&#34;
+                AND
+                    `mac`.`mac`=`freenibs`.`mac`
+                AND
+                    `sw`.`id`=`mac`.`sw_id` 
+                  ORDER BY 
+                        `sw`.`id`,`sw`.`ports`
+                        &#34;;
+            //echo $q;
+    break;
+    case &#34;type&#34;:
+        switch($_GET[&#39;sub_type&#39;]){
+        default:
+            if(strlen($_GET[&#39;sub_type&#39;])&gt;1){
+                $add_=&#34;
+                     
+                        `sw`.`type` =&#39;&#34;.quote_smart($_GET[&#39;sub_type&#39;]).&#34;&#39;
+                        &#34;;
+            }
+            
+            $q=&#34;SELECT  
+                &#34;.$field_to_select.&#34;
+            FROM 
+                    `freenibs`,`mac`,`sw`
+            WHERE
+                    `mac`.`mac`=`freenibs`.`mac`
+                AND
+                    `sw`.`id`=`mac`.`sw_id` 
+                AND
+                        
+                  &#34;.$add_.&#34;
+                
+                
+                  ORDER BY 
+                        `sw`.`type`,`sw`.`name`,`mac`.`port`
+                        &#34;;
+        break;
+        }
+    break;
+
+
+    default:
+        $q=&#34;SELECT  
+                &#34;.$field_to_select.&#34;
+            FROM 
+                    `freenibs`,`mac`,`sw`
+            WHERE
+                    `mac`.`mac`=`freenibs`.`mac`
+                AND
+                    `sw`.`id`=`mac`.`sw_id` 
+                
+                  ORDER BY `sw`.`id`,`mac`.`port`
+                        &#34;;
+        
+    break;      
+    }
+        $this-&gt;db-&gt;query($q);
+        $n=$this-&gt;db-&gt;num_rows();
+        $c=0;
+            if($n&gt;0){
+                
+                $nasid=-1;
+                $nastemp=-1;
+                $ports=array();
+
+                $n_of_ports=48;
+                        $header_sw.=&#34;
+
+&lt;td&gt;
+  &lt;a href=\&#34;?sort=ul\&#34;&gt;Àäðåññ&lt;/a&gt;
+  
+  &lt;td&gt;
+    &lt;td&gt;
+      &lt;a href=\&#34;?sort=id\&#34;&gt;ID&lt;/a&gt;
+      
+      &lt;td&gt;
+        &lt;td&gt;
+          &lt;a href=\&#34;?sort=type\&#34;&gt;type&lt;/a&gt;
+          
+          &lt;td&gt;
+            &#34;;
+                                
+                                    echo $header_sw;
+                                echo &#34;
+                                &lt;div style=\&#34;font-size:12px\&#34;&gt;&lt;table  border=\&#34;1px\&#34;&gt;
+            
+            &lt;tr&gt;
+              &#34;;
+                            if(strlen($_GET[&#39;id&#39;])&gt;1) $n++;
+                            for($i=0;$i&lt;$n;$i++){
+                                if( !( (strlen($_GET[&#39;id&#39;])&gt;1)&amp;&amp;($i==$n))){
+                                     $row=$this-&gt;db-&gt;fetch_array();
+                                    $nasid=$row[&#39;id&#39;];
+                                    
+                                }
+                                else{
+                                  $nasid++;
+                                 
+                                }
+                                
+                                    if($i==0) {
+                                        $nasid=$row[&#39;id&#39;];
+                                        $nastemp=$nasid;
+                                        $temp_nas_ip=$row[&#39;nas_ip&#39;];
+                                        $temp_name=$row[&#39;name&#39;];
+                                        $temp_type=$row[&#39;type&#39;];
+                                        $temp_id=$row[&#39;id&#39;];
+                                        $temp_ports=$row[&#39;ports&#39;];
+                                        $temp_version=$row[&#39;version&#39;];
+                                        if(preg_match(&#34;/\bVersion/i&#34;,$row[&#39;version&#39;])){
+                                                $temp_version=explode(&#34;Version&#34;,$row[&#39;version&#39;]);
+                                                $row[&#39;version&#39;]=$temp_version[&#39;0&#39;];
+                                                $temp_version=$row[&#39;version&#39;];
+                                            }
+                                    }
+                                    
+                                    if($nastemp!=$nasid){
+                                        if($_GET[&#39;snmp&#39;]==&#34;true&#34;)
+                                            $sw_res=self::scan_sw_by_ip($temp_nas_ip);
+              
+                                              if( ($temp_ports&gt;0)&amp;&amp;($temp_ports&lt;100))
+                                                $n_of_ports=$temp_ports;
+                                              else
+                                                $n_of_ports=48;
+              
+                                            $c++;
+                                            if($c&gt;1){
+                                                $c=0;
+                                                $td_pre=&#34; border=\&#34;1px\&#34; &#34;;
+                                            }
+                                            else {
+                                                $td_pre=&#39; &#39;;
+                                            }
+                                            echo &#34;
+                                            
+                                            &lt;tr &#34;.$td_pre.&#34;&gt;
+                                                 &lt;td  rowspan=\&#34;2\&#34; nowrap=\&#34;nowrap\&#34; bgcolor=\&#34;#999999\&#34;&gt;
+                                            &lt;a href=\&#34;http://&#34;.$temp_nas_ip.&#34;\&#34;  target=\&#34;_blank\&#34;&gt;&#34;.$temp_name.&#34;&lt;/a&gt;
+                                                &lt;br /&gt;&#34;.str_replace(&#34;Fast Ethernet Switch&#34;,&#34;&#34;,$temp_version).&#34;
+                                        &lt;/td&gt;
+                                        &lt;td rowspan=\&#34;2\&#34;&gt;
+                                            &lt;a href=\&#34;?sort=id&amp;id=&#34;.$temp_id.&#34;\&#34; target=\&#34;_blank\&#34;&gt; &#34;.$temp_id.&#34;&lt;/a&gt;&lt;/td&gt;
+                                        &lt;td &#34;.$td_pre.&#34; rowspan=\&#34;2\&#34;&gt;
+                                            &lt;a href=\&#34;?sort=type&amp;sub_type=&#34;.$temp_type.&#34;\&#34;&gt;
+                                                    &#34;.$temp_type.&#34;
+                                            &lt;/a&gt;
+                                        &lt;/td&gt;&#34;;
+                                            $nastemp=$nasid;    
+                                            $header_ports=&#39;&#39;;
+                                            for($i=1;$i&lt;$n_of_ports+1;$i++){
+                                                
+                                                $header_ports.=&#34;&lt;td &#34;.$td_pre.&#34;  bgcolor=\&#34;#CCCCCC\&#34;&gt;&#34;.$i.&#34;&lt;/td&gt;&#34;;
+                                            }
+                                        
+                                            echo &#34;  &lt;tr &#34;.$td_pre.&#34;&gt;$header_ports
+            &lt;/tr&gt;
+                                                
+            
+            &lt;tr&gt;
+              &lt;td&gt;
+                
+              &lt;/td&gt;
+                                                
+              
+              &lt;td&gt;
+                
+              &lt;/td&gt;
+                                                
+              
+              &lt;td&gt;
+                
+              &lt;/td&gt; &#34;;
+                                            for($i=1;$i&lt;$n_of_ports+1;$i++){
+                                                if(strlen($ports[$i])&gt;0){
+                                                echo &#34;
+              
+              &lt;td&gt;
+                &#34;.$ports[$i].&#34;
+              &lt;/td&gt;&#34;;
+                                                        
+                                                }
+                                                else{
+                                                    echo &#34;&lt;td bgcolor=\&#34;#FFFF00\&#34;&gt; &lt;/td&gt;&#34;;
+                                                }
+                                                
+                                            }
+                                            echo &#34;
+            &lt;/tr&gt;&#34;;
+                                            $ports=&#39;&#39;;
+                                            $ports=array();
+                                    }else{
+                                        
+                                        $temp_nas_ip=$row[&#39;nas_ip&#39;];
+                                        $temp_name=$row[&#39;name&#39;];
+                                        $temp_type=$row[&#39;type&#39;];
+                                        $temp_id=$row[&#39;id&#39;];
+                                        $temp_ports=$row[&#39;ports&#39;];
+                                        $temp_version=$row[&#39;version&#39;];
+                                        if(preg_match(&#34;/\bVersion/i&#34;,$row[&#39;version&#39;])){
+                                                $temp_version=explode(&#34;Version&#34;,$row[&#39;version&#39;]);
+                                                $row[&#39;version&#39;]=$temp_version[&#39;0&#39;];
+                                                $temp_version=$row[&#39;version&#39;];
+                                            }
+                                    }
+            
+            
+                                if(!(strlen($row[&#39;user&#39;])&gt;0))
+                                        $row[&#39;user&#39;]=$row[&#39;mac&#39;];
+                                if($row[&#39;deposit&#39;]&gt;=0){
+                                    $ports[$row[&#39;port&#39;]].=&#34;&lt;a href=\&#34;http://admin/edit_user.php?uid=&#34;.$row[&#39;uid&#39;].&#34;\&#34; target=\&#34;_blank\&#34; &gt;&#34;.$row[&#39;user&#39;].&#34;&lt;/a&gt;
+            
+            &lt;br /&gt;&#34;;    
+                                }else{
+                                    $ports[$row[&#39;port&#39;]].=&#34;&lt;b&gt;&lt;a style=\&#34;color: red\&#34; href=\&#34;https://admin/edit_user.php?uid=&#34;.$row[&#39;uid&#39;].&#34;\&#34; target=\&#34;_blank\&#34;&gt;&#34;.$row[&#39;user&#39;].&#34;&lt;/a&gt;&lt;/b&gt;&lt;br /&gt;&#34;;   
+                                }
+                            }
+                            if($_GET[&#39;id&#39;]&gt;1){
+                                switch($_GET[&#39;snmp&#39;]){
+                                case &#34;true&#34;:
+                                    echo &#34;&lt;/tr&gt;
+                                    &lt;/table&gt;&lt;/div&gt;&#34;;
+                                    echo &#34;
+            
+            &lt;p&gt;
+              &#34;.PAGE_MES_2.&#34;:
+            &lt;/p&gt;
+                                    
+            
+            &lt;p&gt;
+              &#34;.PAGE_MES_3.&#34;:   $sw_res[type]
+            &lt;/p&gt;
+                                    
+            
+            &lt;p&gt;
+              &#34;.PAGE_MES_4.&#34;    $sw_res[version]
+            &lt;/p&gt;
+                                    
+            
+            &lt;p&gt;
+              &#34;.PAGE_MES_5.&#34;    $sw_res[ports]
+            &lt;/p&gt;
+                                    
+            
+            &lt;p&gt;
+              Ip    $sw_res[ip]
+            &lt;/p&gt;&#34;;
+                                break;
+                                default:
+                                    echo &#34;&lt;/tr&gt;
+                                    &lt;/table&gt;&lt;/div&gt;&#34;;
+                                    echo &#34;
+                                    
+            
+            &lt;p&gt;
+              &lt;a href=\&#34;?sort=id&amp;id=&#34;.$temp_id.&#34;&amp;snmp=true\&#34;&gt;Get data by snmp&lt;/a&gt;
+                                    
+              
+              &lt;p&gt;
+                &#34;.PAGE_MES_2.&#34;:
+              &lt;/p&gt;
+                                    
+              
+              &lt;p&gt;
+                &#34;.PAGE_MES_3.&#34;: $temp_type
+              &lt;/p&gt;
+                                    
+              
+              &lt;p&gt;
+                &#34;.PAGE_MES_4.&#34;  
+              &lt;/p&gt;
+                                    
+              
+              &lt;p&gt;
+                &#34;.PAGE_MES_5.&#34;  
+              &lt;/p&gt;
+                                    
+              
+              &lt;p&gt;
+                Ip  $temp_nas_ip
+              &lt;/p&gt;&#34;;
+                                break;
+                                }
+                            }
+                        }
+                    
+                    
+                }
+              }
+              ?&gt;
+              
+              &lt;/pre&gt;
+              
+
+&lt;pre&gt;&lt;code&gt;          &amp;lt;p&amp;gt;
+            pages/top.php:
+          &amp;lt;/p&amp;gt;
+
+
+          &amp;lt;pre lang=&amp;quot;php&amp;quot; line=&amp;quot;1&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&amp;lt;?php ?&amp;gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/pre&gt;&lt;/p&gt;
+
+&lt;p&gt;
+  pages/bottom.php:
+&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;
+&lt;?php ?&gt;
+&amp;lt;/html&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;
+  cron.php:
+&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;
+#!/usr/bin/php
+&lt;?php
+ include_once(&#34;engine.php&#34;);
+  $db=new db_mysql(HOST,USER,DB_PASS,DB,DEBUG_DB);
+ if(DEBUG_DB==&#34;true&#34;) echo &#39;$db obj is ok&#39;.&#34;&lt;br&gt;\n&#34;;
+ 
+ $db-&gt;SET_NAMES(&#34;utf8&#34;);
+ 
+ $db_nibs=new db_mysql(HOST_NIBS,USER_NIBS,DB_NIBS_PASS,DB_NIBS,DEBUG_DB);
+ if(DEBUG_DB==&#34;true&#34;) echo &#39;$db_nibs obj is ok&#39;.&#34;
+
+&lt;br /&gt;\n&#34;;
+ //$db_nibs-&gt;SET_NAMES(&#34;cp1251&#34;);
+ //$db-&gt;SET_COLLATE(&#34;latin1_swedish_ci&#34;);
+ //$db_nibs-&gt;SET_COLLATE(&#34;cp1251_general_ci&#34;);
+ $db_nibs-&gt;SET_NAMES(&#34;utf8&#34;);
+ $page=new page(&amp;$db,&amp;$db_nibs);
+ 
+ $page-&gt;cron();
+ 
+?&gt;
+&lt;/pre&gt;
+
+&lt;p&gt;
+  cron_one_ip.php:
+&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; line=&#34;1&#34;&gt;
+#!/usr/bin/php -q
+&lt;?php 
+$path=&#34;/var/www/skmsw&#34;;
+ $ip=$argv[&#39;1&#39;];
+if(file_exists($path.&#34;/pid/&#34;.str_replace(&#34;.&#34;,&#34;&#34;,$ip))){
+    echo &#34;exist&#34;;
+}
+else{
+$f=fopen($path.&#34;/pid/&#34;.str_replace(&#34;.&#34;,&#34;&#34;,$ip),&#34;w&#34;); 
+fwrite($f,&#34;do&#34;); 
+include_once(&#34;engine.php&#34;);
+  $db=new db_mysql(HOST,USER,DB_PASS,DB,DEBUG_DB);
+ if(DEBUG_DB==&#34;true&#34;) echo &#39;$db obj is ok&#39;.&#34;&lt;br&gt;\n&#34;;
+     $db-&gt;SET_NAMES(&#34;utf8&#34;);
+ 
+ $db_nibs=new db_mysql(HOST_NIBS,USER_NIBS,DB_NIBS_PASS,DB_NIBS,DEBUG_DB);
+ if(DEBUG_DB==&#34;true&#34;) echo &#39;$db_nibs obj is ok&#39;.&#34;
+
+&lt;br /&gt;\n&#34;;
+ //$db_nibs-&gt;SET_NAMES(&#34;cp1251&#34;);
+ //$db-&gt;SET_COLLATE(&#34;latin1_swedish_ci&#34;);
+ //$db_nibs-&gt;SET_COLLATE(&#34;cp1251_general_ci&#34;);
+ $db_nibs-&gt;SET_NAMES(&#34;utf8&#34;);
+ $page=new page(&amp;$db,&amp;$db_nibs);
+ $page-&gt;cron_one_ip($ip);
+
+
+
+unlink($path.&#34;/pid/&#34;.str_replace(&#34;.&#34;,&#34;&#34;,$ip)); 
+}
+ ?&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

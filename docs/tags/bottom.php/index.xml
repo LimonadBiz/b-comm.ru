@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bottom.Php on </title>
+    <link>http://b-comm.ru/tags/bottom.php/index.xml</link>
+    <description>Recent content in Bottom.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/bottom.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>bottom.php</title>
+      <link>http://b-comm.ru/billing/bottom-php</link>
+      <pubDate>Sat, 14 Jan 2012 23:22:58 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/bottom-php</guid>
+      <description>&lt;pre lang=&#34;php&#34;&gt;&lt;?php
+if ($LINK) @mysql_close($LINK);
+if ($LINK_POSTFIX) @mysql_close ($LINK_POSTFIX);
+?&gt;
+&amp;lt;/body&gt;
+&amp;lt;/html&gt;
+
+&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

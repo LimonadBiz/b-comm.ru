@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Credit_of_user.Php on </title>
+    <link>http://b-comm.ru/tags/credit_of_user.php/index.xml</link>
+    <description>Recent content in Credit_of_user.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/credit_of_user.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>credit_of_user.php —Кредиты пользователей</title>
+      <link>http://b-comm.ru/billing/credit_of_user-php-%D0%BA%D1%80%D0%B5%D0%B4%D0%B8%D1%82%D1%8B-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9</link>
+      <pubDate>Sat, 14 Jan 2012 23:36:42 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/credit_of_user-php-%D0%BA%D1%80%D0%B5%D0%B4%D0%B8%D1%82%D1%8B-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9</guid>
+      <description>&lt;p&gt;credit_of_user.php —Кредиты пользователей &lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?
+$TOP = &#34; Кредиты пользователей &#34;;
+$META = &#34;&lt;META HTTP-EQUIV=\&#34;Cache-Control\&#34; CONTENT=\&#34;no-cache\&#34;&gt;\n&amp;lt;META HTTP-EQUIV=\&#34;Pragma\&#34; CONTENT=\&#34;no-cache\&#34;&gt;&#34;;
+
+include(&#34;top.php&#34;);
+include(&#34;class.loggin.php&#34;);
+$log = new Logging();
+$log-&gt;setfile(&#34;credit_of_user.php.log.html&#34;);
+echo &#34;
+
+&lt;a href=&#39;credit_of_user.php.log.html&#39;&gt;Данные по операциям&lt;/a&gt;&#34;;
+?&gt;
+
+
+&lt;CENTER&gt;
+  &lt;?php
+function quote_smart($value)
+{
+    // если magic_quotes_gpc включена - используем stripslashes
+    if (get_magic_quotes_gpc()) {
+        $value = stripslashes($value);
+    }
+    // Если переменная - число, то экранировать её не нужно
+    // если нет - то окружем её кавычками, и экранируем
+    if (!is_numeric($value)) {
+        $value = mysql_real_escape_string($value);
+    }
+    return $value;
+}
+
+
+/* коннект к БД - меняем на свое */
+$link = mysql_connect(&#39;10.200.205.224&#39;, &#39;freenibs&#39;, &#39;freenibs&#39;);
+if (!$link) {
+    die(&#39;Could not connect: &#39; . mysql_error());
+}
+
+mysql_select_db(&#34;freenibs&#34;);
+// Выбираем дни за которые показывать Трафло
+$card_id=$_GET[&#39;id&#39;];
+if(strlen(trim($_GET[&#39;act&#39;]))&gt;0)
+      $act=$_GET[&#39;act&#39;];
+  else
+       $act=$_POST[&#39;act&#39;];
+  switch($act){
+     /* case &#34;delete&#34;:
+              if($card_id&gt;0){
+                  $q=&#34;DELETE FROM  `privat24` WHERE `id`=&#34;.quote_smart($card_id).&#34; LIMIT 1&#34;;
+                  //echo $q;
+                  $log-&gt;lwrite(&#39;Удалена карта # &#39;.$card_id.&#39; user:&#39;.$_GET[&#39;user&#39;].&#39; serial:&#39;.$_GET[&#39;card&#39;].&#34; 
+  
+  &lt;br /&gt;\n&#34;);
+  
+                  mysql_query($q);
+              }
+              break;
+      */
+      case &#34;update&#34;:
+               if($_POST[&#39;uid&#39;]&gt;0){
+                    $q=&#34;UPDATE `users` SET `credit`=&#39;&#34;.$_POST[&#39;credit&#39;].&#34;&#39; WHERE `uid`=&#34;.quote_smart($_POST[&#39;uid&#39;]).&#34; LIMIT 1&#34;;
+                    $log-&gt;lwrite(&#39;обновление кредита пользователю: &lt;a target=&#34;_open&#34; href=&#34;edit_user.php?uid=&#39;.$_POST[&#39;uid&#39;].&#39;&#34;&gt;&#39;.$_POST[&#39;user&#39;].&#39;[&#39;.$_POST[&#39;uid&#39;].&#39;] &#39;.&#34;&lt;/a&gt;&lt;br /&gt;\n&#34;);
+                     mysql_query($q);
+               }
+               break;
+  
+      case &#34;updateall&#34;:
+                   if($_POST[&#39;uid&#39;]&gt;0){
+                      $q=&#34;UPDATE `users` SET `credit`=&#39;0.00&#39; &#34;;
+                      $log-&gt;lwrite(&#39;обновление кредита всех пользователей&#39;.&#34;&amp;lt;/a&gt;&lt;br /&gt;\n&#34;);
+                     mysql_query($q);
+                    }
+  
+               break;
+  
+  }
+  $q=&#34;SELECT * FROM `users` WHERE `credit`&gt;&#39;0.01&#39; OR `credit`&amp;lt;&#39;-0.01&#39; ORDER BY `credit`  DESC &#34;;
+  
+    $result = mysql_query($q);
+    //$days=array();
+    $i=0;
+  echo &#34;
+  
+  &lt;table border=&#39;1&#39;&gt;
+    &lt;td&gt;
+      N
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+      user
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+      credit
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+      deposit
+    &lt;/td&gt;
+    
+    &lt;td&gt;
+      Установить кредит
+    &lt;/td&gt;&#34;;
+    
+    while($row = mysql_fetch_array($result, MYSQL_ASSOC)){
+        $i++;
+        echo &#34; 
+    
+    &lt;tr&gt;
+      &lt;td&gt;
+        $i
+      &lt;/td&gt;
+      
+      &lt;td&gt;
+        &amp;lt;a target=\&#34;_open\&#34; href=\&#34;edit_user.php?uid=&#34;.$row[&#39;uid&#39;].&#34;\&#34;&gt; &#34;.$row[&#39;user&#39;].&#34;&amp;lt;/a&gt;
+      &lt;/td&gt;
+                      
+      
+      &lt;td&gt;
+        &#34;.$row[&#39;credit&#39;].&#34;
+      &lt;/td&gt;
+                      
+      
+      &lt;td&gt;
+        &#34;.$row[&#39;deposit&#39;].&#34;
+      &lt;/td&gt;
+                      
+      
+      &lt;td&gt;
+        
+      &lt;/td&gt;
+      
+                 
+    &lt;/tr&gt; &#34;;
+    }
+    echo &#34;
+  &lt;/table&gt;&#34;;
+  mysql_close($link);
+  ?&gt;
+  
+  
+  
+  &lt;?
+
+?&gt;
+  
+&lt;/CENTER&gt;
+
+
+&lt;?
+include(&#34;bottom.php&#34;);
+?&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

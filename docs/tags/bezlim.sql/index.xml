@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bezlim.Sql on </title>
+    <link>http://b-comm.ru/tags/bezlim.sql/index.xml</link>
+    <description>Recent content in Bezlim.Sql on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/bezlim.sql/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>bezlim.sql</title>
+      <link>http://b-comm.ru/billing/bezlim-sql</link>
+      <pubDate>Sat, 14 Jan 2012 23:20:44 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/bezlim-sql</guid>
+      <description>&lt;p&gt;bezlim.sql специальная таблица, которая нужна для моей модификации Фриинибса)))&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;FLUSH PRIVILEGES;
+grant select,insert,update,delete,create,drop on bezlim.* to bezlim@localhost identified by &#39;bezlim&#39;;
+grant select,insert,update,delete,create,drop on bezlim.* to bezlim@127.0.0.1 identified by &#39;bezlim&#39;;
+
+DROP DATABASE IF EXISTS `bezlim`;
+CREATE DATABASE IF NOT EXISTS `bezlim`;
+USE `bezlim`;
+
+
+DROP TABLE IF EXISTS `all`;
+CREATE TABLE `all` (
+  `ip` varchar(48) NOT NULL default &#39;192.168.0.1&#39;,
+  `rule` int(32) NOT NULL default &#39;500&#39;,
+  `bw1` varchar(12) NOT NULL default &#39;0&#39;,
+  `bw2` varchar(12) NOT NULL default &#39;0&#39;,
+  `activ` char(1) NOT NULL default &#39;y&#39;,
+  `id` int(32) NOT NULL auto_increment,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+INSERT INTO `all` ( `ip` , `rule` , `bw1` , `bw2` , `activ`  ) VALUES (&#39;192.168.0.1&#39;, &#39;500&#39;, &#39;16Kbit/s&#39;, &#39;16Kbit/s&#39;, &#39;y&#39;);
+
+&lt;/pre&gt;
+
+&lt;p&gt;[bezlim.sql специальная таблица, которая нужна для моей модификации Фриинибса)))&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;FLUSH PRIVILEGES;
+grant select,insert,update,delete,create,drop on bezlim.* to bezlim@localhost identified by &#39;bezlim&#39;;
+grant select,insert,update,delete,create,drop on bezlim.* to bezlim@127.0.0.1 identified by &#39;bezlim&#39;;
+
+DROP DATABASE IF EXISTS `bezlim`;
+CREATE DATABASE IF NOT EXISTS `bezlim`;
+USE `bezlim`;
+
+
+DROP TABLE IF EXISTS `all`;
+CREATE TABLE `all` (
+  `ip` varchar(48) NOT NULL default &#39;192.168.0.1&#39;,
+  `rule` int(32) NOT NULL default &#39;500&#39;,
+  `bw1` varchar(12) NOT NULL default &#39;0&#39;,
+  `bw2` varchar(12) NOT NULL default &#39;0&#39;,
+  `activ` char(1) NOT NULL default &#39;y&#39;,
+  `id` int(32) NOT NULL auto_increment,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+INSERT INTO `all` ( `ip` , `rule` , `bw1` , `bw2` , `activ`  ) VALUES (&#39;192.168.0.1&#39;, &#39;500&#39;, &#39;16Kbit/s&#39;, &#39;16Kbit/s&#39;, &#39;y&#39;);
+
+&lt;/pre&gt;
+
+&lt;p&gt;]&lt;a href=&#34;http://www.kurs-autocad.ru/3d/&#34;&gt;1&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

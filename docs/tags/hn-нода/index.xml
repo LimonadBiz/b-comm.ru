@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hn Нода on </title>
+    <link>http://b-comm.ru/tags/hn-%D0%BD%D0%BE%D0%B4%D0%B0/index.xml</link>
+    <description>Recent content in Hn Нода on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/hn-%D0%BD%D0%BE%D0%B4%D0%B0/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Openvz сохранение виртуальных нод на хост машину вариант 1-rsync, tar, 7zip, bzip2 и большая нагрузка</title>
+      <link>http://b-comm.ru/virtualization/openvz-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D0%BD%D0%BE%D0%B4-%D0%BD%D0%B0-%D1%85%D0%BE%D1%81%D1%82-%D0%BC</link>
+      <pubDate>Wed, 19 Jan 2011 16:56:41 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/virtualization/openvz-%D1%81%D0%BE%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B8%D1%80%D1%82%D1%83%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D1%85-%D0%BD%D0%BE%D0%B4-%D0%BD%D0%B0-%D1%85%D0%BE%D1%81%D1%82-%D0%BC</guid>
+      <description>&lt;h2 id=&#34;ставим-цель&#34;&gt;Ставим Цель&lt;/h2&gt;
+
+&lt;p&gt;Нам нужно держать в некой папке на этом же сервере актуальные копии нод. При этом в добавок складировать архивы с этими нодами.&lt;/p&gt;
+
+&lt;p&gt;Для проделывания этих действий Я написал скрипт. Так же не учитывается реальное состояние ноды &amp;#8212; были ли реальные изменения или нет? Изменения /var/log &amp;#8212; не очень актуально (разве, что bin-logs nfv от mysql храняться) и их бекапить можно &amp;#171;наживо&amp;#187; тем же rsync&amp;#8217;ом)))&lt;/p&gt;
+
+&lt;p&gt;У Меня есть несколько нод, и конечно хотелось бы определиться с тем, что лучше использовать для архивирования?&lt;/p&gt;
+
+&lt;h3 id=&#34;openvz-сохранение-виртуальных-нод-на-хост-машину-1-rsync-tar-7zip-bzip2-и-большая-нагрузка&#34;&gt;OpenVZ сохранение виртуальных нод на хост машину #1: rsync, tar, 7zip, bzip2 и большая нагрузка&lt;/h3&gt;
+
+&lt;h3 id=&#34;логика-работы-скрипта&#34;&gt;Логика работы скрипта&lt;/h3&gt;
+
+&lt;p&gt;Логика скрипта состоит в том, что OpenVZ ноды Мы называем в виде цифр, а буквенное значение не присваиваем (давно было, что OpenVZ не умел в отличии от Virtuozz&amp;#8217;ы этого делать, как сейчас дела обстоят &amp;#8212; не знаю).&lt;/p&gt;
+
+&lt;p&gt;Дальше у Нас есть место на диске, где хранятся наши ноды &amp;#8212;&lt;/p&gt;
+
+&lt;p&gt;В /etc/vz/vz.conf это будет /vz/private/:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;VE_PRIVATE=/vz/private/$VEID&lt;/pre&gt;
+
+&lt;p&gt;А у Меня в скрипте VZ_ROOT=&amp;#187;/vz/private&amp;#187;.&lt;/p&gt;
+
+&lt;p&gt;VZ_DUMP_ROOT=&amp;#187;/vz/private/dump&amp;#187; &amp;#8212; то куда Я сохраняю ноды.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Внимание!!! Логика скрипта состоит в том, что бы синхронизировать с помощью rsync ноду из $VZ_ROOT с $VZ_DUMP_ROOT, и не удалять это содержимое из бекапной папки&lt;/strong&gt;!!!&lt;/p&gt;
+
+&lt;p&gt;Так можно получить наименьший downtime, но и под каждую ноду будет в 2-а раза больше места забираться!!!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TODO:&lt;/strong&gt; Я еще добавил такую функцию в скрипт, что бы для не запущенных нод он просто делал rsync, не создавая бекапы, хотя надо было бы по другому сделать: &lt;strong&gt;если rsync нашёл различающиеся файлы &amp;#8212; делать бекап )))&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TODO:&lt;/strong&gt; Так же чистку нод Я не делал, а надо было бы почистить: /var/log &amp;#8212; может rsync не нужен&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;backup-openvz.sh&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;#!/bin/sh
+# Размещено на http://b-comm.ru/?p=119
+# Автор wel: valeranew@ukr.net
+# script номер 1: сохранение нод, но не учитывается то что скрипт может 
+# подвесить всю родительскую HN-ноду
+# у Меня виртуальна нода из-за большого LA выключила некоторые сервисы
+# советую вторую реализацию найти или выкинуть bzip / 7zip 
+
+VZ_ROOT=&#34;/vz/private&#34;
+VZ_DUMP_ROOT=&#34;/vz/private/dump&#34;
+
+VZCTL=&#34;/usr/sbin/vzctl &#34;
+
+
+
+VZ_NotStop=() #пишем подряд контейнеры, которые будут зависить друг от друга
+
+shopt -s extglob
+
+if [ ! -d &#34;$VZ_ROOT&#34; ]; then
+        mkdir -p $VZ_ROOT
+fi
+if [ ! -d &#34;$VZ_DUMP_ROOT&#34; ]; then
+        mkdir -p $VZ_DUMP_ROOT
+fi
+
+cd $VZ_ROOT
+echo &#34;------------------------------------------------------------------------------------------------------&#34;
+
+for DIR in *
+do
+        if [  -d &#34;$DIR&#34; ]; then
+                if [[ &#34;$DIR&#34; != +([0-9]) ]]; then
+                        echo &#34;Не сохраняю $DIR так как директория содержит буквы&#34;
+                else
+                        NOT_BACKUP=0
+                        for ((i=0; i&amp;lt;${#VZ_NotStop[@]}; i++)); do
+                                if [ &#34;${VZ_NotStop[$i]}&#34; -eq &#34;$DIR&#34; ]; then
+                                         NOT_BACKUP=1
+                                fi
+                        done
+
+                        RUN_OUT=`vzlist |awk &#39;{print $1}&#39;|grep -v V|grep &#34;\&amp;lt;$DIR\&gt;&#34;`
+                        let &#34; VZ_RUN = RUN_OUT + 0&#34;
+                        #Содержит значение текущей OVZ или пустую строку
+                        if [ &#34;$VZ_RUN&#34;  -eq &#34;$DIR&#34; ]; then
+                                VZ_IS_RUNNING=1
+                        else
+                                VZ_IS_RUNNING=0
+                        fi
+
+                         if [ &#34;$NOT_BACKUP&#34; -eq &#34;1&#34; ]; then
+                                echo &#34;$DIR не будет сохранено&#34;
+                         else
+                                echo &#34;Сохраняю $DIR&#34;
+                                a=`date +%s`
+                                if  [ &#34;$VZ_IS_RUNNING&#34;  -eq &#34;1&#34; ]; then
+                                $VZCTL stop $DIR  &gt;/dev/null 2&gt;&amp;1
+                                fi
+                                nice -n -19 ionice -c1 rsync -acr --numeric-ids --force --delete-excluded --delete-after  --max-delete=200  $VZ_ROOT/$DIR $VZ_DUMP_ROOT  #&gt;/dev/null 2&gt;&amp;1
+                                if  [ &#34;$VZ_IS_RUNNING&#34;  -eq &#34;1&#34; ]; then
+                                        $VZCTL start $DIR &gt;/dev/null 2&gt;&amp;1
+                                fi
+                                b=`date +%s`
+                                let &#34;e = b -a&#34;
+                                echo &#34;Сохранение $DIR заняло $e sec&#34;
+
+                             if  [ &#34;$VZ_IS_RUNNING&#34;  -eq &#34;1&#34; ]; then
+                                echo &#34;Архивирование начато&#34;
+                                a=`date +%s`
+                                NAME=`date +%Y-%m-%d--%H-%M-%S`
+                                TAR_NAME=&#34;$DIR.$NAME.tar&#34;
+                                TAR_NAME_FOR_7z=&#34;$DIR.$NAME.7.tar&#34;
+                                P7ZIP_DUMP=&#34;$VZ_DUMP_ROOT/$TAR_NAME_FOR_7z&#34;
+                                nice -n 19 ionice -c3 tar --ignore-failed-read -cf $VZ_DUMP_ROOT/$TAR_NAME $DIR/  &gt;/dev/null 2&gt;&amp;1
+                                c=`date +%s`
+                                let &#34;d = c -a&#34;
+                                echo &#34;Время работы tar $d sec&#34;
+                                echo &#34;Начинаю архивировать $TAR_NAME_FOR_7z.7z&#34;
+                                g=`date +%s`
+
+                                #нужно для 7zip#
+                                nice -n 19 ionice -c3 cp $VZ_DUMP_ROOT/$TAR_NAME $VZ_DUMP_ROOT/$TAR_NAME_FOR_7z
+
+                                nice -n 19 ionice -c3 7z a -t7z -mx9   $VZ_DUMP_ROOT/$TAR_NAME_FOR_7z.7z  $P7ZIP_DUMP  &gt;/dev/null 2&gt;&amp;1
+                                c=`date +%s`
+                                let &#34;PKZIP = g -c&#34;
+                                echo &#34;Время архивирования $TAR_NAME_FOR_7z.7z $PKZIP sec&#34;
+                                echo &#34;Архивирую $TAR_NAME.bz2&#34;
+                                u=`date +%s`
+                                nice -n 19 ionice -c3 bzip2 $VZ_DUMP_ROOT/$TAR_NAME &gt; /dev/null 2&gt;&amp;1
+                                i=`date +%s`
+                                let &#34;BZIP = i -u&#34;
+                                echo &#34;Время архивирования $TAR_NAME $BZIP sec&#34;
+                                b=`date +%s`
+                                rm $VZ_DUMP_ROOT/$TAR_NAME &gt; /dev/null 2&gt;&amp;1
+                                rm $P7ZIP_DUMP &gt; /dev/null 2&gt;&amp;1
+                                rm $VZ_DUMP_ROOT/$DIR.latest.tar.bz2  &gt; /dev/null 2&gt;&amp;1
+                                cp $VZ_DUMP_ROOT/$TAR_NAME.bz2 $VZ_DUMP_ROOT/$DIR.latest.tar.bz2  &gt; /dev/null 2&gt;&amp;1
+                                let &#34;e = b -a&#34;
+                                #echo &#34;Архивирование занало  $e sec  из них ==  BZIP: $BZIP sec&#34;
+                                echo &#34;Архивирование занало  $e sec из них == PKZIP: $PKZIP sec BZIP: $BZIP sec&#34;
+                             fi
+
+                         fi
+                fi
+        fi
+done
+#Внимательнее тут - Я перезапустил все виртуальные машины!!!
+/etc/init.d/vz restart
+
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;log выполнения&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34; &gt;-------------------------------------------------------------------------------------------------------
+Сохраняю 186
+Сохранение 186 заняло 3296 sec
+Архивирование начато
+Время работы tar 2883 sec
+Начинаю архивировать 186.2011-01-19--07-42-56.7.tar.7z
+Время архивирования 186.2011-01-19--07-42-56.7.tar.7z -3982 sec
+Архивирую 186.2011-01-19--07-42-56.tar.bz2
+Время архивирования 186.2011-01-19--07-42-56.tar 1325 sec
+Архивирование занало  8190 sec из них == PKZIP: -3982 sec BZIP: 1325 sec
+Сохраняю 201
+Сохранение 201 заняло 535 sec
+Архивирование начато
+Время работы tar 325 sec
+Начинаю архивировать 201.2011-01-19--10-09-00.7.tar.7z
+Время архивирования 201.2011-01-19--10-09-00.7.tar.7z -5251 sec
+Архивирую 201.2011-01-19--10-09-00.tar.bz2
+Время архивирования 201.2011-01-19--10-09-00.tar 1868 sec
+Архивирование занало  7444 sec из них == PKZIP: -5251 sec BZIP: 1868 sec
+Сохраняю 203
+Сохранение 203 заняло 90 sec
+Архивирование начато
+Время работы tar 8 sec
+Начинаю архивировать 203.2011-01-19--12-16-34.7.tar.7z
+Время архивирования 203.2011-01-19--12-16-34.7.tar.7z -387 sec
+Архивирую 203.2011-01-19--12-16-34.tar.bz2
+Время архивирования 203.2011-01-19--12-16-34.tar 92 sec
+Архивирование занало  487 sec из них == PKZIP: -387 sec BZIP: 92 sec
+Сохраняю 205
+Сохранение 205 заняло 83 sec
+Архивирование начато
+Время работы tar 6 sec
+Начинаю архивировать 205.2011-01-19--12-26-05.7.tar.7z
+Время архивирования 205.2011-01-19--12-26-05.7.tar.7z -488 sec
+Архивирую 205.2011-01-19--12-26-05.tar.bz2
+Время архивирования 205.2011-01-19--12-26-05.tar 115 sec
+Архивирование занало  609 sec из них == PKZIP: -488 sec BZIP: 115 sec
+Сохраняю 206
+Сохранение 206 заняло 64 sec
+Архивирование начато
+Время работы tar 8 sec
+Начинаю архивировать 206.2011-01-19--12-37-19.7.tar.7z
+Время архивирования 206.2011-01-19--12-37-19.7.tar.7z -452 sec
+Архивирую 206.2011-01-19--12-37-19.tar.bz2
+Время архивирования 206.2011-01-19--12-37-19.tar 112 sec
+Архивирование занало  572 sec из них == PKZIP: -452 sec BZIP: 112 sec
+Сохраняю 207
+Сохранение 207 заняло 106 sec
+Архивирование начато
+Время работы tar 27 sec
+Начинаю архивировать 207.2011-01-19--12-48-39.7.tar.7z
+Время архивирования 207.2011-01-19--12-48-39.7.tar.7z -880 sec
+Архивирую 207.2011-01-19--12-48-39.tar.bz2
+Время архивирования 207.2011-01-19--12-48-39.tar 252 sec
+Архивирование занало  1159 sec из них == PKZIP: -880 sec BZIP: 252 sec
+Сохраняю 209
+Сохранение 209 заняло 350 sec
+Архивирование начато
+Время работы tar 195 sec
+Начинаю архивировать 209.2011-01-19--13-13-51.7.tar.7z
+Время архивирования 209.2011-01-19--13-13-51.7.tar.7z -2040 sec
+Архивирую 209.2011-01-19--13-13-51.tar.bz2
+Время архивирования 209.2011-01-19--13-13-51.tar 747 sec
+Архивирование занало  2982 sec из них == PKZIP: -2040 sec BZIP: 747 sec
+Сохраняю 223
+Сохранение 223 заняло 192 sec
+Архивирование начато
+Время работы tar 38 sec
+Начинаю архивировать 223.2011-01-19--14-06-57.7.tar.7z
+Время архивирования 223.2011-01-19--14-06-57.7.tar.7z -1351 sec
+Архивирую 223.2011-01-19--14-06-57.tar.bz2
+Время архивирования 223.2011-01-19--14-06-57.tar 302 sec
+Архивирование занало  1691 sec из них == PKZIP: -1351 sec BZIP: 302 sec
+Не сохраняю backup так как директория содержит буквы
+Не сохраняю dump так как директория содержит буквы
+Shutting down VE 223
+Shutting down VE 209
+Shutting down VE 207
+Shutting down VE 206
+Shutting down VE 205
+Shutting down VE 203
+Shutting down VE 201
+Shutting down VE 186
+Bringing down interface venet0: ..done
+Stopping OpenVZ: ..done
+Starting OpenVZ: ..done
+Bringing up interface venet0: ..done
+Configuring interface venet0: ..done
+Starting VE 186: ..done
+Starting VE 201: ..done
+Starting VE 203: ..done
+Starting VE 205: ..done
+Starting VE 206: ..done
+Starting VE 207: ..done
+Starting VE 209: ..done
+Starting VE 223: ..done
+&lt;/pre&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;vzlist  -a|awk &#39;{print$1,$5}&#39;
+VEID HOSTNAME
+186 mail-server
+201 web-server1
+203 ns1
+205 ns2
+206 xbt-tracker
+207 verlihub-server
+209 web-server2
+223 database-server
+&lt;/pre&gt;
+
+&lt;pre lang=&#34;bash&#34; line=&#34;1&#34;&gt;/vz/private# ls -la dump/|grep -v latest
+итого 14521388
+drwxr-xr-x 10 root root       4096 Янв 19 14:35 .
+drwx------ 12 root root       4096 Янв 19 15:33 ..
+drwxrwxrwx 21 root root       4096 Янв 19 06:43 186
+-rw-r--r--  1 root root  733662921 Янв 19 09:37 186.2011-01-19--07-42-56.7.tar.7z
+-rw-r--r--  1 root root 1173570629 Янв 19 08:30 186.2011-01-19--07-42-56.tar.bz2
+drwxr-xr-x 21 root root       4096 Янв 19 06:35 201
+-rw-r--r--  1 root root 2743271248 Янв 19 11:41 201.2011-01-19--10-09-00.7.tar.7z
+-rw-r--r--  1 root root 2863944236 Янв 19 10:14 201.2011-01-19--10-09-00.tar.bz2
+drwxr-xr-x 21 root root       4096 Янв 19 06:35 203
+-rw-r--r--  1 root root   55583004 Янв 19 12:23 203.2011-01-19--12-16-34.7.tar.7z
+-rw-r--r--  1 root root   86636067 Янв 19 12:16 203.2011-01-19--12-16-34.tar.bz2
+drwxr-xr-x 21 root root       4096 Янв 19 06:36 205
+-rw-r--r--  1 root root   61589401 Янв 19 12:34 205.2011-01-19--12-26-05.7.tar.7z
+-rw-r--r--  1 root root   96632242 Янв 19 12:26 205.2011-01-19--12-26-05.tar.bz2
+drwxr-xr-x 20 root root       4096 Янв 19 06:35 206
+-rw-r--r--  1 root root   53580264 Янв 19 12:44 206.2011-01-19--12-37-19.7.tar.7z
+-rw-r--r--  1 root root   90946031 Янв 19 12:37 206.2011-01-19--12-37-19.tar.bz2
+drwxr-xr-x 20 root root       4096 Янв 19 06:36 207
+-rw-r--r--  1 root root  112456884 Янв 19 13:03 207.2011-01-19--12-48-39.7.tar.7z
+-rw-r--r--  1 root root  205655557 Янв 19 12:49 207.2011-01-19--12-48-39.tar.bz2
+drwxr-xr-x 20 root root       4096 Янв 19 06:36 209
+-rw-r--r--  1 root root  443173145 Янв 19 13:51 209.2011-01-19--13-13-51.7.tar.7z
+-rw-r--r--  1 root root  604901452 Янв 19 13:17 209.2011-01-19--13-13-51.tar.bz2
+drwxr-xr-x 21 root root       4096 Янв 19 06:36 223
+-rw-r--r--  1 root root   91173753 Янв 19 14:30 223.2011-01-19--14-06-57.7.tar.7z
+-rw-r--r--  1 root root  158046225 Янв 19 14:07 223.2011-01-19--14-06-57.tar.bz2
+&lt;/pre&gt;
+
+&lt;p&gt;На время выполнения скрипта:&lt;/p&gt;
+
+&lt;pre lang=&#34;bash&#34;&gt;Tasks: 128 total,   3 running, 125 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.7%us,  0.3%sy, 98.7%ni,  0.0%id,  0.0%wa,  0.0%hi,  0.3%si,  0.0%st
+Mem:   3105112k total,  2936252k used,   168860k free,    36568k buffers
+Swap:  4096532k total,     1160k used,  4095372k free,  1913184k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+29584 root      39  19  678m 674m 1724 R 98.4 22.3  17:04.09 7z
+14365 Debian-e  20   0 27708 4816 1620 S  0.7  0.2   0:04.44 pdns_recursor
+31387 root      20   0  2388 1144  872 R  0.7  0.0   0:00.04 top
+    1 root      20   0  2100  696  592 S  0.0  0.0   0:03.84 init
+    2 root      15  -5     0    0    0 S  0.0  0.0   0:00.00 kthreadd
+&lt;/pre&gt;
+
+&lt;h3 id=&#34;вывод&#34;&gt;Вывод:&lt;/h3&gt;
+
+&lt;p&gt;Во первых надо определить &amp;#8212; надо ли полностью архивировать ноду если изменений не было?&lt;/p&gt;
+
+&lt;p&gt;Во вторых надо определиться с тем, что использовать для архивирования &amp;#8212; bzip2 или 7zip или в tar?&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

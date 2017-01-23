@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cards_list.Php on </title>
+    <link>http://b-comm.ru/tags/cards_list.php/index.xml</link>
+    <description>Recent content in Cards_list.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/cards_list.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>cards_list.php</title>
+      <link>http://b-comm.ru/billing/cards_list-php</link>
+      <pubDate>Sat, 14 Jan 2012 23:29:25 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/cards_list-php</guid>
+      <description>&lt;p&gt;скрипт нужный для работы с карточками&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?
+include_once(&#34;defines.php&#34;);
+if(!USE_CARDS) exit();
+
+include_once(&#34;utils.php&#34;);
+
+    $result = mysql_query (&#34;SELECT * FROM &#34;.CARDS_TABLE.&#34; WHERE series=&#39;&#34;.$series.&#34;&#39; AND status=&#39;a&#39;&#34;,$LINK_CARDS) or die(&#34;cards_list.php -&gt; err2 &#34;.mysql_error($LINK_CARDS));
+    $actived = mysql_num_rows ($result);
+    mysql_free_result($result);
+
+    $result = mysql_query (&#34;SELECT * FROM &#34;.CARDS_TABLE.&#34; WHERE series=&#39;&#34;.$series.&#34;&#39; AND status=&#39;l&#39;&#34;,$LINK_CARDS) or die(&#34;cards_list.php -&gt; err2 &#34;.mysql_error($LINK_CARDS));
+    $locked = mysql_num_rows ($result);
+    mysql_free_result($result);
+
+    $result = mysql_query (&#34;SELECT * FROM &#34;.CARDS_TABLE.&#34; WHERE series=&#39;&#34;.$series.&#34;&#39; AND status=&#39;u&#39;&#34;,$LINK_CARDS) or die(&#34;cards_list.php -&gt; err2 &#34;.mysql_error($LINK_CARDS));
+    $used = mysql_num_rows ($result);
+    mysql_free_result($result);
+
+    $result = mysql_query (&#34;SELECT unix_timestamp(added) as unix_added, unix_timestamp(expired) as unix_expired FROM &#34;.CARDS_TABLE.&#34; WHERE series=&#39;&#34;.$series.&#34;&#39; GROUP BY series&#34;,$LINK_CARDS) or die(&#34;cards_list.php -&gt; err2 &#34;.mysql_error($LINK_CARDS));
+    if (mysql_num_rows ($result) &gt; 0)
+      $row = mysql_fetch_object($result);
+    mysql_free_result($result);
+
+  echo &#34;&amp;lt;FONT FACE=arial COLOR=green&gt;
+
+&lt;B&gt;Серия `&amp;lt;FONT COLOR=red&gt;$series&amp;lt;/FONT&gt;&#39; &amp;lt;FONT COLOR=black&gt;[&#34;.date(&#34;Y/m/d&#34;, $row-&gt;unix_expired).&#34;]&amp;lt;/FONT&gt; (всего: &amp;lt;FONT COLOR=blue&gt;$total&amp;lt;/FONT&gt;, рабочих: &amp;lt;FONT COLOR=blue&gt;$actived&amp;lt;/FONT&gt;, блокированных: &amp;lt;FONT COLOR=blue&gt;$locked&amp;lt;/FONT&gt;, использованных: &amp;lt;FONT COLOR=blue&gt;$used&amp;lt;/FONT&gt;)&lt;/B&gt;&amp;lt;/FONT&gt;&lt;BR /&gt;&#34;;
+  if ($row-&gt;unix_expired &amp;lt;= time()) echo &#34;&amp;lt;FONT SIZE=+1 FACE=arial COLOR=red&gt;&lt;B&gt;Внимание!!! Серия устарела!&lt;/B&gt;&amp;lt;/FONT&gt;&lt;BR /&gt;&#34;;
+  echo &#34;&amp;lt;FONT SIZE=+1 FACE=arial&gt;&lt;B&gt;&#34;;
+  if ($total == $locked + $used) echo &#34;&amp;lt;A HREF=save_series.php?series=$series&amp;#038;action=unlock&gt;Разблокировать серию&amp;lt;/A&gt;&#34;;
+  else echo &#34;&amp;lt;A HREF=save_series.php?series=$series&amp;#038;action=lock&gt;Блокировать серию&amp;lt;/A&gt;&#34;;
+  echo &#34; | &amp;lt;A onclick=\&#34;return confirm(&#39;Вы действительно хотите УДАЛИТЬ серию $series?&#39;)\&#34; HREF=real_del_series.php?series=$series&gt;Удалить серию&amp;lt;/A&gt;&#34;;
+  echo &#34;&lt;/B&gt;&amp;lt;/FONT&gt;&lt;BR /&gt;&#34;;
+?&gt;
+  
+
+&lt;HR /&gt;
+&amp;lt;TABLE BORDER=0 CELLSPACING=2 CELLPADDING=4 BGCOLOR=black&gt;
+   &amp;lt;TR ALIGN=center BGCOLOR=&#34;#99dd99&#34;&gt;
+   
+
+&lt;TD&gt;
+  &lt;B&gt;Номер&lt;BR /&gt;карточки&lt;/B&gt;
+&lt;/TD&gt;
+
+    
+
+&lt;TD&gt;
+  &lt;B&gt;Номинал&lt;/B&gt;
+&lt;/TD&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;Состояние&lt;/B&gt;
+&lt;/TD&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;Действия&lt;/B&gt;
+&lt;/TD&gt;
+    
+
+&lt;?php
+    // рср лш АСДЕЛ ОНОНКМЪРЭ 🙂
+    ?&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;IP&lt;/B&gt;
+&lt;/TD&gt;
+    
+
+&lt;TD&gt;
+  &lt;B&gt;login&lt;/B&gt;
+&lt;/TD&gt;
+
+        
+
+&lt;TD&gt;
+  &lt;B&gt;Номер &lt;BR /&gt;(код пополнения)&lt;/B&gt;
+&lt;/TD&gt;
+        
+
+&lt;TD&gt;
+  дата поподнения
+&lt;/TD&gt;
+   &amp;lt;/TR&gt;
+
+
+&lt;?
+
+//    $result = mysql_query (&#34;SELECT sn, nominal, status FROM &#34;.CARDS_TABLE.&#34; WHERE series=&#39;&#34;.$series.&#34;&#39;&#34;,$LINK_CARDS) or die(&#34;cards_list.php -&gt; err2 &#34;.mysql_error($LINK_CARDS));
+    $result = mysql_query (&#34;SELECT sn, nominal, status, used_at, used_by, n, login FROM &#34;.CARDS_TABLE.&#34; WHERE series=&#39;&#34;.$series.&#34;&#39;&#34;,$LINK_CARDS) or die(&#34;cards_list.php -&gt; err2 &#34;.mysql_error($LINK_CARDS));
+    for ($i = 0; $i &amp;lt; mysql_num_rows ($result); $i++) {
+      $row = mysql_fetch_object ($result);
+          //poriadkovij nomer carti/////////
+
+
+          ///
+          printf (&#34;   &amp;lt;TR ALIGN=center BGCOLOR=\&#34;#%s\&#34;&gt;\n&#34;, ($row-&gt;status == &#39;a&#39;) ? &#34;eeeeee&#34; : (($row-&gt;status == &#39;u&#39;) ? &#34;dddd99&#34; : &#34;ffcccc&#34;));
+
+
+      printf (&#34;    
+
+&lt;TD&gt;
+  %s-%s-%s-%s-%s
+&lt;/TD&gt;\n&#34;, $series, substr($row-&gt;sn,0,4), substr($row-&gt;sn,4,4), substr($row-&gt;sn,8,4), substr($row-&gt;sn,12,2));
+      printf (&#34;    
+
+&lt;TD&gt;
+  %8.2f
+&lt;/TD&gt;\n&#34;, $row-&gt;nominal);
+      printf (&#34;    
+
+&lt;TD&gt;
+  %s
+&lt;/TD&gt;\n&#34;, ($row-&gt;status == &#39;a&#39;) ? &#34;&amp;lt;A HREF=save_card.php?series=$series&amp;#038;sn=$row-&gt;sn&amp;action=lock&gt;рабочая&amp;lt;/A&gt;&#34; : (($row-&gt;status == &#39;u&#39;) ? &#34;использованна&#34; : &#34;&amp;lt;A HREF=save_card.php?series=$series&amp;#038;sn=$row-&gt;sn&amp;action=unlock&gt;блокированна&amp;lt;/a&gt;&#34;));
+      printf (&#34;    
+
+&lt;TD&gt;
+  &amp;lt;A onclick=\&#34;return confirm(&#39;Вы действительно хотите УДАЛИТЬ карточку : %s-%s-%s-%s-%s?&#39;)\&#34; HREF=real_del_card.php?series=$series&amp;#038;sn=$row-&gt;sn&gt;Удалить&amp;lt;/A&gt;
+&lt;/TD&gt;\n&#34;, $series, substr($row-&gt;sn,0,4), substr($row-&gt;sn,4,4), substr($row-&gt;sn,8,4), substr($row-&gt;sn,12,2));
+
+    //my 🙂
+//login from
+          printf (&#34;    
+
+&lt;TD&gt;
+  %s
+&lt;/TD&gt;\n&#34;, $row-&gt;login);
+    //IP from
+          printf (&#34;    
+
+&lt;TD&gt;
+  %s
+&lt;/TD&gt;\n&#34;, $row-&gt;used_by);
+
+
+          printf (&#34;  
+
+&lt;TD&gt;
+  %s-%s
+&lt;/TD&gt;\n&#34;, substr($row-&gt;n,0,4),substr($row-&gt;n,4,13));
+
+//            printf (&#34;    
+
+&lt;TD&gt;
+  %s-%s-%s-%s-%s
+&lt;/TD&gt;\n&#34;,$row-&gt;nominal);
+              //, substr($row-&gt;n,0,4), substr($row-&gt;n,4,4), substr($row-&gt;n,8,4), substr($row-&gt;n,12,2));
+            printf (&#34;    
+
+&lt;TD&gt;
+  %s
+&lt;/TD&gt;\n&#34;, $row-&gt;used_at);
+      echo &#34;   &amp;lt;/TR&gt;\n&#34;;
+    }
+    mysql_free_result ($result);
+?&gt;
+&amp;lt;/TABLE&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

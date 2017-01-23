@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bezlim_index.Php on </title>
+    <link>http://b-comm.ru/tags/bezlim_index.php/index.xml</link>
+    <description>Recent content in Bezlim_index.Php on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/bezlim_index.php/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>bezlim_index.php</title>
+      <link>http://b-comm.ru/post/</link>
+      <pubDate>Sat, 14 Jan 2012 23:22:13 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/post/</guid>
+      <description>&lt;p&gt;Работа с безлимитом&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;bezlim_index.php
+&lt;?php
+include_once(&#34;top.php&#34;);
+include_once(&#34;mysql.php&#34;);
+include_once(&#34;my_fill.php&#34;);
+$REF=$HTTP_REFERER;
+
+
+$my_query = new my_fill($LINK_BEZLIM);
+
+//if (($REF!=$PHP_SELF)&amp;#038;&amp;#038;strlen($REF)&gt;0)
+//echo &#34;||&lt;A HREF=\&#34;$REF\&#34; &gt;назад&lt;/A&gt;||&#34;;
+if ($_GET[&#34;delete&#34;]==&#34;all&#34;)
+{
+$my_query-&gt;deleteall();
+}
+?&gt;
+        
+
+&lt;A HREF=&#34; &lt;?php echo $PHP_SELF; ?&gt;?view=activ&#34;&gt;&lt;B&gt;Просмотр незанятых ип:
+                &lt;?php
+                        $q=&#34;SELECT * FROM `all` WHERE activ=&#39;y&#39; or activ=&#39;Y&#39;&#34;;
+                        $my_query-&gt;getn($q);
+                ?&gt;
+        &lt;/A&gt;
+
+
+&lt;BR /&gt;
+        &lt;A HREF=&#34; &lt;?php echo $PHP_SELF; ?&gt;?view=deactiv&#34;&gt;&lt;B&gt;Просмотр отключенных ип:
+                &lt;?php
+                        $q=&#34;SELECT * FROM `all` WHERE activ=&#39;N&#39; or activ=&#39;n&#39;&#34;;
+                        $my_query-&gt;getn($q);
+                ?&gt;
+        &lt;/A&gt;
+
+
+&lt;BR /&gt;
+
+        &lt;A HREF=&#34; &lt;?php echo $PHP_SELF; ?&gt;?view=all&#34;&gt;&lt;B&gt;Просмотр всех ип:
+                &lt;?php
+                                $q=&#34;SELECT * FROM `all`&#34;;
+                                $my_query-&gt;getn($q);
+                ?&gt;
+        &lt;/A&gt;
+
+
+&lt;BR /&gt;
+
+        &lt;A HREF=&#34; &lt;?php echo $PHP_SELF; ?&gt;?add=&lt;? echo $my_query-&gt;max_id();?&gt;&#34;&gt;&lt;B&gt;Добавить ип
+        &lt;/A&gt;
+&lt;BR /&gt;
+
+        &lt;A HREF=&#34;save_bez.php?save=save&#34;&gt;&lt;B&gt;Сохранить настройки
+        &lt;/A&gt;
+&lt;BR /&gt;
+        &lt;A HREF=&#34;save_bez.php?save=view&#34;&gt;&lt;B&gt;Просмотреть настройки
+        &lt;/A&gt;
+&lt;BR /&gt;
+        &lt;A HREF=&#34; &lt;?php echo $PHP_SELF; ?&gt;?view=freenibs&#34;&gt;Просмотреть Всех в базе FreeNibs
+        &lt;/A&gt;
+&lt;BR /&gt;
+&lt;BR /&gt;
+
+&lt;BR /&gt;
+        &lt;A HREF=&#34;save_bez.php?save=gen&#34;&gt;&lt;B&gt;Генерировать настройки
+        &lt;/A&gt;
+
+&lt;BR /&gt;
+        &lt;A HREF=&#34;&lt;?php echo $PHP_SELF; ?&gt;?delete=all&#34;&gt;&lt;B&gt;Удалить ВСЕ!!! настройки
+        &lt;/A&gt;&lt;BR /&gt;&lt;BR /&gt;
+&lt;?php
+
+if ($_GET[&#34;view&#34;]==&#34;activ&#34;)
+{
+$q=&#34;SELECT * FROM `all` WHERE activ=&#39;y&#39; or activ=&#39;Y&#39;&#34;;
+$my_query-&gt;setquery($q);
+$my_query-&gt;my_print();
+}
+if ($_GET[&#34;view&#34;]==&#34;deactiv&#34;)
+{
+$q=&#34;SELECT * FROM `all` WHERE activ=&#39;n&#39; or activ=&#39;N&#39;&#34;;
+$my_query-&gt;setquery($q);
+$my_query-&gt;my_print();
+}
+if ($_GET[&#34;view&#34;]==&#34;all&#34;)
+{
+$q=&#34;SELECT * FROM `all`&#34;;
+$my_query-&gt;setquery($q);
+$my_query-&gt;my_print();
+}
+if ($_GET[&#34;add&#34;]&gt;0)
+{
+ $my_query-&gt;maxrule();
+$ru=$my_query-&gt;maxrule;
+
+ $my_query-&gt;ad(&#34;192.168.0.1&#34;,&#34;$ru&#34;,&#34;0&#34;,&#34;0&#34;);
+ }
+if ($_GET[&#34;view&#34;]==&#34;freenibs&#34;)
+{
+//echo &#34;saassadsadsadsdasads&#34;;
+
+$my_query-&gt;view_freenibs();
+}
+?&gt;
+&lt;/table&gt;
+
+
+
+&lt;?
+//phpinfo();
+//deactiv
+
+//include_once(&#34;bottom.php&#34;);
+
+
+?&gt;
+
+&lt;/pre&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Сутки on </title>
+    <link>http://b-comm.ru/tags/%D1%81%D1%83%D1%82%D0%BA%D0%B8/index.xml</link>
+    <description>Recent content in Сутки on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <atom:link href="http://b-comm.ru/tags/%D1%81%D1%83%D1%82%D0%BA%D0%B8/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>FreeNIBS Снятие абонплаты за сутки</title>
+      <link>http://b-comm.ru/billing/freenibs-%D1%81%D0%BD%D1%8F%D1%82%D0%B8%D0%B5-%D0%B0%D0%B1%D0%BE%D0%BD%D0%BF%D0%BB%D0%B0%D1%82%D1%8B-%D0%B7%D0%B0-%D1%81%D1%83%D1%82%D0%BA%D0%B8</link>
+      <pubDate>Thu, 23 Jul 2009 21:33:48 +0000</pubDate>
+      
+      <guid>http://b-comm.ru/billing/freenibs-%D1%81%D0%BD%D1%8F%D1%82%D0%B8%D0%B5-%D0%B0%D0%B1%D0%BE%D0%BD%D0%BF%D0%BB%D0%B0%D1%82%D1%8B-%D0%B7%D0%B0-%D1%81%D1%83%D1%82%D0%BA%D0%B8</guid>
+      <description>&lt;p&gt;Данный скрипт позволяет снимать абонплату за сутки.&lt;/p&gt;
+
+&lt;p&gt;Посмотрим сначала web-морду, которая позволяет посмотреть снятия:&lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?
+//sutki
+echo &#34;===============================================\n&#34;;
+echo date(&#34;Y-m-d H:i:s&#34;).&#34;\n&#34;;
+echo &#34;===============================================\n&#34;;
+
+$us=&#34;freenibs&#34;;
+$db=&#34;freenibs&#34;;
+$pass=&#34;freenibs&#34;;
+$host=&#34;localhost&#34;;
+
+$date_today = date(&#34;Y-m-d H:i:s&#34;);
+$prev_month_date_start = mktime (0,0,0,date(&#34;m&#34;)-1,1,date(&#34;Y&#34;));
+$prev_month_date_stop = mktime (0,0,0-1,date(&#34;m&#34;),1,date(&#34;Y&#34;));
+$r=mysql_connect($host,$us,$pass);
+$query=&#34;select users.uid,users.gid,users.user,users.deposit,packets.fixed,packets.fixed_cost,users.blocked from users,packets where users.gid=packets.gid and users.blocked=0 and packets.fixed=2 and packets.fixed_cost &gt; 0 order by ucase(users.user)&#34;;
+$result=mysql_db_query($db,$query,$r) or die (&#34;Error query&#34;);
+
+echo &#34;
+
+&lt;BR /&gt;Пользователь |До снятия| Добавлено | Остаток &lt;BR /&gt;&#34;;
+while ($row=mysql_fetch_array($result)) {
+$uid=$row[&#34;uid&#34;];
+$gid=$row[&#34;gid&#34;];
+$user=$row[&#34;user&#34;];
+
+$deposit=$row[&#34;deposit&#34;];
+$fixed_cost=$row[&#34;fixed_cost&#34;];
+
+$query_num=&#34;SELECT COUNT(user) FROM actions WHERE user=&#39;$user&#39; AND start_time &gt; FROM_UNIXTIME($prev_month_date_start) AND start_time &amp;lt; FROM_UNIXTIME($prev_month_date_stop)&#34;;
+$result_num=mysql_db_query($db,$query_num,$r) or die (&#34;Error query&#34;);
+$rez = mysql_fetch_array($result_num);
+
+$uniq=rand();
+$id=rand();
+$posle=$deposit-$fixed_cost;
+echo &#34;&lt;BR /&gt;&#34;.$user.&#34; |$deposit| -$fixed_cost |$posle &lt;BR /&gt;&#34;;
+echo &#34;=====================================\n\n&lt;BR /&gt;&#34;;
+};?&gt;&lt;/pre&gt;
+
+&lt;p&gt;А теперь собственно сам скрипт под гордым названием &lt;strong&gt;abon_day.php&lt;/strong&gt; &lt;/p&gt;
+
+&lt;pre lang=&#34;php&#34;&gt;&lt;?
+//sutki
+echo date(&#34;Y-m-d H:i:s&#34;).&#34;\n&#34;;
+echo &#34;-------------------------------------------------------------------------------------\n&#34;;
+
+$us=&#34;freenibs&#34;;
+$db=&#34;freenibs&#34;;
+$pass=&#34;freenibs&#34;;
+$host=&#34;localhost&#34;;
+$bez_abonki_per_month=&#34;10&#34;; //sum which user&#39;s must&#39;nt pay for abonplatu
+
+$date_today = date(&#34;Y-m-d H:i:s&#34;);
+$prev_month_date_start = mktime (0,0,0,date(&#34;m&#34;)-1,1,date(&#34;Y&#34;));
+$prev_month_date_stop = mktime (0,0,0-1,date(&#34;m&#34;),1,date(&#34;Y&#34;));
+
+$r=mysql_connect($host,$us,$pass); // packets.fixed=2 - day // packets.fixed=0 - month
+$query=&#34;select users.uid,users.gid,users.bezabon,users.user,users.deposit,packets.fixed,packets.fixed_cost,users.blocked from users,packets where users.gid=packets.gid and users.blocked=0 and packets.fixed=2 and packets.fixed_cost &gt; 0 order by ucase(users.user)&#34;;
+$result=mysql_db_query($db,$query,$r) or die (&#34;Error query&#34;);
+
+
+
+while ($row=mysql_fetch_array($result)) {
+
+$uid=$row[&#34;uid&#34;];
+
+$gid=$row[&#34;gid&#34;];
+$user=$row[&#34;user&#34;];
+
+$deposit=$row[&#34;deposit&#34;];
+$fixed_cost=$row[&#34;fixed_cost&#34;];
+
+switch($row[&#39;bezabon&#39;])
+{
+case &#34;yes&#34;:
+echo &#34;BEZABONKI\n&#34;;
+//$fixed_cost=$fixed_cost-$bez_abonki_per_month;
+break;
+
+}
+
+
+
+$query_num=&#34;SELECT COUNT(user) FROM actions WHERE user=&#39;$user&#39; AND start_time &gt; FROM_UNIXTIME($prev_month_date_start) AND start_time &amp;lt; FROM_UNIXTIME($prev_month_date_stop)&#34;;
+$result_num=mysql_db_query($db,$query_num,$r) or die (&#34;Error query&#34;);
+$rez = mysql_fetch_array($result_num);
+
+//if ($rez[0] != 0) {
+echo &#34;
+
+&lt;BR /&gt;&#34;.$rez[0].&#34; | &#34;.$user.&#34; | &lt;BR /&gt;zapros:  &#34;.$query_num.&#34;\n &lt;BR /&gt;&#34;;
+$uniq=rand();
+$id=rand();
+$query_u=&#34;insert into actions set unique_id=&#39;$uniq&#39;,id=&#39;$id&#39;,start_time=&#39;$date_today&#39;,stop_time=&#39;$date_today&#39;,in_bytes=&#39;0&#39;, out_bytes=&#39;0&#39;, before_billing=&#39;$deposit&#39;,billing_minus=&#39;-$fixed_cost&#39;,user=&#39;$user&#39;,gid=&#39;$gid&#39;,comment=&#39;Abonplata-DAY&#39;&#34;;
+$posle=$deposit-$fixed_cost;
+if ($posle == 0) $posle = &#39;-0.000001&#39;;
+$query_dep=&#34;update users set deposit=&#39;$posle&#39; where uid=&#39;$uid&#39;&#34;;
+// $query_abon=&#34;insert into abonplata set id=&#39;&#39;,user=&#39;$user&#39;,date=&#39;$date_today&#39;,fixed_cost=&#39;$fixed_cost&#39;,do=&#39;$deposit&#39;,posle=&#39;$posle&#39;&#34;;
+echo $query_u.&#34;; ;\n&lt;BR /&gt;&#34;;
+echo $query_dep.&#34;; ;\n&lt;BR /&gt;&#34;;
+// echo $query_abon.&#34;\n&#34;;
+echo &#34;=====================================\n\n&lt;BR /&gt;&#34;;
+
+$r1=mysql_connect($host,$us,$pass);
+mysql_db_query($db,$query_u,$r1) or die (&#34;Error query_u : $query_u&#34;);
+mysql_db_query($db,$query_dep,$r1) or die (&#34;Error query_dep : $query_dep&#34;);
+};
+echo &#34;\n\n&#34;;
+?&gt;
+
+&lt;/pre&gt;
+
+&lt;p&gt;Результат, но он не читабельный&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
