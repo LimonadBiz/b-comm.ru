@@ -6,5 +6,5 @@ name: Провайдерам
 description:
 contentDir: "content"
 theme: "hugo-bootstrap-premium"
-publishDir: "docs"
+publishDir: "public"
 
